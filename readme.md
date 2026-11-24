@@ -119,9 +119,14 @@ O workflow gera o contrato e exige que ele corresponda ao `openapi.yaml` version
 
 - `openapi.yaml`: contrato da versão publicada.
 - `redoc.html`: documentação correspondente, com os scripts carregados pela CDN da Redocly.
-- `SHA256SUMS`: checksums SHA256 dos dois arquivos.
+- `changelog.md`: histórico com a seção da versão publicada e o relatório do oasdiff em português.
+- `SHA256SUMS`: checksums SHA256 dos três arquivos.
 
-As notas da release são geradas pelo GitHub, com uma identificação do fork. A release é preparada como rascunho e publicada depois do envio dos arquivos. Se o envio falhar, a execução pode ser repetida para completar o rascunho. Uma release já publicada não é sobrescrita.
+O oasdiff compara o contrato da tag atual com o da maior versão SemVer anterior do fork que esteja no histórico do commit publicado. Tags do Banco Central são desconsideradas. Na primeira release do fork, o contrato é registrado como base inicial; nas seguintes, o relatório identifica as alterações, ou informa que não houve mudanças no contrato.
+
+As notas da release incluem esse relatório em português e as notas automáticas do GitHub. A release é preparada como rascunho e publicada depois do envio dos arquivos. Após a publicação, o workflow adiciona a mesma seção ao `changelog.md` da `master` em um commit automático, preservando o histórico existente. Como esse commit acontece depois da criação da tag, a nova seção está no anexo da release e na `master`; o arquivo dentro da tag permanece como estava no momento da marcação.
+
+Se houver falha no envio dos anexos ou no commit do changelog, a execução pode ser repetida: o rascunho é retomado e a seção não é duplicada. Uma release já publicada não é sobrescrita. A gravação do changelog exige que as regras da `master` permitam o push do `github-actions[bot]`, assim como a atualização automática do contrato.
 
 ### Aprovação do gestor (opcional)
 
@@ -211,7 +216,7 @@ act push -W .github/workflows/release.yml -e /tmp/pix-api-release-event.json \
   --artifact-server-path "$PWD/reports/act-release-artifacts"
 ```
 
-O pacote gerado fica no artefato `release-fork-v0.0.0-local`, dentro de `reports/act-release-artifacts`. A simulação gera os arquivos e verifica os checksums; a criação da release no GitHub fica desativada durante o `act`.
+O pacote gerado fica no artefato `release-fork-v0.0.0-local`, dentro de `reports/act-release-artifacts`. A simulação gera o contrato, o Redoc e uma cópia do changelog com a nova seção, além de verificar os checksums. Com `act`, a publicação da release e o commit do changelog ficam desativados; o `changelog.md` da sua pasta de trabalho não é alterado.
 
 #### Listar os workflows
 

@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
@@ -27,16 +29,7 @@ jobs:
         id: version
         env:
           RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          node --input-type=module <<'NODE'
-          import { appendFileSync } from 'node:fs';
-          const tag = process.env.RELEASE_TAG;
-          const match = /^fork-v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/.exec(tag);
-          const invalidPrerelease = match?.[4]?.split('.').some(id => /^[0-9]+$/.test(id) && id.length > 1 && id.startsWith('0'));
-          if (!match || match[0] !== tag || invalidPrerelease) throw new Error('Use uma tag SemVer do fork, como fork-v1.0.0 ou fork-v1.1.0-rc.1.');
-          appendFileSync(process.env.GITHUB_OUTPUT, `tag=${tag}\nprerelease=${Boolean(match[4])}\n`);
-          console.log(`Release: ${tag}; pré-release: ${Boolean(match[4])}.`);
-          NODE
+        run: node scripts/release-changelog.mjs validate
       - name: Instalar dependências
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Gerar contrato da tag
@@ -45,13 +38,27 @@ jobs:
           git diff --exit-code -- openapi.yaml
       - name: Gerar documentação Redoc
         run: npm run build:docs
+      - name: Gerar changelog do contrato em português
+        id: changelog
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          curl --fail --silent --show-error --location --retry 3 \
+            https://github.com/oasdiff/oasdiff/releases/download/v1.39.0/oasdiff_1.39.0_linux_amd64.tar.gz \
+            --output "$RUNNER_TEMP/oasdiff.tar.gz"
+          printf '%s  %s\n' \
+            '71a85930728f367a2086077b7ae1411319421549d18473a3e8258b6451520433' \
+            "$RUNNER_TEMP/oasdiff.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/oasdiff.tar.gz" -C "$RUNNER_TEMP" oasdiff
+          node scripts/release-changelog.mjs prepare "$RUNNER_TEMP/oasdiff"
+          cp scripts/release-changelog.mjs "$RUNNER_TEMP/release-changelog.mjs"
       - name: Preparar arquivos da release
         run: |
           mkdir -p reports/release
           cp openapi.yaml reports/release/openapi.yaml
           cp site/index.html reports/release/redoc.html
           cd reports/release
-          sha256sum openapi.yaml redoc.html > SHA256SUMS
+          sha256sum openapi.yaml redoc.html changelog.md > SHA256SUMS
           sha256sum --check SHA256SUMS
       - name: Disponibilizar pacote da release
         if: ${{ !env.ACT || env.ACTIONS_RUNTIME_URL != '' }}
@@ -67,6 +74,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
           IS_PRERELEASE: ${{ steps.version.outputs.prerelease }}
+          PREVIOUS_TAG: ${{ steps.changelog.outputs.previous_tag }}
         run: |
           state=$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft' 2>/dev/null || true)
           if [ "$state" = 'false' ]; then
@@ -74,14 +82,42 @@ jobs:
             exit 0
           fi
           if [ "$state" != 'true' ]; then
+            options=()
+            if [ -n "$PREVIOUS_TAG" ]; then
+              options+=(--notes-start-tag "$PREVIOUS_TAG")
+            fi
             gh release create "$RELEASE_TAG" --draft --verify-tag \
-              --title "$RELEASE_TAG" --generate-notes \
-              --notes "Distribuição do fork $GH_REPO. A versão da API Pix permanece em info.version do contrato anexado. O redoc.html usa a CDN da Redocly, assim como a página publicada."
+              --title "$RELEASE_TAG" --generate-notes "${options[@]}" \
+              --notes-file reports/release-notes.md
           fi
           gh release upload "$RELEASE_TAG" \
-            reports/release/openapi.yaml reports/release/redoc.html reports/release/SHA256SUMS \
+            reports/release/openapi.yaml reports/release/redoc.html \
+            reports/release/changelog.md reports/release/SHA256SUMS \
             --clobber
           gh release edit "$RELEASE_TAG" --draft=false --prerelease="$IS_PRERELEASE"
+      - name: Registrar changelog na master
+        if: ${{ !env.ACT }}
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch --no-tags origin master
+            git switch --detach origin/master
+            node "$RUNNER_TEMP/release-changelog.mjs" update
+            if git diff --quiet -- changelog.md; then
+              echo "O changelog de $RELEASE_TAG já está registrado."
+              exit 0
+            fi
+            git add -- changelog.md
+            git commit --only -m "docs: registrar changelog de $RELEASE_TAG" -- changelog.md
+            if git push origin HEAD:refs/heads/master; then
+              exit 0
+            fi
+          done
+          echo 'Não foi possível atualizar o changelog na master. Execute o workflow novamente.' >&2
+          exit 1
       - name: Informar resultado local
         if: ${{ env.ACT }}
         env:
@@ -89,5 +125,5 @@ jobs:
           IS_PRERELEASE: ${{ steps.version.outputs.prerelease }}
         run: |
           echo "Simulação da release $RELEASE_TAG; pré-release: $IS_PRERELEASE."
-          echo 'Arquivos preparados: openapi.yaml, redoc.html e SHA256SUMS.'
-          echo 'Com act, nenhuma tag ou release é criada no GitHub.'
+          echo 'Arquivos preparados: openapi.yaml, redoc.html, changelog.md e SHA256SUMS.'
+          echo 'Com act, nenhuma tag, release ou commit é criado no GitHub.'

@@ -2,6 +2,8 @@
 
 Mudanças relevantes na API Pix serão documentadas aqui neste documento.
 
+As seções `fork-v*` são adicionadas automaticamente após a publicação de cada release do fork, com o relatório do oasdiff em português. O histórico original da API Pix é preservado abaixo.
+
 ## [2.11.0-rc1]
 
 - Inclusão de novos status para cobranças com vencimento: `CONCLUIDA_POR_OUTRO_ARRANJO` e `REMOVIDA_PELO_PSP_BOLETO`.
