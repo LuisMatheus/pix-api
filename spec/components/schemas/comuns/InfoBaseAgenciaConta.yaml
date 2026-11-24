@@ -1,0 +1,14 @@
+      type: "object"
+      required: ["agencia", "conta"]
+      title: "Informações de Agência e Conta"
+      properties:
+        agencia:
+          type: "string"
+          title: "Agência"
+          description: "Número da agência do usuário."
+          maxLength: 4
+        conta:
+          type: "string"
+          title: "Conta Corrente"
+          description: "Número da conta do usuário."
+          maxLength: 20

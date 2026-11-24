@@ -1,0 +1,6 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/ServicoIndisponivel
+        title: "Serviço Indisponível"
+        status: 503
+        detail: "Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento."

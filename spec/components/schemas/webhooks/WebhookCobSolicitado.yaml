@@ -1,0 +1,9 @@
+      type: "object"
+      required: ["webhookUrl"]
+      title: "Webhook Base"
+      properties:
+        webhookUrl:
+          type: "string"
+          title: "URL Webhook"
+          format: uri
+          example: https://pix.example.com/api/webhookcob/

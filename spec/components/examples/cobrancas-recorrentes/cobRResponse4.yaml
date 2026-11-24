@@ -1,0 +1,52 @@
+      summary: "Exemplo de cobrança recorrente 3"
+      value:
+        idRec: RN985156112024071999000566354
+        txid: 517bd858b59d458a841280b0f0a60bfa
+        calendario:
+          criacao: "2024-05-20"
+          dataDeVencimento: "2024-06-20"
+        valor: 
+          original: "210.00"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "xjsjjfhasjhu821412ad7dajjqwfjjjvvjj"
+          cbs:
+            informado:
+              valor: "7.35"
+              data: "2024-05-20T14:47:29.470Z"
+          ibs:
+            informado:
+              valor: "14.70"
+              data: "2024-05-20T14:47:29.470Z"
+        valorLiquidoEstimado: "187.95"
+        status: CANCELADA
+        politicaRetentativa: NAO_PERMITE
+        ajusteDiaUtil: true
+        devedor:
+          cep: "26901340"
+          cidade: "São Luís"
+          email: "fulano.tal@mail.com"
+          logradouro: "Alameda Cardoso 1007"
+          uf: "MA"
+        recebedor:
+          cnpj: "31166575201770"
+          conta: "107262"
+          nome: "Empresa de Telecomunicações SA"
+          tipoConta: POUPANÇA
+        tentativas:
+          - dataLiquidacao: "2024-06-20"
+            tipo: AGND
+            endToEndId: E12345678202406201221abcdef12345
+            status: CANCELADA 
+        encerramento:
+          cancelamento:
+            solicitante: "USUARIO_RECEBEDOR"
+            codigo: "SLCR"
+            descricao: "Cancelamento de agendamento solicitado pelo usuário recebedor"
+        atualizacao:
+          - data: "2024-05-20T14:47:29.470Z"
+            status: CRIADA
+          - data: "2024-05-21T10:18:20.120Z"
+            status: ATIVA
+          - data: "2024-05-26T10:18:20.120Z"
+            status: CANCELADA

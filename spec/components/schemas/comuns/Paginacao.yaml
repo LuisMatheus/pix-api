@@ -1,0 +1,30 @@
+      type: "object"
+      title: "Paginação"
+      required:
+        [
+          "paginaAtual",
+          "itensPorPagina",
+          "quantidadeDePaginas",
+          "quantidadeTotalDeItens",
+        ]
+      properties:
+        paginaAtual:
+          type: "integer"
+          title: "Página atual"
+          description: "Número da página recuperada."
+          minimum: 0
+        itensPorPagina:
+          type: "integer"
+          title: "Itens por página"
+          description: "Quantidade de registros retornado na página."
+          minimum: 1
+        quantidadeDePaginas:
+          type: "integer"
+          title: "Quantidade de páginas"
+          description: "Quantidade de páginas disponíveis para consulta."
+          minimum: 1
+        quantidadeTotalDeItens:
+          type: "integer"
+          title: "Quantidade total de itens"
+          description: "Quantidade total de itens disponíveis de acordo com os parâmetros informados."
+          minimum: 0

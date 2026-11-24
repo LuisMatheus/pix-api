@@ -1,0 +1,28 @@
+      summary: "Exemplo de criação de cobrança recorrente 1"
+      value:
+        idRec: RR1234567820240115abcdefghijk
+        infoAdicional: "Serviços de Streamming de Música e Filmes."
+        calendario:
+          dataDeVencimento: "2024-04-15"
+        valor: 
+          original: "106.07"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "gsgsglllwkfwfubrsjfd7373dfd235"
+          cbs:
+            informado:
+              valor: "3.71"
+          ibs:
+            informado:
+              valor: "7.42"
+        ajusteDiaUtil: true
+        devedor:
+          cep: "89256140"
+          cidade: "Uberlândia"
+          email: "sebastiao.tavares@mail.com"
+          logradouro: "Alameda Franco 1056"
+          uf: "MG"
+        recebedor:
+          agencia: "9708"
+          conta: "012682"
+          tipoConta: CORRENTE

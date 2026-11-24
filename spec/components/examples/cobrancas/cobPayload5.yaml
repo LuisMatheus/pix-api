@@ -1,0 +1,42 @@
+      summary: "Exemplo de payload de cobrança com vencimento 2 com tributos"
+      value:
+        calendario:
+          criacao: "2026-06-09T10:00:00.000Z"
+          apresentacao: "2026-06-15T18:00:00Z"
+          dataDeVencimento: "2026-07-31"
+          validadeAposVencimento: 30
+        devedor:
+          cnpj: "92221288310574"
+          nome: "Imobiliária Bom Sucesso"
+        recebedor:
+          logradouro: "Rua 15 Numero 1200, Bairro São Luiz"
+          cidade: "São Paulo"
+          uf: "SP"
+          cep: "70800100"
+          cnpj: "37989000025711"
+          nome: "Empresa de Logística SA"
+        txid: "d4f7a9b2c3e44f1a9b8c7d6e5f123abc"
+        revisao: 3
+        status: "ATIVA"
+        valor:
+          original: "200.00"
+          multa: "10.00"
+          juros: "1.50"
+          final: "211.50"
+        chave: "b12f3e4a-6c7d-11ee-9a34-0242ac120010"
+        solicitacaoPagador: "Informar cartão fidelidade"
+        infoAdicionais:
+          - nome: "quantidade"
+            valor: "2"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "oakeir7361u4n538d87ad8aj42jk"
+          cbs:
+            informado:
+              valor: "12.00"
+              data: "2026-06-09T10:00:00.000Z"
+          ibs:
+            informado:
+              valor: "8.50"
+              data: "2026-06-09T10:00:00.000Z"
+        valorLiquidoEstimado: "179.50"

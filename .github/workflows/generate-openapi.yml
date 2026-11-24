@@ -1,0 +1,84 @@
+name: Gerar OpenAPI
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      publish_docs:
+        description: Gerar e publicar a documentação Redoc
+        type: boolean
+        default: false
+      run_lint:
+        description: Executar lint do contrato com Redocly
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-openapi-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    name: Gerar contrato
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Gerar openapi.yaml
+        run: npm run bundle
+      - name: Validar regras ativas do contrato
+        if: ${{ inputs.run_lint }}
+        run: npm run lint
+      - name: Disponibilizar openapi.yaml
+        if: ${{ !env.ACT || env.ACTIONS_RUNTIME_URL != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-contract
+          path: openapi.yaml
+          if-no-files-found: error
+      - name: Gerar documentação Redoc
+        if: ${{ github.event_name == 'push' || inputs.publish_docs }}
+        run: npm run build:docs
+      - name: Atualizar openapi.yaml na master
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master' }}
+        shell: sh
+        run: |
+          set -eu
+
+          git add -- openapi.yaml
+          if git diff --cached --quiet -- openapi.yaml; then
+              echo 'openapi.yaml já está atualizado. Nenhum commit necessário.'
+              exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit --only -m 'chore: regenerate openapi.yaml' -- openapi.yaml
+          git push origin HEAD:refs/heads/master
+      - name: Disponibilizar Redoc local
+        if: ${{ env.ACT && (github.event_name == 'push' || inputs.publish_docs) }}
+        run: sh scripts/preview-docs-docker.sh
+      - name: Publicar no GitHub Pages
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master' && (github.event_name == 'push' || inputs.publish_docs) }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
+      - name: Informar resultado local
+        if: ${{ env.ACT }}
+        run: |
+          echo 'Contrato gerado. Commits e pushes são executados somente no GitHub.'
+          if [ -z "${ACTIONS_RUNTIME_URL:-}" ]; then
+            echo 'Para salvar o artefato com act, adicione --artifact-server-path "$PWD/reports/act-artifacts".'
+          fi

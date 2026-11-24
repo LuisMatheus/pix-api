@@ -1,0 +1,35 @@
+      type: "object"
+      title: "Valor da cobrança com vencimento calculada retornada pelo payload"
+      required: ["final"]
+      description: "Todos os campos que indicam valores monetários obedecem ao pattern \\d{1,10}\\.\\d{2}. O separador decimal é o caractere ponto. Não é aplicável utilizar separador de milhar. Exemplos de valores aderentes ao padrão: “1.00”, “123.99”, “123456789.23"
+      properties:
+        original:
+          type: "string"
+          title: "Valor"
+          pattern: "\\d{1,10}\\.\\d{2}"
+          description: "Valor original da cobrança."
+        multa:
+          title: "Multa aplicada"
+          description: "Multa aplicada à cobrança"
+          type: "string"
+          pattern: "\\d{1,10}\\.\\d{2}"
+        juros:
+          title: "Juro aplicado"
+          description: "Juro aplicado à cobrança"
+          type: "string"
+          pattern: "\\d{1,10}\\.\\d{2}"
+        abatimento:
+          title: "Abatimento aplicado"
+          description: "Abatimento aplicado à cobrança"
+          type: "string"
+          pattern: "\\d{1,10}\\.\\d{2}"
+        desconto:
+          title: "Desconto aplicado"
+          description: "Descontos aplicados à cobrança"
+          type: "string"
+          pattern: "\\d{1,10}\\.\\d{2}"
+        final:
+          type: "string"
+          title: "Valor final"
+          pattern: "\\d{1,10}\\.\\d{2}"
+          description: "Valor final da cobrança."

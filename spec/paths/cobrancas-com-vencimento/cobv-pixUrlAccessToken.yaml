@@ -1,0 +1,77 @@
+    parameters:
+      - name: "pixUrlAccessToken"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "codMun"
+        in: "query"
+        description: |
+          Código baseado na Tabela de Códigos de Municípios do __[IBGE](https://www.ibge.gov.br/explica/codigos-dos-municipios.php)__ que apresenta a lista dos municípios brasileiros associados a um código composto de 7 dígitos, sendo os dois primeiros referentes ao código da Unidade da Federação.
+        schema:
+          type: "string"
+          pattern: "/^\\d{7}$/"
+          title: "Código do município"
+      - name: "DPP"
+        in: "query"
+        description: "Data de pagamento pretendida. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601."
+        schema:
+          type: "string"
+          format: "date"
+          example: "2021-04-01"
+    get:
+      tags:
+        - "CobPayload"
+      servers:
+        - url: https://{fdqnPSPRecebedor}/{endpointOpcional}
+          variables:
+            fdqnPSPRecebedor:
+              default: example.com
+              description: Endpoint base para que os usuários devedores possam acessar o payload JSON que representa a cobrança com vencimento.
+      summary: "Recuperar o payload JSON que representa a cobrança com vencimento."
+      description: |
+        ## Endpoint (location) que serve um payload que representa uma cobrança com vencimento.
+
+        No momento que o usuário devedor efetua a leitura de um QR Code dinâmico gerado pelo recebedor, esta URL será acessada e seu conteúdo consiste em uma estrutura JWS.
+        As informações sobre a segurança no acesso às urls encontram-se no Manual de Segurança do Pix disponível em nesse __[link](https://www.bcb.gov.br/estabilidadefinanceira/comunicacaodados)__.
+
+      security: []
+      responses:
+        "200":
+          description: |
+            # Descrição do Retorno
+            O retorno desse endpoint é um objeto que apresenta estrutura JWS, conforme especificado no manual de segurança. Segue um exemplo:
+
+            ```jws
+            eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXUyIsImtpZCI6IjIwMTEtMDQtMjkiLCJqa3UiOiJodHRwczovL3Rvb2xzLmlldGYub3JnL2h0bWwvcmZjNzUxNyIsIng1dCI6IkFwcGVuZGl4QUV4YW1wbGVBMUpXS1NSc2FLZXkifQ.eyJjYWxlbmRhcmlvIjp7ImNyaWFjYW8iOiIyMDIwLTA5LTE1VDE5OjM5OjU0LjAxM1oiLCJhcHJlc2VudGFjYW8iOiIyMDIwLTA0LTAxVDE4OjAwOjAwWiIsImRhdGFEZVZlbmNpbWVudG8iOiIyMDIwLTEyLTMxIiwidmFsaWRhZGVBcG9zVmVuY2ltZW50byI6MzB9LCJkZXZlZG9yIjp7ImxvZ3JhZG91cm8iOiJBbGFtZWRhIFNhbnRvcywgTnVtZXJvIDEwLCBCYWlycm8gQnJheiIsImNpZGFkZSI6IkRpYWRlbWEiLCJ1ZiI6IlNQIiwiY2VwIjoiNzA4MDAxMDAiLCJjbnBqIjoiNTY5ODkwMDAwMTk1MzMiLCJub21lIjoiRW1wcmVzYSBkZSBBbGltZW50b3MgU0EifSwicmVjZWJlZG9yIjp7ImxvZ3JhZG91cm8iOiJSdWEgMjAgTnVtZXJvIDcwLCBCYWlycm8gTHV6IiwiY2lkYWRlIjoiQmVsbyBIb3Jpem9udGUiLCJ1ZiI6Ik1HIiwiY2VwIjoiNTUxMjA3NTAiLCJjbnBqIjoiNTg5MDA2MzMxMjA3MTEiLCJub21lIjoiRW1wcmVzYSBkZSBBYmFzdGVjaW1lbnRvIFNBIn0sInR4aWQiOiJmYzlhNDM2NmZmM2Q0OTY0YjVkYmM2YzkxYTg3MjJkMyIsInJldmlzYW8iOiIzIiwic3RhdHVzIjoiQVRJVkEiLCJ2YWxvciI6eyJvcmlnaW5hbCI6IjEyMy40NSIsIm11bHRhIjoiMTUuMDAiLCJqdXJvcyI6IjIuMDAiLCJmaW5hbCI6IjE0MCw0NSJ9LCJjaGF2ZSI6Ijc0MDdjOWM4LWY3OGItMTFlYS1hZGMxLTAyNDJhYzEyMDAwMiIsInNvbGljaXRhY2FvUGFnYWRvciI6IkluZm9ybWFyIGNhcnRhbyBmaWRlbGlkYWRlIiwiaW5mb0FkaWNpb25haXMiOlt7Im5vbWUiOiJxdWFudGlkYWRlIiwidmFsb3IiOiIyIn1dfQ.BYibf_oK38IubbnnfThe4gaXuJgfoGQzFIezxHS76jGLQ4re2BwSdsiIzBW1t0JOtL094jLtJMVttdIdF9YJukrdzbknbf1jzfHghgBfNqXfZm7jxWuV8IO0jimoSoo7oMrG3MYytRFpdk2Q_ZhTL5UgZqVbfJkMwcp8o0FYmzrmiGPll-kgBulTgGgvGjzl-mC5dtl56351ix1-If1D7KAohHzcYTHzEFkvYZlNCcxyHJX94-8IqpYaTQ1rJlnPExPIgys-ioZ3U_QzcPz4d3tGvRAfHEU7VoIeZHeXR1jqKuqvz70ayc8mAbL7RXzJat1Ru_glS3krkSdXdZxK-w
+            ```
+
+            Este objeto JWS assinado deve ser validado pelo devedor. Maiores detalhes técnicos a respeito da especificação
+            de segurança encontram-se no __[Manual de Segurança do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pix)__.
+
+            Conforme pode-se verificar no exemplo acima, o objeto JWS apresenta três fragmentos separados pelo caractere `.` (ponto). São eles: `header`, `payload` e `signature`.
+
+            Em termos de funcionalidade, o fragmento que interessa ao devedor é o `payload`, que apresenta estrutura conforme especificada pelo `schema` do presente endpoint, contendo detalhes concernentes à cobrança.
+
+          content:
+            "application/jose":
+              schema:
+                $ref: "../../components/schemas/cobrancas-com-vencimento/CobVPayload.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobPayload2.yaml"
+                retorno2:
+                  $ref: "../../components/examples/cobrancas/cobPayload5.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../components/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../components/examples/erros/RequisicaoInvalidaCobPayloadExample1.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"

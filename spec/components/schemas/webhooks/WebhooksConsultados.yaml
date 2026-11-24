@@ -1,0 +1,12 @@
+      type: "object"
+      title: "Webhooks Consultados"
+      required: ["webhooks"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaWebhooks.yaml"
+        webhooks:
+          type: "array"
+          title: "Lista de Webhooks consultados"
+          items:
+            allOf:
+              - $ref: "WebhookCompleto.yaml"

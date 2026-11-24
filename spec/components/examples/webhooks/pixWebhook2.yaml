@@ -1,0 +1,7 @@
+      summary: "Exemplo de Webhook Pix 2"
+      value:
+        endToEndId: "E87654321202009091221dfghi123456"
+        txid: "971122d8f37211eaadc10242ac120002"
+        valor: "110.00"
+        horario: "2020-09-09T20:15:00.358Z"
+        infoPagador: "0123456789"

@@ -1,0 +1,12 @@
+      type: "object"
+      title: "Locations Consultadas"
+      required: ["parametros", "loc"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaPayloadLocation.yaml"
+        loc:
+          type: "array"
+          title: "Lista de locations cadastradas"
+          items:
+            allOf:
+              - $ref: "PayloadLocationCompleta.yaml"

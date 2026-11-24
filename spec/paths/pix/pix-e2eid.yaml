@@ -1,0 +1,34 @@
+    parameters:
+      - name: "e2eid"
+        in: "path"
+        required: true
+        schema:
+          $ref: "../../components/schemas/pix/EndToEndId.yaml"
+    get:
+      tags:
+        - "Pix"
+      summary: "Consultar Pix."
+      security:
+        - OAuth2: [pix.read]
+      description: "Endpoint para consultar um Pix através de um e2eid."
+      responses:
+        "200":
+          description: "Dados do Pix efetuado."
+          content:
+            "application/json":
+              schema:
+                allOf:
+                  - $ref: "../../components/schemas/pix/PixConsultado.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/pix/pixResponse1.yaml"
+                retorno2:
+                  $ref: "../../components/examples/pix/pixResponse2.yaml"
+                retorno3:
+                  $ref: "../../components/examples/pix/pixResponse3.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"

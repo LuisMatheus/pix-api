@@ -1,0 +1,37 @@
+      summary: "Exemplo de Recorrência Completa com Dados QR Jornada 2"
+      value:
+        idRec: RN1234567820240115abcdefghijk
+        status: APROVADA
+        valor:
+          valorRec: "300.00"
+        vinculo:
+          contrato: "98625023"
+          devedor:
+            cpf: "87734514122"
+            nome: "Fulano de Tal"
+          objeto: "Serviços de Gestão de Imóveis"
+        calendario:
+          dataFinal: "2028-09-01"
+          dataInicial: "2024-02-01"
+          periodicidade: MENSAL
+        politicaRetentativa: NAO_PERMITE
+        loc:
+          criacao: "2023-12-19T12:28:05.230Z"
+          id: 5100
+          location: pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002
+          idRec: RN1234567820240115abcdefghijk
+        pagador:
+          codMun: "2673833"
+          cpf: "75633122216"
+          ispbParticipante: "81102623"
+        recebedor:
+          cnpj: "92221288310574"
+          nome: "Imobiliária Bom Sucesso"
+        atualizacao:
+          - data: "2024-01-03T08:30:02.050Z"
+            nome: CRIADA
+          - data: "2024-01-04T09:40:42.210Z"
+            nome: APROVADA
+        dadosQR:
+          jornada: JORNADA_2
+          pixCopiaECola: 00020126180014br.gov.bcb.pix5204000053039865802BR5913Fulano de Tal6008BRASILIA62070503***80800014br.gov.bcb.pix2558pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002630462C9

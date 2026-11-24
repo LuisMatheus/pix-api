@@ -1,0 +1,5 @@
+      type: "object"
+      title: "Cobrança Recorrente Revisada"
+      description: "Dados enviados para revisão da cobrança recorrente via API Pix"
+      allOf:
+        - $ref: "CobRStatusRevisada.yaml"

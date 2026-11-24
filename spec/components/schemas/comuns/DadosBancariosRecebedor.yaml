@@ -1,0 +1,19 @@
+      type: "object"
+      required: ["conta", "tipoConta"]
+      properties:
+        conta:
+          type: "string"
+          description: "Número da conta do usuário recebedor."
+          maxLength: 20
+        tipoConta:
+          type: "string"
+          title: "Tipo da conta do usuário recebedor"
+          description: "Tipo da conta do usuário recebedor."
+          enum:
+            - "CORRENTE"
+            - "POUPANCA"
+            - "PAGAMENTO"
+        agencia:
+          type: "string"
+          description: "Número da agência do usuário recebedor."
+          maxLength: 4

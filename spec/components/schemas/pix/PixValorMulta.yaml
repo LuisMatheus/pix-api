@@ -1,0 +1,11 @@
+      type: "object"
+      properties:
+        multa:
+          type: "object"
+          required: ["valor"]
+          properties:
+            valor:
+              type: "string"
+              title: "Valor relativo a multa."
+              description: "Valor da multa."
+              pattern: "\\d{1,10}\\.\\d{2}"

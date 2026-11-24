@@ -1,0 +1,18 @@
+      summary: "Exemplo de lote de cobranças com vencimento 1"
+      value:
+        descricao: "Cobranças dos alunos do turno vespertino"
+        criacao: "2020-11-01T20:15:00.358Z"
+        cobsv:
+          - criacao: "2020-11-01T20:15:00.358Z"
+            txid: "fb2761260e554ad593c7226beb5cb650"
+            status: "CRIADA"
+          - txid: "7978c0c97ea847e78e8849634473c1f1"
+            status: "NEGADA"
+            problema:
+              type: https://pix.bcb.gov.br/api/v2/error/CobVOperacaoInvalida
+              title: "Cobrança inválida."
+              status: 400
+              detail: "A requisição que busca alterar ou criar uma cobrança com vencimento não respeita o _schema_ ou está semanticamente errada."
+              violacoes:
+                - razao: "O objeto cobv.devedor não respeita o _schema_."
+                  propriedade: "cobv.devedor"

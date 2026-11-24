@@ -1,0 +1,104 @@
+    parameters:
+      - name: "txid"
+        in: "path"
+        required: true
+        schema:
+          $ref: "../../components/schemas/comuns/TxId.yaml"
+    put:
+      tags:
+        - "CobV"
+      summary: "Criar cobrança com vencimento."
+      security:
+        - OAuth2: [cobv.write]
+      description: |-
+        Endpoint para criar uma cobrança com vencimento.
+      requestBody:
+        $ref: "../../components/requestBodies/cobrancas-com-vencimento/CobVBody.yaml"
+      responses:
+        "201":
+          description: "Cobrança com vencimento criada"
+          content:
+            "application/json":
+              schema:
+                $ref: "../../components/schemas/cobrancas-com-vencimento/CobVGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobResponse4.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../components/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../components/examples/erros/RequisicaoInvalidaCobVExample1.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"
+    patch:
+      tags:
+        - "CobV"
+      summary: "Revisar cobrança com vencimento."
+      security:
+        - OAuth2: [cobv.write]
+      requestBody:
+        $ref: "../../components/requestBodies/cobrancas-com-vencimento/CobVBodyRevisada.yaml"
+      responses:
+        "200":
+          description: "Cobrança com vencimento revisada. A revisão deve ser incrementada em 1."
+          content:
+            "application/json":
+              schema:
+                $ref: "../../components/schemas/cobrancas-com-vencimento/CobVGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobResponse4.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../components/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../components/examples/erros/OperacaoInvalidaCobVExample1.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"
+    get:
+      parameters:
+        - name: "revisao"
+          in: "query"
+          required: false
+          schema:
+            $ref: "../../components/schemas/comuns/Revisao.yaml"
+      tags:
+        - "CobV"
+      summary: "Consultar cobrança com vencimento."
+      security:
+        - OAuth2: [cobv.read]
+      description: |-
+        Endpoint para consultar uma cobrança com vencimento através de um determinado txid.
+      responses:
+        "200":
+          description: "Dados da cobrança com vencimento."
+          content:
+            "application/json":
+              schema:
+                $ref: "../../components/schemas/cobrancas-com-vencimento/CobVCompleta.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobResponse4.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"

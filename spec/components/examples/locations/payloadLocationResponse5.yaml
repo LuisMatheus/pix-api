@@ -1,0 +1,6 @@
+      summary: "Exemplo de Payload Location 1"
+      value:
+        id: 7716
+        location: "pix.example.com/qr/v2/2353c790eefb11eaadc10242ac120002"
+        tipoCob: "cob"
+        criacao: "2020-03-11T21:19:51.013Z"

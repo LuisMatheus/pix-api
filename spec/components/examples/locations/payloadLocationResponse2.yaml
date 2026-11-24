@@ -1,0 +1,7 @@
+      summary: "Exemplo de Payload Location 2"
+      value:
+        id: 856
+        txid: "31e08604f9ce459bb59672332af8d672"
+        location: "pix.example.com/qr/v2/cobv/39c9f435c6324867aa1dec1260e1127c"
+        tipoCob: "cobv"
+        criacao: "2020-02-10T19:22:52.013Z"

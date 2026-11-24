@@ -1,0 +1,10 @@
+      type: "object"
+      title: "Configuração da Recorrência"
+      required: ["politicaRetentativa"]
+      properties:
+        politicaRetentativa:
+          type: "string"
+          title: "Política de retentativa pós vencimento da recorrência"
+          enum:
+            - "NAO_PERMITE"
+            - "PERMITE_3R_7D"

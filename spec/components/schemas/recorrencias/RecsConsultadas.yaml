@@ -1,0 +1,12 @@
+      type: "object"
+      title: "Recorrencias consultadas"
+      required: ["parametros", "recs"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaRec.yaml"
+        recs:
+          type: "array"
+          title: "Lista de recorrências"
+          items:
+            allOf:
+              - $ref: "RecCompletaPesquisada.yaml"

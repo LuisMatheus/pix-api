@@ -1,0 +1,18 @@
+      type: "object"
+      title: "Violações"
+      properties:
+        razao:
+          type: "string"
+          title: "Descrição do erro"
+          description: "Descrição do erro"
+          example: "Valor da cobrança não pode ser 0.00"
+        propriedade:
+          type: "string"
+          title: "Nome da propriedade"
+          description: "Nome da propriedade"
+          example: "cob.chave"
+        valor:
+          type: "string"
+          title: "Valor da propriedade"
+          description: "Valor da propriedade"
+          example: "061996671234"

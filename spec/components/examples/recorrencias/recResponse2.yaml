@@ -1,0 +1,22 @@
+      summary: "Exemplo de Recorrência 2"
+      value:
+        idRec: RR1234567820240115abcdefghijk
+        vinculo:
+          contrato: "998782003"
+          devedor:
+            cpf: "02989131415"
+            nome: "Beltrano da Silva"
+          objeto: "Serviço de Plano de Saúde."
+        calendario:
+          dataInicial: "2024-10-10"
+          periodicidade: ANUAL
+        politicaRetentativa: PERMITE_3R_7D
+        recebedor:
+          cnpj: "09172302153900"
+          nome: "Empresa de Serviços de Saúde SA"
+        valor:
+          valorMinimoRecebedor: "5000.00"
+        status: CRIADA
+        atualizacao:
+          - data: "2024-01-11T10:27:01.280Z"
+            nome: CRIADA

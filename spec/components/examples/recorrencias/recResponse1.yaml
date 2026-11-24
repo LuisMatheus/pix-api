@@ -1,0 +1,32 @@
+      summary: "Exemplo de Recorrência 1"
+      value:
+        idRec: RN1234567820240115abcdefghijk
+        vinculo:
+          contrato: "63100862"
+          devedor:
+            cpf: "45164632481"
+            nome: "Fulano de Tal"
+          objeto: "Serviço de Streamming de Música."
+        calendario:
+          dataFinal: "2025-04-01"
+          dataInicial: "2024-04-01"
+          periodicidade: MENSAL
+        politicaRetentativa: NAO_PERMITE
+        recebedor:
+          cnpj: "01602606113708"
+          nome: "Empresa de Serviços SA"
+        valor:
+          valorRec: "35.00"
+        status: CRIADA
+        loc:
+          criacao: "2023-12-10T07:10:05.115Z"
+          id: 108
+          location: pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002
+          idRec: RN1234567820240115abcdefghijk
+        ativacao:
+          dadosJornada:
+            tipoJornada: JORNADA_3
+            txid: "33beb661beda44a8928fef47dbeb2dc5"
+        atualizacao:
+          - data: "2023-12-19T12:28:05.230Z"
+            nome: CRIADA

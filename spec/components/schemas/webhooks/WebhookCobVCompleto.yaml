@@ -1,0 +1,15 @@
+      type: "object"
+      required: ["webhookUrl"]
+      title: "Webhook Base"
+      properties:
+        webhookUrl:
+          type: "string"
+          title: "URL Webhook"
+          format: uri
+          example: https://pix.example.com/api/webhookcobv/
+        criacao:
+          type: "string"
+          format: "date-time"
+          title: "Data de Criação"
+          description: "Data e hora em que o webhook foi cadastrado. Respeita RFC 3339."
+          readOnly: true

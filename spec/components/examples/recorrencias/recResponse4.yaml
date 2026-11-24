@@ -1,0 +1,27 @@
+      summary: "Exemplo de Recorrência Completa Jornada 1"
+      value:
+        idRec: RR7784567820240528123defgh775
+        status: CRIADA
+        valor:
+          valorRec: "250.00"
+        vinculo:
+          contrato: "9612389"
+          devedor:
+            cpf: "45832633800"
+            nome: "Alfredo Tavares"
+          objeto: "Serviços Esportivos"
+        calendario:
+          dataFinal: "2028-09-01"
+          dataInicial: "2024-02-01"
+          periodicidade: MENSAL
+        politicaRetentativa: PERMITE_3R_7D
+        pagador:
+          codMun: "1509873"
+          cpf: "45832633800"
+          ispbParticipante: "52780028"
+        recebedor:
+          cnpj: "56958712500811"
+          nome: "Academia Saúde"
+        atualizacao:
+          - data: "2024-01-03T08:30:02.050Z"
+            nome: CRIADA

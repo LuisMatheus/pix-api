@@ -1,0 +1,23 @@
+      summary: "Exemplo de payload de recorrência 1"
+      value:
+        idRec: RN123456782024011577825445612
+        vinculo:
+          contrato: "5582610"
+          devedor:
+            cpf: "45164632481"
+            nome: "Fulano de Tal"
+          objeto: "Serviço de Streamming de Música."
+        calendario:
+          dataFinal: "2025-04-01"
+          dataInicial: "2024-04-01"
+          periodicidade: MENSAL
+        politicaRetentativa: NAO_PERMITE
+        valor:
+          valorRec: "35.00"
+        recebedor:
+          cnpj: "28765007802371"
+          nome: "Startup Musical"
+          ispbParticipante: "12345678"
+        atualizacao:
+          - status: CRIADA
+            data: '2024-03-20T10:12:07.567Z'

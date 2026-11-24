@@ -1,0 +1,9 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/RecOperacaoInvalida
+        title: "Operação inválida."
+        status: 400
+        detail: "A recorrência não respeita o schema."
+        violacoes:
+          - razao: "O campo rec.calendario.dataInicial não respeita o schema."
+            propriedade: "rec.calendario.dataInicial"

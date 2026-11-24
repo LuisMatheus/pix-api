@@ -1,0 +1,33 @@
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://pix.example.com/oauth/token
+          scopes:
+            cob.write: Permissão para alteração de cobranças imediatas
+            cob.read: Permissão para consulta de cobranças imediatas
+            cobr.write: Permissão para alteração de cobranças recorrentes
+            cobr.read: Permissão para consulta de cobranças recorrentes
+            rec.write: Permissão para alteração de recorrências
+            rec.read: Permissão para consulta de recorrências
+            solicrec.write: Permissão para alteração de solicitações de recorrências
+            solicrec.read: Permissão para consulta de solicitações de recorrências
+            cobv.write: Permissão para alteração de cobranças com vencimento
+            cobv.read: Permissão para consulta de cobranças com vencimento
+            lotecobv.write: Permissão para alteração de lotes de cobranças com vencimento
+            lotecobv.read: Permissão para consulta de lotes de cobranças com vencimento
+            pix.write: Permissão para alteração de Pix
+            pix.read: Permissão para consulta de Pix
+            webhook.read: Permissão para consulta do webhook
+            webhook.write: Permissão para alteração do webhook
+            webhookrec.read: Permissão para consulta do webhook
+            webhookrec.write: Permissão para alteração do webhook
+            webhookcobr.read: Permissão para consulta do webhook
+            webhookcobr.write: Permissão para alteração do webhook
+            webhookcob.read: Permissão para consulta do webhook
+            webhookcob.write: Permissão para alteração do webhook
+            webhookcobv.read: Permissão para consulta do webhook
+            webhookcobv.write: Permissão para alteração do webhook
+            payloadlocation.write: Permissão para alteração de payloads
+            payloadlocation.read: Permissão para consulta de payloads
+            payloadlocationrec.write: Permissão para alteração de payloads
+            payloadlocationrec.read: Permissão para consulta de payloads

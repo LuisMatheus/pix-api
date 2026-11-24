@@ -1,0 +1,12 @@
+      description: "Dados para notificação."
+      required: true
+      content:
+        "application/json":
+          schema:
+            properties:
+              recs:
+                type: "array"
+                items:
+                  $ref: "../../schemas/recorrencias/RecNotification.yaml"
+          example:
+            $ref: "../../examples/webhooks/recWebhookNotification1.yaml#/value"

@@ -1,0 +1,13 @@
+      summary: "Exemplo de retorno da consulta de Webhooks 1"
+      value:
+        parametros:
+          inicio: "2020-04-01T00:00:00Z"
+          fim: "2020-04-01T23:59:59Z"
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 1
+        webhooks:
+          - allOf:
+            - $ref: "#/components/examples/recWebhookResponse1"

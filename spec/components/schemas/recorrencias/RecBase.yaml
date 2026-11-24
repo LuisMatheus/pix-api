@@ -1,0 +1,70 @@
+      title: "Recorrência Base"
+      type: "object"
+      required: ["idRec", "calendario","vinculo","retentativa"]
+      description: "Atributos de Configuração de Recorrência"
+      properties:
+        vinculo:
+          type: "object"
+          title: "Descrição do Objeto da Recorrência"
+          required: ["contrato","devedor"]
+          description: "Informações sobre o objeto da recorrência."
+          properties:
+            objeto:
+              type: "string"
+              title: "Identificador do objeto de vínculo"
+              description: "Campo de texto livre para informações referentes ao contrato que permitam ao usuário pagador reconhecer o objeto dos pagamentos periódicos por meio do Pix Automático."
+              maxLength: 35
+              example: 
+                - "Conta de energia Av. Paulista, 1804"
+                - "Serviço de internet banda larga"
+                - "Assinatura anual"
+            devedor:
+              description: "O objeto devedor organiza as informações sobre o devedor da recorrência."
+              oneOf:
+                - $ref: "PessoaFisicaRecorrencia.yaml"
+                - $ref: "PessoaJuridicaRecorrencia.yaml"
+            contrato:
+              type: "string"
+              title: "Objeto da autorização"
+              description: "Número, identificador, ou código que representa o objeto da autorização (contrato, pedido etc.)."
+              maxLength: 35
+        calendario:
+          type: "object"
+          title: "Informações sobre calendário da recorrência"
+          required: ["dataInicial", "periodicidade"]
+          description: "Informações sobre calendário da recorrência"
+          properties:
+            dataInicial:
+              type: "string"
+              format: "date"
+              title: "Data estimada de primeiro pagamento."
+              description: "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. Data estimada de primeiro pagamento."
+              example: "2023-04-01"
+            dataFinal:
+              type: "string"
+              format: "date"
+              title: "Data final da vigência."
+              description: "Campo opcional que deve ser preenchido para autorizações com vigência pré-definida, devendo ser compatível com os valores informados em tipoFrequencia e a dataInicialRecorrencia. Não deve ser preenchido para autorizações por tempo indeterminado. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601."
+              example: "2023-04-01"
+            periodicidade:
+              type: "string"
+              title: "Periodicidade das cobranças recorrentes."
+              enum:
+                - "SEMANAL"
+                - "MENSAL"
+                - "TRIMESTRAL"
+                - "SEMESTRAL"
+                - "ANUAL"
+        valor:
+          type: "object"
+          properties:
+            valorRec:
+              type: "string"
+              pattern: "\\d{1,10}\\.\\d{2}"
+              title: "Valor da recorrência"
+              description: "Campo opcional, deve ser preenchido apenas quando o valor dos pagamentos for fixo ou não for sujeito a alteração durante a vigência da autorização."
+            valorMinimoRecebedor:
+              type: "string"
+              pattern: "\\d{1,10}\\.\\d{2}"
+              title: "Valor mínimo da recorrência"
+              description: "Campo opcional. Valor definido pelo usuário recebedor. Se o usuário pagador atribuir um valor máximo para os pagamentos daquela autorização, ele não poderá ser inferior ao piso definido pelo usuário recebedor. Não pode ser preenchido nas autorizações de valor fixo, ou seja, com campo valor preenchido."

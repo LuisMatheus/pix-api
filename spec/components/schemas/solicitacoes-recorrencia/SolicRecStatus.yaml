@@ -1,0 +1,15 @@
+      type: "object"
+      title: "Status da Solicitação de Recorrência"
+      required: ["status"]
+      properties:
+        status:
+          type: "string"
+          title: "Status do registro da solicitação de recorrência"
+          enum:
+            - "CRIADA"
+            - "ENVIADA"
+            - "RECEBIDA"
+            - "REJEITADA"
+            - "ACEITA"
+            - "EXPIRADA"
+            - "CANCELADA"

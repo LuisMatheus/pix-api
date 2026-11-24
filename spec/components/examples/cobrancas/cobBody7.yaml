@@ -1,0 +1,23 @@
+      summary: "Exemplo de revisão de cobrança com vencimento 1"
+      value:
+        loc:
+          id: 789
+        devedor:
+          logradouro: "Alameda Souza, Numero 80, Bairro Braz"
+          cidade: "Recife"
+          uf: "PE"
+          cep: "70011750"
+          cpf: "12345678909"
+          nome: "Francisco da Silva"
+        valor:
+          original: "123.45"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "lddlg2glkkl620fs9908093235"
+          cbs:
+            informado:
+              valor: "4.32"
+          ibs:
+            informado:
+              valor: "8.13"
+        solicitacaoPagador: "Cobrança dos serviços prestados."

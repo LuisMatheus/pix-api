@@ -1,0 +1,54 @@
+      type: "object"
+      title: "Cobrança com Vencimento Gerada"
+      description: "Dados criados ou alterados da cobrança com vencimento via API Pix"
+      required:
+        [
+          "location",
+          "txid",
+          "devedor",
+          "calendario",
+          "revisao",
+          "status",
+          "valor",
+          "chave",
+          "recebedor",
+        ]
+      allOf:
+        - type: "object"
+          properties:
+            calendario:
+              required: ["validadeAposVencimento"]
+              title: "Calendário"
+              description: "Os campos aninhados sob o identificador calendário organizam informações a respeito de controle de tempo da cobrança."
+              allOf:
+                - $ref: "../cobrancas/CobCriacao.yaml"
+                - $ref: "../cobrancas/CobDataDeVencimento.yaml"
+            txid:
+              $ref: "../comuns/TxId.yaml"
+            revisao:
+              $ref: "../comuns/Revisao.yaml"
+        - $ref: "../comuns/DadosDevedor.yaml"
+        - $ref: "../comuns/DadosRecebedor.yaml"
+        - type: "object"
+          properties:
+            loc:
+              required: ["id", "txid", "tipoCob", "criacao"]
+              allOf:
+                - $ref: "../locations/PayloadLocation.yaml"
+        - type: "object"
+          properties:
+            status:
+              $ref: "CobVStatus.yaml"
+        - type: "object"
+          properties:
+            valor:
+              required: ["original"]
+              allOf:
+                - $ref: "CobVValor.yaml"
+        - $ref: "../cobrancas/CobBaseCopiaCola.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              allOf:
+                - $ref: "../tributos/TributoInformadoCompleto.yaml"
+        - $ref: "../tributos/ValorLiquidoEstimado.yaml"

@@ -1,0 +1,4 @@
+      type: "object"
+      title: "Webhook Solicitado"
+      allOf:
+        - $ref: "WebhookRecBase.yaml"

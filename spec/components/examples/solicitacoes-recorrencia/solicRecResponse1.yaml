@@ -1,0 +1,35 @@
+      summary: "Exemplo de solicitação de confirmação de recorrência 1"
+      value:
+        idSolicRec: SC876456782024021577825445312
+        idRec: RN123456782024011577825445612
+        calendario:
+          dataExpiracaoSolicitacao: "2023-12-20T12:17:11.926Z"
+        status: CRIADA
+        destinatario:
+          agencia: "2569"
+          conta: "550689"
+          cpf: "15231470190"
+          ispbParticipante: "91193552"
+        atualizacao:
+          - data: "2023-12-20T12:18:18.618Z"
+            status: CRIADA
+        recPayload:
+          idRec: RN123456782024011577825445612
+          vinculo:
+            contrato: "561238008"
+            devedor:
+              cpf: "15231470190"
+              nome: "Fulano de Tal"
+            objeto: "Serviços de Telecomunicações"
+          calendario:
+            dataFinal: "2023-12-01"
+            dataInicial: "2024-04-01"
+            periodicidade: MENSAL
+          recebedor:
+            cnpj: "94370926517368"
+            nome: "Empresa de Serviços SA"
+          valor:
+            valorRec: "1200.09"
+          atualizacao:
+            - data: "2023-12-15T08:30:07.115Z"
+              status: CRIADA

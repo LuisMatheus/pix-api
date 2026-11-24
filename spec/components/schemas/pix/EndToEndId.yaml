@@ -1,0 +1,6 @@
+      type: "string"
+      title: "Id fim a fim da transação"
+      description: "EndToEndIdentification que transita na PACS002, PACS004 e PACS008"
+      pattern: "[a-zA-Z0-9]{32}"
+      minLength: 32
+      maxLength: 32

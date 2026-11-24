@@ -1,0 +1,118 @@
+    parameters:
+      - name: txid
+        in: path
+        required: true
+        schema:
+          $ref: "../../components/schemas/comuns/TxId.yaml"
+    put:
+      tags:
+        - "Cob"
+      summary: "Criar cobrança imediata."
+      security:
+        - OAuth2: [cob.write]
+      description: |-
+        Endpoint para criar uma cobrança imediata.
+      requestBody:
+        $ref: "../../components/requestBodies/cobrancas/CobBody.yaml"
+      responses:
+        "201":
+          description: "Cobrança imediata criada"
+          content:
+            "application/json":
+              schema:
+                $ref: "../../components/schemas/cobrancas/CobGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobResponse1.yaml"
+                retorno2:
+                  $ref: "../../components/examples/cobrancas/cobResponse5.yaml"
+                retorno3:
+                  $ref: "../../components/examples/cobrancas/cobResponse6.yaml"
+                retorno4:
+                  $ref: "../../components/examples/cobrancas/cobResponse7.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../components/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../components/examples/erros/RequisicaoInvalidaCobExample1.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"
+    patch:
+      tags:
+        - "Cob"
+      summary: "Revisar cobrança imediata."
+      security:
+        - OAuth2: [cob.write]
+      requestBody:
+        $ref: "../../components/requestBodies/cobrancas/CobBodyRevisada.yaml"
+      responses:
+        "200":
+          description: "Cobrança imediata revisada. A revisão deve ser incrementada em 1."
+          content:
+            "application/json":
+              schema:
+                $ref: "../../components/schemas/cobrancas/CobGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobResponse3.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../components/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../components/examples/erros/OperacaoInvalidaCobExample1.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"
+    get:
+      parameters:
+        - name: "revisao"
+          in: "query"
+          required: false
+          schema:
+            $ref: "../../components/schemas/comuns/Revisao.yaml"
+      tags:
+        - "Cob"
+      summary: "Consultar cobrança imediata."
+      security:
+        - OAuth2: [cob.read]
+      description: |-
+        Endpoint para consultar uma cobrança através de um determinado txid.
+      responses:
+        "200":
+          description: "Dados da cobrança imediata."
+          content:
+            "application/json":
+              schema:
+                $ref: "../../components/schemas/cobrancas/CobCompleta.yaml"
+              examples:
+                retorno1:
+                  $ref: "../../components/examples/cobrancas/cobResponse1.yaml"
+                retorno2:
+                  $ref: "../../components/examples/cobrancas/cobResponse2.yaml"
+                retorno3:
+                  $ref: "../../components/examples/cobrancas/cobResponse5.yaml"
+                retorno4:
+                  $ref: "../../components/examples/cobrancas/cobResponse6.yaml"
+                retorno5:
+                  $ref: "../../components/examples/cobrancas/cobResponse7.yaml"
+        "403":
+          $ref: "../../components/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../components/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../components/responses/ServicoIndisponivel.yaml"

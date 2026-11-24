@@ -1,0 +1,9 @@
+# O responsável deve ter acesso de escrita ao repositório.
+# Ativar a exigência de revisão de Code Owners na proteção da master.
+/spec/ @LuisMatheus
+/openapi.yaml @LuisMatheus
+/scripts/ @LuisMatheus
+/.github/ @LuisMatheus
+/redocly.yaml @LuisMatheus
+/package.json @LuisMatheus
+/package-lock.json @LuisMatheus

@@ -1,0 +1,5 @@
+      description: "Problemas na requisição."
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/erros/Problema.yaml"

@@ -1,0 +1,11 @@
+      summary: "Exemplo de lote de cobranças com vencimento 2"
+      value:
+        descricao: "Cobranças dos assinantes anuais"
+        criacao: "2020-11-17T20:00:00.358Z"
+        cobsv:
+          - criacao: "2020-11-17T20:00:00.358Z"
+            txid: "06601eaa3822423fbe897f613b983e01"
+            status: "CRIADA"
+          - criacao: "2020-11-17T20:00:00.358Z"
+            txid: "4e07059760d54cf493de6e7f1fbfad9a"
+            status: "CRIADA"

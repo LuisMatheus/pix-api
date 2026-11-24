@@ -1,0 +1,15 @@
+      type: "object"
+      title: "Valor estimado da cobrança após recolhimento de CBS e IBS."
+      properties:
+        valorLiquidoEstimado:
+          type: "string"
+          title: "Valor Líquido Estimado."
+          pattern: "\\d{1,10}\\.\\d{2}"
+          description: |-
+            Valor estimado da cobrança após recolhimento de CBS e IBS.
+
+            -	Se houver tributo segregado é dado pela fórmula: `valorLiquido = valor - (tributo.cbs.segregado.valor + tributo.ibs.segregado.valor)`; senão
+            -	Se houver tributo em aberto é dado pela fórmula: `valorLiquido = valor.original - (tributo.cbs.emAberto.valor + tributo.ibs. emAberto.valor)`; senão
+            -	Se houver tributo corrigido é dado pela fórmula: `valorLiquido = valor.original - (tributo.cbs.corrigido.valor + tributo.ibs.corrigido.valor)`; senão
+            -	Se houver tributo informado é dado pela fórmula: `valorLiquido = valor.original - (tributo.cbs.informado.valor + tributo.ibs.informado.valor)`; senão
+            -	Se não houver tributo informado: `valorLiquido = valor.original`.

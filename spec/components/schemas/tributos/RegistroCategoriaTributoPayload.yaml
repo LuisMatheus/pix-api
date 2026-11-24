@@ -1,0 +1,15 @@
+      type: "object"
+      title: "Registro de tributo informado e corrigido."
+      description: "Informações tributárias disponibilizadas publicamente."
+      required: ["informado"]
+      properties:
+        informado:
+          title: "Tributo informado"
+          description: "Categoria de tributo informado."
+          allOf:
+            - $ref: "ValorTributoDetalheCompleto.yaml"
+        corrigido:
+          title: "Tributo corrigido"
+          description: "Categoria de tributo corrigido."
+          allOf:
+            - $ref: "ValorTributoDetalheCompleto.yaml"

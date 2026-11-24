@@ -1,0 +1,19 @@
+      summary: "Exemplo de revisão de cobrança 1"
+      value:
+        loc:
+          id: 7768
+        devedor:
+          cpf: "12345678909"
+          nome: "Francisco da Silva"
+        valor:
+          original: "123.45"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "lkjalkjfspjroij2poij523lk2nflqkef"
+          cbs:
+            informado:
+              valor: "4.50"
+          ibs:
+            informado:
+              valor: "8.60"
+        solicitacaoPagador: "Cobrança dos serviços prestados."

@@ -1,0 +1,10 @@
+      type: "object"
+      title: "Solicitação de Recorrência"
+      description: "Dados alterados da solicitação da recorrência"
+      required: ["status"]
+      properties:
+        status:
+          type: "string"
+          title: "Status do registro da solicitação de recorrência"
+          enum:
+            - "CANCELADA"

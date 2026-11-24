@@ -1,0 +1,15 @@
+      summary: "Exemplo de retorno da consulta de Pix 1"
+      value:
+        parametros:
+          inicio: "2020-01-01T00:00:00Z"
+          fim: "2020-12-01T23:59:59Z"
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 2
+        lotes:
+          - allOf:
+              - $ref: "#/components/examples/loteCobVResponse1/value"
+          - allOf:
+              - $ref: "#/components/examples/loteCobVResponse2/value"

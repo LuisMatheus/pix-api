@@ -1,0 +1,12 @@
+      type: "object"
+      title: "Cobranças recorrentes consultadas"
+      required: ["parametros", "cobsr"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaCobR.yaml"
+        cobsr:
+          type: "array"
+          title: "Lista de cobranças"
+          items:
+            allOf:
+              - $ref: "CobRCompleta.yaml"

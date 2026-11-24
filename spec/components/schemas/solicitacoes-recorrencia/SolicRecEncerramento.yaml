@@ -1,0 +1,19 @@
+      type: "object"
+      title: "Detalhamento do encerramento da solicitação de recorrência."
+      properties:
+        encerramento:
+          type: "object"
+          title: "Detalhamento do encerramento da solicitação de recorrência."
+          properties:
+            rejeicao:
+              type: "object"
+              title: "Informações sobre a rejeição da solicitação de recorrência"
+              required: ["motivo"]
+              description: "Informações sobre a rejeição da solicitação de recorrência"
+              properties:
+                motivo:
+                  type: "string"
+                  title: "Motivo da rejeição"
+                  description: "Motivo pelo qual a solicitação de recorrência foi rejeitada."
+                  enum:
+                    - "DADOS_BANCARIOS_INVALIDOS"

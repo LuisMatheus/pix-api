@@ -1,0 +1,15 @@
+      summary: "Exemplo de criação de cobrança imediata com Saque Pix 2"
+      value:
+        devedor:
+          cnpj: "12345678000195"
+          nome: "Empresa de Serviços SA"
+        valor:
+          original: "0.00"
+          modalidadeAlteracao: 0
+          retirada:
+            saque:
+              valor: "20.00"
+              modalidadeAlteracao: 1
+              modalidadeAgente: "AGFSS"
+              prestadorDoServicoDeSaque: "12345678"
+        chave: "7d9f0335-8dcc-4054-9bf9-0dbd61d36906"

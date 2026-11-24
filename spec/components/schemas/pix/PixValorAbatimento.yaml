@@ -1,0 +1,11 @@
+      type: "object"
+      properties:
+        abatimento:
+          type: "object"
+          required: ["valor"]
+          properties:
+            valor:
+              type: "string"
+              title: "Valor relativo a abatimento."
+              description: "Valor do abatimento."
+              pattern: "\\d{1,10}\\.\\d{2}"

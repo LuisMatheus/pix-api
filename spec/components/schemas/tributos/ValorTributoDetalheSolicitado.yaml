@@ -1,0 +1,9 @@
+      type: "object"
+      title: "Informação solicitada do valor do tributo"
+      required: ["valor"]
+      properties:
+        valor:
+          type: "string"
+          pattern: "\\d{1,10}\\.\\d{2}"
+          title: "Valor do tributo"
+          #description: "Valor do tributo relacionado ao pagamento."

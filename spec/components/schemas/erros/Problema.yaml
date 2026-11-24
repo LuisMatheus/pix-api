@@ -1,0 +1,26 @@
+      type: object
+      required: ["type", "title", "status"]
+      properties:
+        type:
+          type: string
+          format: uri
+          description: "URI de referência que identifica o tipo de problema. De acordo com a RFC 7807."
+          example: "https://pix.bcb.gov.br/api/v2/error/NaoEncontrado"
+        title:
+          type: string
+          description: "Descrição resumida do problema."
+          example: Not found
+        status:
+          type: integer
+          description: "Código HTTP do status retornado."
+          example: 404
+        detail:
+          type: string
+          description: "Descrição completa do problema."
+        correlationId:
+          type: string
+          description: Identificador de correlação do problema para fins de suporte
+        violacoes:
+          type: array
+          items:
+            $ref: "Violacao.yaml"

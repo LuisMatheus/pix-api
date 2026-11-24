@@ -1,0 +1,11 @@
+      type: "object"
+      title: "Expiração"
+      properties:
+        expiracao:
+          type: "integer"
+          format: "int32"
+          title: "Tempo de vida da cobrança, especificado em segundos."
+          description: |
+            Tempo de vida da cobrança, especificado em segundos a partir da data de criação (Calendario.criacao)
+          example: "3600"
+          default: "86400"

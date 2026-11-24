@@ -1,0 +1,10 @@
+      type: "object"
+      title: "Configuração da Cobrança Recorrente"
+      required: ["politicaRetentativa"]
+      properties:
+        politicaRetentativa:
+          type: "string"
+          title: "Política de retentativa da cobrança recorrente"
+          enum:
+            - "NAO_PERMITE"
+            - "PERMITE_3R_7D"

@@ -1,0 +1,10 @@
+      type: "object"
+      title: "Location do Payload Solicitada"
+      description: "Identificador da localização do payload solicitada."
+      required: ["tipo"]
+      properties:
+        tipo:
+          type: "string"
+          title: "Tipo da cobrança"
+          enum:
+            - "rec"

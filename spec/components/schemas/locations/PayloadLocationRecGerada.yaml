@@ -1,0 +1,21 @@
+      type: "object"
+      title: "Location do Payload Completa"
+      description: "Identificador da localização do payload completo."
+      required: ["id", "location", "tipo", "criacao"]
+      properties:
+        id:
+          $ref: "PayloadLocationRecId.yaml"
+        location:
+          type: "string"
+          title: "Localização do payload"
+          description: "Localização do Payload a ser informada na criação da recorrência."
+          maxLength: 77
+          format: uri
+          example: "pix.example.com/qr/v2/rec/2353c790eefb11eaadc10242ac120002"
+          readOnly: true
+        criacao:
+          type: "string"
+          format: "date-time"
+          title: "Data de Criação"
+          description: "Data e hora em que a location foi criada. Respeita RFC 3339."
+          readOnly: true

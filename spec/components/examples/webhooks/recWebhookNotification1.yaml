@@ -1,0 +1,14 @@
+      summary: "Exemplo de Notificação de Recorrência 1"
+      value:
+        recs:
+          - idRec: RR1026652320240821lab77511abf
+            status: APROVADA
+            atualizacao:
+            - status: CRIADA
+              data: '2024-08-20T10:12:07.567Z'
+            - status: APROVADA
+              data: '2024-08-22T12:43:53.337Z'
+            ativacao:
+              tipoJornada: JORNADA_3
+              dadosJornada:
+                txid: r9eFIFmwcZ55Nm4RsKZAAtIvvCrlcNN6

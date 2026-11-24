@@ -1,0 +1,26 @@
+      summary: "Exemplo de cobrança imediata com Saque Pix 3"
+      value:
+        calendario:
+          criacao: "2020-09-09T20:15:00.358Z"
+          expiracao: 3600
+        txid: "33beb661beda44a8928fef47dbeb2dc5"
+        revisao: 0
+        loc:
+          id: 1004
+          location: "pix.example.com/qr/7faa6893c4e64893a503baf0d40af213"
+          tipoCob: "cob"
+        location: "pix.example.com/qr/7faa6893c4e64893a503baf0d40af213"
+        status: "ATIVA"
+        devedor:
+          cnpj: "12345678000195"
+          nome: "Empresa de Serviços SA"
+        valor:
+          original: "10.00"
+          modalidadeAlteracao: 0
+          retirada:
+            troco:
+              valor: "0.00"
+              modalidadeAlteracao: 1
+              modalidadeAgente: "AGTEC"
+              prestadorDoServicoDeSaque: "12345678"
+        chave: "7d9f0335-8dcc-4054-9bf9-0dbd61d36906"

@@ -1,0 +1,19 @@
+      type: "object"
+      required: ["webhookUrl", "cnpj", "criacao"]
+      title: "Webhook"
+      properties:
+        webhookUrl:
+          type: string
+          format: uri
+          example: https://pix.example.com/api/webhook/
+        cnpj:
+          type: "string"
+          title: "CNPJ"
+          pattern: "^[0-9A-Z]{14}$"
+          description: "Filtro pelo CNPJ do devedor. Não pode ser utilizado ao mesmo tempo que o CPF."
+        criacao:
+          type: "string"
+          format: "date-time"
+          title: "Data de Criação"
+          description: "Data e hora em que o webhook foi cadastrado. Respeita RFC 3339."
+          readOnly: true

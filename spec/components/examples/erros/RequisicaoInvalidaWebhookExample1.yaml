@@ -1,0 +1,6 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/WebhookOperacaoInvalida
+        title: "Webhook inválido."
+        status: 400
+        detail: "A presente requisição busca criar um webhook sem respeitar o _schema_ ou, ainda, com sentido semanticamente inválido."

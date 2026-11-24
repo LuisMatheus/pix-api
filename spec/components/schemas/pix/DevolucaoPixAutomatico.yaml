@@ -1,0 +1,54 @@
+      type: "object"
+      title: "Devolução"
+      required: ["id", "rtrId", "valor", "horario", "status"]
+      properties:
+        id:
+          $ref: "DevolucaoId.yaml"
+        rtrId:
+          type: "string"
+          title: "RtrId"
+          description: "ReturnIdentification que transita na PACS004."
+          example: "D12345678202009091000abcde123456"
+          pattern: "[a-zA-Z0-9]{32}"
+          minLength: 32
+          maxLength: 32
+        valor:
+          type: "string"
+          title: "Valor a devolver."
+          pattern: "\\d{1,10}\\.\\d{2}"
+          description: "Valor a devolver."
+        natureza:
+          $ref: "DevolucaoNaturezaPixAutomatico.yaml"
+        descricao:
+          type: "string"
+          title: "Mensagem ao pagador relativa à devolução."
+          maxLength: 140
+          description: "O campo `descricao`, opcional, determina um texto a ser apresentado ao pagador contendo informações sobre a devolução. Esse texto será preenchido, na pacs.004, pelo PSP do recebedor, no campo RemittanceInformation. O tamanho do campo na pacs.004 está limitado a 140 caracteres."
+        horario:
+          type: "object"
+          properties:
+            solicitacao:
+              type: "string"
+              format: "date-time"
+              title: "Horário de solicitação"
+              description: "Horário no qual a devolução foi solicitada no PSP."
+            liquidacao:
+              type: "string"
+              format: "date-time"
+              title: "Horário de liquidacao"
+              description: "Horário no qual a devolução foi liquidada no PSP."
+        status:
+          type: "string"
+          title: "Status"
+          description: "Status da devolução."
+          enum: ["EM_PROCESSAMENTO", "DEVOLVIDO", "NAO_REALIZADO"]
+        motivo:
+          type: "string"
+          title: "Descrição do status."
+          description: |
+            # Status da Devolução
+
+            Campo opcional que pode ser utilizado pelo PSP recebedor para detalhar os motivos
+            de a devolução ter atingido o status em questão.
+            Pode ser utilizado, por exemplo, para detalhar o motivo de a devolução não ter sido realizada.
+          maxLength: 140

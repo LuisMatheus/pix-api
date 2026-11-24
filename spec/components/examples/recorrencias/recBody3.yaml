@@ -1,0 +1,11 @@
+      summary: "Exemplo de Revisão de Recorrência 1"
+      value:
+        loc: 108
+        vinculo:
+          devedor:
+            nome: "Fulano de Tal"
+        calendario:
+          dataInicial: "2024-04-01"
+        ativacao:
+          dadosJornada:
+            txid: "33beb661beda44a8928fef47dbeb2dc5"

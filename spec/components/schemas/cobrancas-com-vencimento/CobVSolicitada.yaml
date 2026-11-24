@@ -1,0 +1,30 @@
+      type: "object"
+      title: "Cobrança com vencimento solicitada"
+      description: "Dados enviados para criação ou alteração da cobrança com vencimento via API Pix"
+      required: ["valor", "chave", "devedor", "calendario"]
+      allOf:
+        - type: "object"
+          properties:
+            calendario:
+              title: "Calendário"
+              description: "Os campos aninhados sob o identificador calendário organizam informações a respeito de controle de tempo da cobrança."
+              allOf:
+                - $ref: "../cobrancas/CobDataDeVencimento.yaml"
+        - $ref: "../comuns/DadosDevedor.yaml"
+        - type: "object"
+          properties:
+            loc:
+              allOf:
+                - $ref: "../locations/PayloadLocationCob.yaml"
+        - type: "object"
+          properties:
+            valor:
+              allOf:
+                - required: ["original"]
+                - $ref: "CobVValor.yaml"
+        - $ref: "../cobrancas/CobBase.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              allOf:
+                - $ref: "../tributos/TributoInformadoSolicitado.yaml"

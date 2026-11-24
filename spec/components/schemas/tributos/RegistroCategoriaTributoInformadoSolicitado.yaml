@@ -1,0 +1,10 @@
+      type: "object"
+      title: "Registro de tributo informado"
+      description: "Detalhamento dos valores informados do tributo, segregados por categoria."
+      required: ["informado"]
+      properties:
+        informado:
+          title: "Tributo informado"
+          description: "Categoria de tributo informado."
+          allOf:
+            - $ref: "ValorTributoDetalheSolicitado.yaml"

@@ -1,0 +1,54 @@
+      summary: "Exemplo de cobrança recorrente 2"
+      value:
+        idRec: RR123456782024061999000566354
+        txid: 7f733863543b4a16b516d839bd4bc34e
+        calendario:
+          criacao: "2024-05-20"
+          dataDeVencimento: "2024-06-20"
+        valor: 
+          original: "50.33"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "kjsyriedcncfgfkdks7shs62j39sd83"
+          cbs:
+            informado:
+              valor: "1.76"
+              data: "2024-05-20T14:47:29.470Z"
+            corrigido:
+              valor: "1.80"
+              data: "2024-06-20T09:00:00.000Z"
+          ibs:
+            informado:
+              valor: "3.52"
+              data: "2024-05-20T14:47:29.470Z"
+            corrigido:
+              valor: "3.60"
+              data: "2024-06-20T09:00:00.000Z"
+        valorLiquidoEstimado: "44.93"
+        status: ATIVA
+        politicaRetentativa: PERMITE_3R_7D
+        ajusteDiaUtil: true
+        devedor:
+          cep: "63259740"
+          cidade: "Campinas"
+          email: "beltrano.silva@mail.com"
+          logradouro: "Rua Gonçalves Dias 605"
+          uf: "SP"
+        recebedor:
+          cnpj: "58966551101210"
+          conta: "997182"
+          tipoConta: CORRENTE
+        tentativas:
+          - dataLiquidacao: "2024-06-22"
+            tipo: AGND
+            endToEndId: E12345678202406201221abcdef12345
+            status: EXPIRADA 
+          - dataLiquidacao: "2024-06-24"
+            tipo: NTAG
+            endToEndId: E12345678202406201221abcdef12345
+            status: AGENDADA
+        atualizacao:
+          - data: "2024-05-20T14:47:29.470Z"
+            status: CRIADA
+          - data: "2024-05-21T10:18:20.120Z"
+            status: ATIVA

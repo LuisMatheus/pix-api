@@ -1,0 +1,1509 @@
+openapi: 3.0.0
+info:
+  title: API Pix
+  version: "2.11.0-rc1"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  contact:
+    name: Suporte PIX BCB
+    email: suporte.pix@bcb.gov.br
+    url: https://www.bcb.gov.br/estabilidadefinanceira/pix
+  description: |-
+    A API Pix padroniza serviços oferecidos pelo PSP recebedor no contexto do arranjo Pix, direcionando:
+    - o gerenciamentos de cobranças, com e sem recorrências, em lotes ou não;
+    - o acompanhamento dos Pix e suas devoluções;
+    - as consultas.
+
+    Os serviços expostos pelo PSP recebedor permitem ao usuário recebedor estabelecer integração
+    de sua automação com os serviços Pix do PSP.
+
+    # Evolução da API Pix
+
+    A API Pix busca respeitar __[SemVer](https://semver.org/lang/pt-BR/)__. Nesse sentido,
+    mudanças compatíveis não devem gerar nova versão _major_.
+
+    A versão da API é composta por 4 elementos: _major_, _minor_, _patch_ e _release candidate_.
+    A versão `v[x]`que consta no path da URL é o elemento _major_ da versão da API.
+    A evolução da versão se dá seguinte forma:
+
+      - Major: alterações incompatíveis, com quebra de contrato (v1.0.0 → v2.0.0) 
+      - Minor: alterações compatíveis, sem quebra de contrato (v1.1.0 → v1.2.0)
+      - Patch: bugfixes, esclarecimentos às especificações, sem alterações funcionais (v1.1.1 → v1.1.2)
+      - Release candidate: versões de pré-lançamento de qualquer patch futuro, minor ou major (v1.0.0-rc.1 → v1.0.0-rc.22)
+
+    Alterações sem quebra de contrato e esclarecimentos às especificações podem ocorrer a qualquer momento.
+    Clientes devem estar preparados para lidar com essas mudanças sem quebrar.
+
+    As seguintes mudanças são esperadas e consideradas retrocompatíveis:
+
+    - Adição de novos recursos na API Pix;
+    - Adição de novos parâmetros opcionais;
+    - Adição de novos campos em respostas da API Pix;
+    - Alteração da ordem de campos;
+    - Adição de novos elementos em enumerações.
+
+
+    # Tratamento de erros
+
+    A API Pix retorna códigos de status HTTP para indicar sucesso ou falhas das
+    requisições, são eles:
+    - Códigos `2xx` indicam sucesso; 
+    - Códigos `4xx` indicam falhas causadas pelas
+    informações enviadas pelo cliente ou pelo estado atual das entidades e;
+    - Códigos `5xx` indicam problemas no serviço no lado da API Pix.
+
+    As respostas de erro incluem no corpo detalhes do erro seguindo o
+    _schema_ da [RFC 7807](https://tools.ietf.org/html/rfc7807).
+
+    O campo `type` identifica o tipo de erro e na API Pix segue o padrão:
+
+    `https://pix.bcb.gov.br/api/v2/error/<TipoErro>`
+
+    O padrão acima listado, referente ao campo `type`, não consiste, necessariamente, em uma
+    URL que apresentará uma página web válida, ou um endpoint válido, embora possa, futuramente,
+    ser exatamente o caso. O objetivo primário é apenas e tão somente identificar o tipo de erro.
+
+    Convém reforçar que a API Pix contempla uma lista de produtos e respectivas funcionalidades ofertadas pelo PSP recebedor. 
+    Cabe à relação contratual com cada usuário recebedor a concessão da totalidade ou de um subconjunto de acessos
+    relacionados aos produtos ofertados. Por exemplo, o usuário recebedor, ao acessar uma funcionalidade não contemplada 
+    no seu escopo contratual, receberá o erro geral `AcessoNegado` descrito na próxima seção.
+
+    Abaixo estão listados os tipos de erro e possíveis violações da API Pix.
+
+    ## Gerais
+
+    Esta seção reúne erros que poderiam ser retornados por quaisquer endpoints listados na API Pix.
+
+    ### `RequisicaoInvalida`
+
+      * __Significado__: Requisição inválida.
+      * __HTTP Status Code__: [400 Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+
+    ### `AcessoNegado`
+
+      * __Significado__: Requisição de participante autenticado que viola alguma regra de autorização.
+      * __HTTP Status Code__: [403 Forbidden](https://tools.ietf.org/html/rfc7231#section-6.5.3).
+
+    ### `NaoEncontrado`
+
+      * __Significado__: Entidade não encontrada.
+      * __HTTP Status Code__: [404 Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+
+    ### `PermanentementeRemovido`
+
+      * __Significado__: Indica que a entidade existia, mas foi permanentemente removida.
+      * __HTTP Status Code__: [410 Gone](https://tools.ietf.org/html/rfc7231#section-6.5.9).
+
+    ### `ErroInternoDoServidor`
+
+      * __Significado__: Condição inesperada ao processar requisição.
+      * __HTTP Status Code__: [500 Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1).
+
+    ### `ServicoIndisponivel`
+
+      * __Significado__: Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento.
+      * __HTTP Status Code__: [503 Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4).
+
+    ### `IndisponibilidadePorTempoEsgotado`
+
+      * __Significado__: Indica que o serviço demorou além do esperado para retornar.
+      * __HTTP Status Code__: [504 Gateway Timeout](https://tools.ietf.org/html/rfc7231#section-6.6.5).
+
+    ## Tag CobPayload 
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `CobPayload`.
+    Estes erros indicam problemas na tentativa de recuperação, via _location_, do Payload JSON que representa a cobrança.
+
+    ### `CobPayloadNaoEncontrado`
+
+    * __Significado__: a cobrança em questão não foi encontrada para a location requisitada.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4) ou [410](https://tools.ietf.org/html/rfc7231#section-6.5.9).
+    * __endpoints__: `GET /{pixUrlAccessToken}`, `GET /cobv/{pixUrlAccessToken}`.
+
+    Se a presente location exibia uma cobrança, mas não a exibirá mais de maneira permanentemente,
+    pode-se aplicar o HTTP status code [410](https://tools.ietf.org/html/rfc7231#section-6.5.9). Se a presente location não
+    está exibindo nenhuma cobrança, pode-se utilizar o HTTP status code [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+
+    Uma cobrança pode estar "expirada" (`calendario.expiracao`), "vencida", "Concluida",
+    entre outros estados em que não poderia ser efetivamente paga. Nesses casos, é uma liberalidade
+    do PSP recebedor retornar o presente código de erro ou optar por servir o payload de qualquer maneira,
+    objetivando fornecer uma informação adicional ao usuário pagador final a respeito da cobrança.
+
+    ### `CobPayloadOperacaoInvalida`
+
+    * __Significado__: a cobrança existe, mas a requisição é inválida.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /cobv/{pixUrlAccessToken}`.
+
+    __Violações__:
+      - `codMun` não respeita o _schema_.
+      - `codMun` não é um código válido segundo a __[tabela de municípios do IBGE](https://www.ibge.gov.br/explica/codigos-dos-municipios.php)__.
+      - `DPP` não respeita o _schema_.
+      - `DPP` anterior ao momento presente.
+      - `DPP` superior à validade da cobrança em função dos parâmetros `calendario.dataDeVencimento`
+      e `calendario.validadeAposVencimento`. Exemplo: `dataDeVencimento` => 2020-12-25,
+      `validadeAposVencimento` => 10, `DPP` => 2021-01-05. Neste exemplo, o parâmetro `DPP` é
+      inválido considerando o contexto apresentado porque é uma data em que a cobrança
+      não poderá ser paga. A cobrança, neste exemplo, não será considerada válida
+      a partir da data 2021-01-05.
+
+    ## Tag RecPayload 
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `RecPayload`.
+    Estes erros indicam problemas na tentativa de recuperação, via _location_, do Payload JSON que representa a recorrência.
+
+    ### `RecPayloadNaoEncontrado`
+
+    * __Significado__: a recorrência em questão não foi encontrada para a location requisitada.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4) ou [410](https://tools.ietf.org/html/rfc7231#section-6.5.9).
+    * __endpoint__: `GET /rec/{recUrlAccessToken}`.
+
+    Se a presente location exibia uma recorrência, mas não a exibirá mais de maneira permanentemente,
+    pode-se aplicar o HTTP status code [410](https://tools.ietf.org/html/rfc7231#section-6.5.9). Se a presente location não
+    está exibindo nenhuma recorrência, pode-se utilizar o HTTP status code [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+
+    Uma recorrência pode estar expirada, cancelada ou rejeitada, nesses casos, é uma liberalidade
+    do PSP recebedor retornar o presente código de erro ou optar por servir o payload de qualquer maneira,
+    objetivando fornecer uma informação adicional ao usuário pagador final a respeito da recorrência.
+
+    ### `RecPayloadOperacaoInvalida`
+
+    * __Significado__: a recorrência em questão encontra-se em expirada, rejeitada ou cancelada para a location requisitada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoint__: `GET /rec/{recUrlAccessToken}`.
+
+    __Violações__ para o endpoint `GET /rec/{recUrlAccessToken}`:
+    - O campo `recUrlAccessToken` referencia uma recorrência expirada, rejeitada ou cancelada.
+
+    ## Tag Rec
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `Rec`.
+    Esses erros indicam problemas no gerenciamento de uma recorrência.
+
+    ### `RecNaoEncontrada`
+
+    * __Significado__: Recorrência não encontrada para o idRec informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET|PATCH] /rec/{idRec}`. 
+
+    ### `RecOperacaoInvalida`
+
+    * __Significado__: a requisição que busca alterar ou criar uma recorrência não respeita o _schema_ ou está semanticamente errada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `POST /rec` e `PATCH /rec/{idRec}`.
+
+    __Violações__ para o endpoint `POST /rec`:
+      - O objeto `rec.vinculo` não respeita o _schema_.
+      - O campo `rec.calendario.dataInicial` é anterior à data de criação da recorrência.
+      - O campo `rec.calendario.dataFinal` é anterior ao campo `rec.calendario.dataInicial`.
+      - O campo `rec.calendario.periodicidade` não respeita o _schema_.
+      - O objeto `rec.valor` não respeita o _schema_.
+      - O campo `rec.valor.valorRec` não respeita o _schema_.
+      - O campo `rec.valor.valorMinimoRecebedor` não respeita o _schema_.
+      - Ambos os campos `rec.valor.valorRec` e `rec.valor.valorMinimoRecebedor` estão preenchidos.
+      - O objeto `rec.recebedor` não respeita o _schema_.
+      - O campo `rec.politicaRetentativa` não respeita o _schema_.
+      - O location referenciado por `rec.loc` inexiste.
+      - O location referenciado por `rec.loc` já está sendo utilizado por outra recorrência.
+      - O valor do campo `rec.recebedor.convenio` não é aceito pelo PSP Recebedor.
+      - o recebedor da cobrança identificado pelo campo `rec.dadosJornada.txid` não corresponde ao recebedor associado à recorrência.
+
+    __Violações__ para o endpoint `PATCH /rec/{idRec}`:
+
+      - O campo `rec.calendario.dataInicial` é anterior à data de criação da recorrência.
+      - O location referenciado por `rec.loc` inexiste.
+      - O location referenciado por `rec.loc` já está sendo utilizado por outra recorrência.
+      - O campo `rec.status` não respeita o _schema_.
+      - A recorrência encontra-se expirada, cancelada ou rejeitada.
+      - O campo `rec.loc` somente pode ser alterado quando a recorrência apresentar-se com o status CRIADA.
+      - O campo `rec.calendario.dataInicial` somente pode ser alterado quando a recorrência apresentar-se com o status CRIADA.
+      - O campo `rec.vinculo.devedor.nome` somente pode ser alterado quando a recorrência apresentar-se com o status CRIADA.
+      - O campo `rec.dadosJornada.txid` não pode ser alterado quando a recorrência apresentar-se com o status REJEITADA ou CANCELADA.
+      - O recebedor da cobrança identificado pelo campo `rec.dadosJornada.txid` não corresponde ao recebedor associado à recorrência.
+
+    ### `RecConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de recorrências que não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /rec` e `GET /rec/{idRec}`.
+
+    __Violações__ específicas para o endpoint `GET /rec`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - ambos os parâmetros `cpf` e `cnpj` estão preenchidos.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+    
+    __Violações__ específicas para o endpoint `GET /rec/{idRec}`:
+
+      - o parâmetro `txid` não corresponde a uma cobrança compatível com o campo `ativacao.tipoJornada`. (_Exemplo: `txid` correspondente a uma CobV e `ativação.tipoJornada` igual a JORNADA_3._)
+      - o parâmetro `txid` corresponde a uma cobrança imediata diferente da informada no campo `ativação.dadosJornada.txid`. Esta violação não ocorre caso o parâmetro txid corresponda a uma cobrança com vencimento.
+      - o recebedor da cobrança identificada pelo parâmetro `txid` não corresponde ao recebedor associado à recorrência.
+
+    ## Tag SolicRec
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `SolicRec`.
+    Esses erros indicam problemas no gerenciamento de uma solicitação de confirmação de recorrência.
+
+    ### `SolicRecNaoEncontrada`
+
+    * __Significado__: Solicitação de recorrência não encontrada para o idSolicRec informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET] /solicrec/{idSolicRec}`.
+
+    ### `SolicRecOperacaoInvalida`
+
+    * __Significado__: a requisição que busca criar ou alterar uma solicitação de confirmação de recorrência não respeita o _schema_ ou está semanticamente errada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `[POST] /solicrec` e `PATCH /solicrec/{idSolicRec}`.
+
+    __Violações__ para o endpoint `POST /solicrec`:
+      - O objeto `solicrec.calendario` não respeita o _schema_.
+      - O campo `solicrec.calendario.dataExpiracaoSolicitacao` é anterior à data de criação da solicitação da recorrência.
+      - O objeto `solicrec.destinatario` não respeita o _schema_.
+      - Existe uma solicitação ativa referente ao mesmo `solicrec.idRec`.
+      - Não é possível criar uma solicitação para uma recorrência que já foi confirmada ou está pendente de confirmação pelo usuário pagador.
+    
+    __Violações__ para o endpoint `PATCH /solicrec/{idSolicRec}`:
+
+      - Não é possível cancelar uma solicitação de recorrência com o status diferente de CRIADA, ENVIADA ou RECEBIDA.
+
+    ## Tag CobR
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `CobR`.
+    Esses erros indicam problemas no gerenciamento de uma cobrança recorrente.
+
+    ### `CobRNaoEncontrado`
+
+    * __Significado__: Cobrança não encontrada para o txid informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET|PATCH] /cobr/{txid}` e  `[POST] /cobr/{txid}/retentativa/{data}`.
+
+    ### `CobROperacaoInvalida`
+
+    * __Significado__: a requisição que busca alterar ou criar uma cobrança recorrente não respeita o _schema_ ou está semanticamente errada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `[POST|PUT|PATCH] /cobr/{txid}` e  `[POST] /cobr/{txid}/retentativa/{data}`.
+
+    __Violações__ para o endpoint `POST|PUT /cobr/{txid}`:
+      - O campo `cobr.infoAdicional` não respeita o _schema_.
+      - O campo `cobr.status` não respeita o _schema_.
+      - O objeto `cobr.calendario` não respeita o _schema_.
+      - O campo `cobr.calendario.dataDeVencimento` é anterior à data de criação da cobrança.
+      - O campo `cobr.valor` não respeita o _schema_.
+      - O objeto `cobr.recebedor` não respeita o _schema_.
+      - Os campos `cobr.recebedor.conta` e `cobr.recebedor.agencia` correspondem a uma conta que não pertence a este usuário recebedor.
+      - O objeto `cobr.devedor` não respeita o _schema_.
+      - O campo `cobr.txid` encontra-se em uso.
+      - Existe uma CobR com status diferente de REJEITADA e CANCELADA referente ao mesmo `cobr.idRec` com `calendario.dataDeVencimento` no mesmo ciclo.
+      - O objeto `cobr.tributo` não respeita o _schema_.
+      - O objeto `cobr.tributo` não pode ser preenchido quando o `rec.vinculo.devedor` representar pessoa física.
+      - O somatório dos valores dos tributos é maior que o valor da cobrança, considerando, para cada tributo, o valor da categoria `informado`.
+
+    __Violações__ para o endpoint `PATCH /cobr/{txid}`:
+
+      - Não é possível cancelar uma cobrança em uma data igual ou maior que a data prevista da primeira tentativa de liquidação.
+
+    __Violações__ para o endpoint `POST /cobr/{txid}/retentativa/{data}`:
+
+      - Existe uma tentativa com status `SOLICITADA` ou `AGENDADA`.
+      - Existe uma tentativa em andamento.
+      - Existe uma tentativa ativa.
+      - Existe uma tentativa não finalizada.
+      - Existe uma tentativa vigente para a `data` informada.
+      - O parâmetro `data` não corresponde a uma data futura.
+      - A política configurada na recorrência não permite retentativa de cobrança.
+
+    ### `CobRConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de cobranças que não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /cobr` e `GET /cobr/{txid}`.
+
+    __Violações__ específicas para o endpoint `GET /cobr`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - ambos os parâmetros `cpf` e `cnpj` estão preenchidos.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag Cob
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `Cob`.
+    Esses erros indicam problemas no gerenciamento de uma cobrança para pagamento imediato.
+
+    ### `CobNaoEncontrado`
+
+    * __Significado__: Cobrança não encontrada para o txid informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET|PATCH] /cob/{txid}`.
+
+    ### `CobOperacaoInvalida`
+
+    * __Significado__: a requisição que busca alterar ou criar uma cobrança para pagamento imediato
+    não respeita o _schema_ ou está semanticamente errada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `[POST|PUT|PATCH] /cob/{txid}`.
+
+    __Violações__ para os endpoints `PUT|PATCH /cob/{txid}`:
+      - O campo `cob.calendario.expiracao` é igual ou menor que `zero`.
+      - O campo `cob.valor.original` não respeita o _schema_.
+      - O campo `cob.valor.original` é `zero`.
+      - O objeto `cob.devedor` não respeita o _schema_.
+      - O campo `cob.chave` não respeita o _schema_.
+      - O campo `cob.chave` corresponde a uma conta que não pertence a este usuário recebedor.
+      - O campo `solicitacaoPagador` não respeita o _schema_.
+      - O objeto `infoAdicionais` não respeita o _schema_.
+      - O `location` referenciado por `loc.id` inexiste.
+      - O `location` referenciado por `loc.id` já está sendo utilizado por outra cobrança.
+      - O `location` referenciado por `cob.loc.id` apresenta tipo "cobv" (deveria ser "cob").
+      - O objeto `cob.tributo` não respeita o _schema_.
+      - O objeto `cob.tributo` não pode ser preenchido quando `cob.devedor` estiver ausente ou representar pessoa física.
+      - O somatório dos valores dos tributos é maior que o valor da cobrança, considerando, para cada tributo, o valor de `corrigido` quando preenchido e, na sua ausência, o valor de `informado`.
+
+    __Violações__ específicas para o endpoint `PUT /cob/{txid}`:
+      - A cobrança já existe, não está no status ATIVA, e a presente requisição busca alterá-la.
+
+    __Violações__ específicas para o endpoint `PATCH /cob/{txid}`:
+      - A cobrança não está ATIVA, e a presente requisição busca alterá-la.
+      - A cobrança está ATIVA, e a presente requisição propõe alterar
+      seu status para _REMOVIDA_PELO_USUARIO_RECEBEDOR_ juntamente com outras alterações
+      (não faz sentido remover uma cobrança ao mesmo tempo em que se realizam
+      alterações que não serão aproveitadas).
+      - O campo `cob.status` não respeita o _schema_.
+      - O campo `cob.tributo.cbs.informado` somente pode ser alterado enquanto o campo `cob.tributo.cbs.corrigido` não estiver preenchido.
+      - O campo `cob.tributo.ibs.informado` somente pode ser alterado enquanto o campo `cob.tributo.ibs.corrigido` não estiver preenchido.
+
+    ### `CobConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de cobranças para pagamento imediato
+    não respeitam o _schema_ ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /cob` e `GET /cob/{txid}`.
+
+    __Violações__ específicas para o endpoint `GET /cob`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - ambos os parâmetros `cpf` e `cnpj` estão preenchidos.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    __Violações__ específicas para o endpoint `GET /cob/{txid}`:
+      - o parâmetro `revisao` corresponde a uma revisão inexistente para a cobrança
+      apontada pelo parâmetro `txid`.
+
+    ## Tag CobV
+
+    Esta seção reúne erros retornados pelos endpoints organizados sob a tag `CobV`.
+    Esses erros indicam problemas no gerenciamento de uma cobrança com vencimento.
+
+    ### `CobVNaoEncontrada`
+
+    * __Significado__: Cobrança com vencimento não encontrada para o txid informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET|PATCH] /cobv/{txid}`.
+
+    ### `CobVOperacaoInvalida`
+
+    * __Significado__: a requisição que busca alterar ou criar uma cobrança com vencimento
+    não respeita o _schema_ ou está semanticamente errada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `[PUT|PATCH] /cobv/{txid}`.
+
+    __Violações__ para os endpoints `PUT|PATCH /cobv/{txid}`:
+      - Este `txid` está associado a um lote e no referido lote, o status desta cobrança está atribuído como
+      "EM_PROCESSAMENTO" ou "NEGADA".
+      - O campo `cobv.calendario.dataDeVencimento` é anterior à data de criação da cobrança.
+      - O campo `cobv.calendario.validadeAposVencimento` é menor do que zero.
+      - O objeto `cobv.devedor` não respeita o _schema_.
+      - O campo `cobv.chave` não respeita o _schema_.
+      - O campo `cobv.chave` corresponde a uma conta que não pertence a este usuário recebedor.
+      - O campo `solicitacaoPagador` não respeita o _schema_.
+      - O objeto `infoAdicionais` não respeita o _schema_.
+      - O location referenciado por `cobv.loc.id` inexiste.
+      - O location referenciado por `cobv.loc.id` já está sendo utilizado por outra cobrança.
+      - O location referenciado por `cobv.loc.id` apresenta tipo "cob" (deveria ser "cobv").
+      - O campo `cobv.valor.original` não respeita o _schema_.
+      - O campo `cobv.valor.original` apresenta o valor `zero`.
+      - O objeto `cobv.valor.multa` não respeita o _schema_.
+      - O objeto `cobv.valor.juros` não respeita o _schema_.
+      - O objeto `cobv.valor.abatimento` não respeita o _schema_.
+      - O objeto `cobv.valor.desconto` não respeita o _schema_.
+      - O objeto `cobv.valor.abatimento` representa um valor maior ou igual ao valor da
+      cobrança original ou maior ou igual a 100%.
+      - O objeto `cobv.valor.desconto` apresenta algum elemento de desconto que representa um valor maior ou
+      igual ao valor da cobrança original ou maior ou igual a 100%.
+      - O objeto `cobv.valor.desconto` apresenta algum elemento cuja data seja posterior à data de vencimento
+      representada por `calendario.dataDeVencimento`.
+      - O objeto `cobv.valor.desconto` apresenta modalidade no valor `1` ou `2`,
+      porém `cobv.valor.desconto.valorPerc` encontra-se preenchido
+      - O objeto `cobv.valor.desconto` apresenta modalidade no valor `1` ou `2`, porém
+      o array `cobv.valor.desconto.descontoDataFixa` está vazio ou nulo.
+      - O objeto `cobv.valor.desconto` apresenta modalidade nos valores de `3` a `6`, porém
+      o elemento `cobv.valor.desconto.valorPerc` não está preenchido.
+      - O objeto `cobv.valor.desconto` apresenta modalidade nos valores de `3` a `6`, porém
+      o elemento `cobv.valor.desconto.descontoDataFixa` está preenchido ou não nulo.
+      - O objeto `cobv.tributo` não respeita o _schema_.
+      - O objeto `cobv.tributo` não pode ser preenchido quando `cobv.devedor` representar pessoa física.
+      - O somatório dos valores dos tributos é maior que o valor da cobrança, considerando, para cada tributo, o valor de `corrigido` quando preenchido e, na sua ausência, o valor de `informado`.
+
+    __Violações__ específicas para o endpoint `PUT /cobv/{txid}`:
+      - A cobrança já existe, não está ATIVA, e a presente requisição busca alterá-la
+
+    __Violações__ específicas para o endpoint `PATCH /cobv/{txid}`:
+      - A cobrança não está ATIVA, e a presente requisição busca alterá-la
+      - A cobrança está ATIVA, e a presente requisição propõe alterar
+      seu status para _REMOVIDA_PELO_USUARIO_RECEBEDOR_ juntamente com outras alterações
+      (não faz sentido remover uma cobrança ao mesmo tempo em que se realizam
+      alterações que não serão aproveitadas).
+      - o campo `cobv.status` não respeita o _schema_.
+      - O campo `cobv.tributo.cbs.informado` somente pode ser alterado enquanto o campo `cobv.tributo.cbs.corrigido` não estiver preenchido.
+      - O campo `cobv.tributo.ibs.informado` somente pode ser alterado enquanto o campo `cobv.tributo.ibs.corrigido` não estiver preenchido.
+
+    ### `CobVConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de cobranças com vencimento não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /cobv` e `GET /cobv/{txid}`.
+
+    __Violações__ específicas para o endpoint `GET /cobv`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - ambos os parâmetros `cpf` e `cnpj` estão preenchidos.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    __Violações__ específicas para o endpoint `GET /cobv/{txid}`:
+      - o parâmetro `revisao` corresponde a uma revisão inexistente para a cobrança
+      apontada pelo parâmetro `txid`.
+
+    ## Tag LoteCobV
+    Esta seção reúne erros referentes a endpoints que tratam do gerenciamento de lotes de cobrança.
+
+    ### `LoteCobVNaoEncontrado`
+    * __Significado__: Lote não encontrado para o `id` informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET|PATCH] /lotecobv/{id}`.
+
+    ### `LoteCobVOperacaoInvalida`
+    * __Significado__: a requisição que busca alterar ou criar um lote de cobranças com vencimento
+    não respeita o _schema_ ou está semanticamente errada.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `[PUT|PATCH] /lotecobv/{id}`.
+
+    __Violações__ para os endpoints `PUT|PATCH /lotecobv/{id}`:
+      - O campo `loteCobV.descricao` não respeita o _schema_.
+      - O objeto `loteCobV.cobsV` não respeita o _schema_.
+
+    __Violações__ para o endpoint `PUT /lotecobv/{id}`:
+      - a presente requisição tenta criar um conjunto de cobranças dentre as quais pelo menos
+      uma cobrança já encontra-se criada.
+      - a presente requisição busca alterar um lote já existente, entretanto contém um array de
+      solicitações de alteração de cobranças que não referencia exatamente as mesmas cobranças
+      referenciadas pela requisição original que criou o lote.
+      Uma vez criado um lote, não se pode remover ou adicionar solicitações de
+      criação ou alteração de cobranças a este lote.
+
+    __Violações__ para o endpoint `PATCH /lotecobv/{id}`:
+      - a presente requisição busca alterar um lote já existente e contém, no `array`
+      de cobranças representado por `cobsv`, uma cobrança não existente no array de cobranças
+      atribuído pela requisição original que criou o lote.
+      Uma vez criado um lote, não se pode remover ou adicionar cobranças a este lote.
+
+    __Violações__ para os endpoints `GET /lotecobv/{id}`:
+      - __observação__: para cada elemento do array `cobsv`, retornado por este endpoint, caso a requisição de criação de cobrança esteja em
+      status "NEGADA", o atributo `problema` deste elemento deve ser preenchido respeitando
+      o [schema](https://tools.ietf.org/html/rfc7807) referenciado pela API Pix.
+      - o preenchimento do atributo `problema`, conforme descrito acima, segue o mesmo regramento dos
+      erros especificados para os endpoints `[PUT/PATCH /cobv/{txid}]`, de maneira a possibilitar, ao
+      usuário recebedor, entender qual foi a violação cometida ao se tentar criar
+      a cobrança referenciada por este elemento do array `cobsv`.
+
+    ### `LoteCobVConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de lotes de cobrança com vencimento
+    não respeitam o _schema_ ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /lotecobv` e `GET /lotecobv/{id}`.
+
+    __Violações__ específicas para o endpoint `GET /lotecobv`:
+      - algum dos parâmetros informados para a consulta não respeitam o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag PayloadLocation
+    Esta seção reúne erros referentes a endpoints que tratam do gerenciamento de _locations_.
+
+    ### `PayloadLocationNaoEncontrado`
+    * __Significado__: _Location_ não encontrada para o `id` informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET|PATCH] /loc/{id}`, `DELETE /loc/{id}/txid`.
+
+    ### `PayloadLocationOperacaoInvalida`
+
+    * __Significado__: a presente requisição busca criar uma location sem respeitar o _schema_ estabelecido.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `POST /loc`.
+
+    __Violações__ para o endpoint `POST /loc`:
+      - o campo `tipoCob` não respeita o _schema_.
+
+    ### `PayloadLocationConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de _locations_ não respeitam
+    o _schema_ ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /loc` e `GET /loc/{id}`.
+
+    __Violações__ específicas para o endpoint `GET /loc`:
+      - algum dos parâmetros informados para a consulta não respeitam o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag PayloadLocationRec
+    Esta seção reúne erros referentes a endpoints que tratam do gerenciamento de _locations_ de uma recorrência.
+
+    ### `PayloadLocationRecNaoEncontrado`
+    * __Significado__: _Location_ não encontrada para o `id` informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `[GET] /locrec/{id}`, `DELETE /locrec/{id}/idRec`.
+
+    ### `PayloadLocationRecConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de _locations_ não respeitam
+    o _schema_ ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /locrec` e `GET /locrec/{id}`.
+
+    __Violações__ específicas para o endpoint `GET /locrec`:
+      - algum dos parâmetros informados para a consulta não respeitam o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag Pix
+
+    Reúne erros em endpoints de gestão de Pix recebidos e solicitação de devoluções.
+
+    ### `PixNaoEncontrado`
+
+    * __Significado__: pix não encontrada para o `e2eid` informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `GET /pix/{e2eid}`
+
+    ### `PixDevolucaoNaoEncontrada`
+
+    * __Significado__: devolução representada por {id} não encontrada para o `e2eid` informado.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `GET /pix/{e2eid}/devolucao/{id}`
+
+    ### `PixConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de pix recebidos não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /pix`.
+
+    __Violações__ específicas para o endpoint `GET /pix`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - ambos os parâmetros `cpf` e `cnpj` estão preenchidos.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ### `PixDevolucaoInvalida`
+
+    * __Significado__: a presente requisição de devolução não respeita o _schema_ ou não faz sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `PUT /pix/{e2eid}/devolucao/{id}`.
+
+    __Violações__ específicas para o endpoint `PUT /pix/{e2eid}/devolucao/{id}`:
+      - O campo `devolucao.valor` não respeita o _schema_.
+      - A presente requisição de devolução, em conjunto com as demais prévias devoluções,
+      se aplicável, excederia o valor do pix originário.
+      - A presente requisição de devolução apresenta um `{id}` já utilizado por outra requisição de
+      devolução para o `{e2eid}` em questão.
+      - A presente requisição de devolução viola a janela de tempo permitida para solicitações de devoluções
+      de um pix (hoje estabelecida como 90 dias desde a data de liquidação original do pix).
+
+    ## Tag Webhook
+    Reúne erros dos endpoints que tratam do gerenciamento dos Webhooks da API Pix.
+
+    ### `WebhookOperacaoInvalida`
+    * __Significado__: a presente requisição busca criar um webhook sem respeitar o _schema_ ou,
+    ainda, apresenta semântica inválida.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `PUT /webhook/{chave}`.
+
+    __Violações__ para o endpoint `PUT /webhook/{chave}`:
+      - o parâmetro {chave} não corresponde a uma chave DICT válida.
+      - o parâmetro {chave} não corresponde a uma chave DICT pertencente a este usuário recebedor.
+      - Campo webhook.webhookUrl não respeita o _schema_.
+
+    ### `WebhookNaoEncontrado`
+
+    * __Significado__: o webhook denotado por {chave} não encontra-se estabelecido.
+    * __HTTP Status Code__: [404](https://tools.ietf.org/html/rfc7231#section-6.5.4).
+    * __endpoints__: `GET /webhook/{chave}`,  `DELETE /webhook/{chave}`
+
+    ### `WebhookConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de webhooks ativados não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /webhook`.
+
+    __Violações__ específicas para o endpoint `GET /webhook`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag WebhookRec
+    Reúne erros dos endpoints que tratam do gerenciamento dos Webhooks de recorrências da API Pix.
+
+    ### `WebhookRecOperacaoInvalida`
+    * __Significado__: a presente requisição busca criar um webhook sem respeitar o _schema_ ou,
+    ainda, apresenta semântica inválida.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `PUT /webhookrec`.
+
+    __Violações__ para o endpoint `PUT /webhookrec`:
+      - o campo `webhookUrl` não respeita o _schema_.
+
+    ### `WebhookRecConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de webhooks ativados não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /webhookrec`.
+
+    __Violações__ específicas para o endpoint `GET /webhookrec`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag WebhookCobR
+    Reúne erros dos endpoints que tratam do gerenciamento dos Webhooks de cobranças recorrentes da API Pix.
+
+    ### `WebhookCobROperacaoInvalida`
+    * __Significado__: a presente requisição busca criar um webhook sem respeitar o _schema_ ou,
+    ainda, apresenta semântica inválida.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `PUT /webhookcobr`.
+
+    __Violações__ para o endpoint `PUT /webhookcobr`:
+      - o campo `webhookUrl` não respeita o _schema_.
+
+    ### `WebhookCobRConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de webhooks ativados não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /webhookcob`.
+
+    __Violações__ específicas para o endpoint `GET /webhookcob`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag WebhookCob
+    Reúne erros dos endpoints que tratam do gerenciamento dos Webhooks de cobranças imediatas da API Pix.
+
+    ### `WebhookCobOperacaoInvalida`
+    * __Significado__: a presente requisição busca criar um webhook sem respeitar o _schema_ ou,
+    ainda, apresenta semântica inválida.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `PUT /webhookcob`.
+
+    __Violações__ para o endpoint `PUT /webhookcob`:
+      - o campo `webhookUrl` não respeita o _schema_.
+
+    ### `WebhookCobConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de webhooks ativados não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /webhookcob`.
+
+    __Violações__ específicas para o endpoint `GET /webhookcob`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+    ## Tag WebhookCobV
+    Reúne erros dos endpoints que tratam do gerenciamento dos Webhooks de cobranças com vencimento da API Pix.
+
+    ### `WebhookCobVOperacaoInvalida`
+    * __Significado__: a presente requisição busca criar um webhook sem respeitar o _schema_ ou,
+    ainda, apresenta semântica inválida.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `PUT /webhookcobv`.
+
+    __Violações__ para o endpoint `PUT /webhookcobv`:
+      - o campo `webhookUrl` não respeita o _schema_.
+
+    ### `WebhookCobVConsultaInvalida`
+
+    * __Significado__: os parâmetros de consulta à lista de webhooks ativados não respeitam o schema
+    ou não fazem sentido semanticamente.
+    * __HTTP Status Code__: [400](https://tools.ietf.org/html/rfc7231#section-6.5.1).
+    * __endpoints__: `GET /webhookcobv`.
+
+    __Violações__ específicas para o endpoint `GET /webhookcobv`:
+      - algum dos parâmetros informados para a consulta não respeita o _schema_.
+      - o _timestamp_ representado pelo parâmetro `fim` é anterior ao timestamp
+      representado pelo parâmetro `inicio`.
+      - o parâmetro `paginacao.paginaAtual` é negativo.
+      - o parâmetro `paginacao.itensPorPagina` é negativo.
+
+servers:
+  - url: https://pix.example.com/api/
+    description: Servidor de Produção
+  - url: https://pix-h.example.com/api/
+    description: Servidor de Homologação
+
+tags:
+  - name: CobPayload
+    x-displayName: Reúne endpoints (locations) que retornam o  Payload JSON que representa uma Cobrança
+    description: |-
+      Reúne endpoints (locations) utilizados pelo software do PSP pagador para recuperar o payload JSON que representa uma cobrança.
+
+      Os endpoints listados nesta Tag apresentam requisitos de autenticação e autorização diferenciados em relação aos outros endpoints listados na presente API.
+
+      São endpoints __abertos__ para que qualquer cliente da internet possa se conectar. Cada _location_ é uma _[url de capacidade](https://www.w3.org/TR/capability-urls/)_, funcionalidade implementada via o fragmento `{pixUrlAccessToken}`.
+      Para mais informações, consultar o [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pix).
+  - name: RecPayload
+    x-displayName: Reúne endpoints (locations) que retornam o  Payload JSON que representa uma Recorrência
+    description: |-
+      Reúne endpoints (locations) utilizados pelo software do PSP pagador para recuperar o payload JSON que representa uma recorrência.
+
+      Os endpoints listados nesta Tag apresentam requisitos de autenticação e autorização diferenciados em relação aos outros endpoints listados na presente API.
+
+      São endpoints __abertos__ para que qualquer cliente da internet possa se conectar. Cada _location_ é uma _[url de capacidade](https://www.w3.org/TR/capability-urls/)_, funcionalidade implementada via o fragmento `{recUrlAccessToken}`.
+      Para mais informações, consultar o [Manual de Padrões para iniciação do Pix](https://www.bcb.gov.br/estabilidadefinanceira/pix).
+  - name: Rec
+    x-displayName: Gerenciamento de recorrências
+    description: |-
+      Reúne endpoints destinados a lidar com gerenciamento de recorrências.
+  - name: SolicRec
+    x-displayName: Gerenciamento de solicitações de recorrências
+    description: |-
+      Reúne endpoints destinados a lidar com gerenciamento de solicitações de recorrências.
+  - name: CobR
+    x-displayName: Gerenciamento de cobranças associadas a uma recorrência
+    description: |-
+      Reúne endpoints destinados a lidar com gerenciamento de cobranças associadas a uma recorrência.
+  - name: Cob
+    x-displayName: Gerenciamento de cobranças para pagamento imediato
+    description: |-
+      Reúne endpoints destinados a lidar com gerenciamento de cobranças imediatas.
+  - name: CobV
+    x-displayName: Gerenciamento de cobranças com vencimento
+    description: |-
+      Reúne endpoints destinados a lidar com gerenciamento de cobranças com vencimento.
+  - name: LoteCobV
+    x-displayName: Gerenciamento de cobranças com vencimento em lote
+    description: |-
+      Reúne endpoints destinados a lidar com gerenciamento de cobranças com vencimento em lote.
+  - name: PayloadLocation
+    x-displayName: Configuração de locations para payloads
+    description: |-
+      Reúne endpoints destinados a lidar com configuração e remoção de locations para uso dos payloads
+  - name: PayloadLocationRec
+    x-displayName: Configuração de locations para payloads de recorrências
+    description: |-
+      Reúne endpoints destinados a lidar com configuração e remoção de locations para uso dos payloads de recorrências
+  - name: Pix
+    x-displayName: Gerenciamento de Pix recebidos
+    description: |-
+      reúne endpoints destinados a lidar com  gerenciamento de Pix recebidos.
+  - name: Webhook
+    x-displayName: Gerenciamento de notificações
+    description: |-
+      Reúne endpoints para gerenciamento de notificações por parte do PSP recebedor ao usuário recebedor.
+  - name: WebhookRec
+    x-displayName: Gerenciamento de notificações de recorrências
+    description: |-
+      Reúne endpoints para gerenciamento de notificações de recorrências por parte do PSP recebedor ao usuário recebedor.
+  - name: WebhookCobR
+    x-displayName: Gerenciamento de notificações de cobranças recorrentes
+    description: |-
+      Reúne endpoints para gerenciamento de notificações de cobranças recorrentes por parte do PSP recebedor ao usuário recebedor.
+  - name: WebhookCob
+    x-displayName: Gerenciamento de notificações de cobranças imediatas
+    description: |-
+      Reúne endpoints para gerenciamento de notificações de cobranças imediatas por parte do PSP recebedor ao usuário recebedor.
+  - name: WebhookCobV
+    x-displayName: Gerenciamento de notificações de cobranças com vencimento
+    description: |-
+      Reúne endpoints para gerenciamento de notificações de cobranças com vencimento por parte do PSP recebedor ao usuário recebedor.
+paths:
+  /cob/{txid}:
+    $ref: "paths/cobrancas/cob-txid.yaml"
+  "/cob":
+    $ref: "paths/cobrancas/cob.yaml"
+  "/cobv/{txid}":
+    $ref: "paths/cobrancas-com-vencimento/cobv-txid.yaml"
+  "/cobv":
+    $ref: "paths/cobrancas-com-vencimento/cobv.yaml"
+  "/lotecobv/{id}":
+    $ref: "paths/cobrancas-com-vencimento/lotecobv-id.yaml"
+  "/lotecobv":
+    $ref: "paths/cobrancas-com-vencimento/lotecobv.yaml"
+  "/locrec":
+    $ref: "paths/locations/locrec.yaml"
+  "/locrec/{id}":
+    $ref: "paths/locations/locrec-id.yaml"
+  "/locrec/{id}/idRec":
+    $ref: "paths/locations/locrec-id-idRec.yaml"
+  "/loc":
+    $ref: "paths/locations/loc.yaml"
+  "/loc/{id}":
+    $ref: "paths/locations/loc-id.yaml"
+  "/loc/{id}/txid":
+    $ref: "paths/locations/loc-id-txid.yaml"
+  "/pix/{e2eid}":
+    $ref: "paths/pix/pix-e2eid.yaml"
+  "/pix":
+    $ref: "paths/pix/pix.yaml"
+  "/pix/{e2eid}/devolucao/{id}":
+    $ref: "paths/pix/pix-e2eid-devolucao-id.yaml"
+  "/{pixUrlAccessToken}":
+    $ref: "paths/cobrancas/pixUrlAccessToken.yaml"
+  "/cobv/{pixUrlAccessToken}":
+    $ref: "paths/cobrancas-com-vencimento/cobv-pixUrlAccessToken.yaml"
+  "/rec/{recUrlAccessToken}":
+    $ref: "paths/recorrencias/rec-recUrlAccessToken.yaml"
+  "/webhook/{chave}":
+    $ref: "paths/webhooks/webhook-chave.yaml"
+  "/webhook":
+    $ref: "paths/webhooks/webhook.yaml"
+  "/webhookrec":
+    $ref: "paths/webhooks/webhookrec.yaml"
+  "/webhookcobr":
+    $ref: "paths/webhooks/webhookcobr.yaml"
+  "/webhookcob":
+    $ref: "paths/webhooks/webhookcob.yaml"
+  "/webhookcobv":
+    $ref: "paths/webhooks/webhookcobv.yaml"
+  "/rec/{idRec}":
+    $ref: "paths/recorrencias/rec-idRec.yaml"
+  "/rec":
+    $ref: "paths/recorrencias/rec.yaml"
+  "/solicrec":
+    $ref: "paths/solicitacoes-recorrencia/solicrec.yaml"
+  "/solicrec/{idSolicRec}":
+    $ref: "paths/solicitacoes-recorrencia/solicrec-idSolicRec.yaml"
+  "/cobr/{txid}":
+    $ref: "paths/cobrancas-recorrentes/cobr-txid.yaml"
+  "/cobr":
+    $ref: "paths/cobrancas-recorrentes/cobr.yaml"
+  "/cobr/{txid}/retentativa/{data}":
+    $ref: "paths/cobrancas-recorrentes/cobr-txid-retentativa-data.yaml"
+components:
+  securitySchemes:
+    OAuth2:
+      $ref: "components/securitySchemes/OAuth2.yaml"
+  examples:
+    cobBody1:
+      $ref: "components/examples/cobrancas/cobBody1.yaml"
+    cobBody2:
+      $ref: "components/examples/cobrancas/cobBody2.yaml"
+    cobBody3:
+      $ref: "components/examples/cobrancas/cobBody3.yaml"
+    cobBody4:
+      $ref: "components/examples/cobrancas/cobBody4.yaml"
+    cobBody5:
+      $ref: "components/examples/cobrancas/cobBody5.yaml"
+    cobBody6:
+      $ref: "components/examples/cobrancas/cobBody6.yaml"
+    cobBody7:
+      $ref: "components/examples/cobrancas/cobBody7.yaml"
+    cobBody8:
+      $ref: "components/examples/cobrancas/cobBody8.yaml"
+    cobBody9:
+      $ref: "components/examples/cobrancas/cobBody9.yaml"
+    cobRBody1:
+      $ref: "components/examples/cobrancas-recorrentes/cobRBody1.yaml"
+    cobRBody2:
+      $ref: "components/examples/cobrancas-recorrentes/cobRBody2.yaml"
+    cobRResponse1:
+      $ref: "components/examples/cobrancas-recorrentes/cobRResponse1.yaml"
+    cobRResponse2:
+      $ref: "components/examples/cobrancas-recorrentes/cobRResponse2.yaml"
+    cobRResponse3:
+      $ref: "components/examples/cobrancas-recorrentes/cobRResponse3.yaml"
+    cobRResponse4:
+      $ref: "components/examples/cobrancas-recorrentes/cobRResponse4.yaml"
+    loteCobVBody1:
+      $ref: "components/examples/cobrancas-com-vencimento/loteCobVBody1.yaml"
+    loteCobVBodyRevisado1:
+      $ref: "components/examples/cobrancas-com-vencimento/loteCobVBodyRevisado1.yaml"
+    cobResponse1:
+      $ref: "components/examples/cobrancas/cobResponse1.yaml"
+    cobResponse2:
+      $ref: "components/examples/cobrancas/cobResponse2.yaml"
+    cobResponse3:
+      $ref: "components/examples/cobrancas/cobResponse3.yaml"
+    cobResponse4:
+      $ref: "components/examples/cobrancas/cobResponse4.yaml"
+    cobResponse5:
+      $ref: "components/examples/cobrancas/cobResponse5.yaml"
+    cobResponse6:
+      $ref: "components/examples/cobrancas/cobResponse6.yaml"
+    cobResponse7:
+      $ref: "components/examples/cobrancas/cobResponse7.yaml"
+    recBody1:
+      $ref: "components/examples/recorrencias/recBody1.yaml"
+    recBody2:
+      $ref: "components/examples/recorrencias/recBody2.yaml"
+    recBody3:
+      $ref: "components/examples/recorrencias/recBody3.yaml"
+    recBody4:
+      $ref: "components/examples/recorrencias/recBody4.yaml"
+    recResponse1:
+      $ref: "components/examples/recorrencias/recResponse1.yaml"
+    recResponse2:
+      $ref: "components/examples/recorrencias/recResponse2.yaml"
+    recResponse3:
+      $ref: "components/examples/recorrencias/recResponse3.yaml"
+    recResponse4:
+      $ref: "components/examples/recorrencias/recResponse4.yaml"
+    recResponse5:
+      $ref: "components/examples/recorrencias/recResponse5.yaml"
+    recResponse6:
+      $ref: "components/examples/recorrencias/recResponse6.yaml"
+    recResponse7:
+      $ref: "components/examples/recorrencias/recResponse7.yaml"
+    recResponse8:
+      $ref: "components/examples/recorrencias/recResponse8.yaml"
+    recWebhookNotification1:
+      $ref: "components/examples/webhooks/recWebhookNotification1.yaml"
+    recPayload1:
+      $ref: "components/examples/recorrencias/recPayload1.yaml"
+    solicRecBody1:
+      $ref: "components/examples/solicitacoes-recorrencia/solicRecBody1.yaml"
+    solicRecBody2:
+      $ref: "components/examples/solicitacoes-recorrencia/solicRecBody2.yaml"
+    solicRecResponse1:
+      $ref: "components/examples/solicitacoes-recorrencia/solicRecResponse1.yaml"
+    solicRecResponse2:
+      $ref: "components/examples/solicitacoes-recorrencia/solicRecResponse2.yaml"
+    solicRecResponse3:
+      $ref: "components/examples/solicitacoes-recorrencia/solicRecResponse3.yaml"
+    loteCobVResponse1:
+      $ref: "components/examples/cobrancas-com-vencimento/loteCobVResponse1.yaml"
+    loteCobVResponse2:
+      $ref: "components/examples/cobrancas-com-vencimento/loteCobVResponse2.yaml"
+    payloadLocationBody1:
+      $ref: "components/examples/locations/payloadLocationBody1.yaml"
+    payloadLocationBody2:
+      $ref: "components/examples/locations/payloadLocationBody2.yaml"
+    payloadLocationResponse1:
+      $ref: "components/examples/locations/payloadLocationResponse1.yaml"
+    payloadLocationResponse2:
+      $ref: "components/examples/locations/payloadLocationResponse2.yaml"
+    payloadLocationResponse3:
+      $ref: "components/examples/locations/payloadLocationResponse3.yaml"
+    payloadLocationResponse4:
+      $ref: "components/examples/locations/payloadLocationResponse4.yaml"
+    payloadLocationResponse5:
+      $ref: "components/examples/locations/payloadLocationResponse5.yaml"
+    payloadLocationResponse6:
+      $ref: "components/examples/locations/payloadLocationResponse6.yaml"
+    payloadLocationRecResponse1:
+      $ref: "components/examples/locations/payloadLocationRecResponse1.yaml"
+    payloadLocationRecResponse2:
+      $ref: "components/examples/locations/payloadLocationRecResponse2.yaml"
+    pixResponse1:
+      $ref: "components/examples/pix/pixResponse1.yaml"
+    pixResponse2:
+      $ref: "components/examples/pix/pixResponse2.yaml"
+    pixResponse3:
+      $ref: "components/examples/pix/pixResponse3.yaml"
+    webhookBody1:
+      $ref: "components/examples/webhooks/webhookBody1.yaml"
+    webhookResponse1:
+      $ref: "components/examples/webhooks/webhookResponse1.yaml"
+    pixWebhook1:
+      $ref: "components/examples/webhooks/pixWebhook1.yaml"
+    pixWebhook2:
+      $ref: "components/examples/webhooks/pixWebhook2.yaml"
+    recWebhookBody1:
+      $ref: "components/examples/webhooks/recWebhookBody1.yaml"
+    recWebhookResponse1:
+      $ref: "components/examples/webhooks/recWebhookResponse1.yaml"
+    cobRWebhookBody1:
+      $ref: "components/examples/webhooks/cobRWebhookBody1.yaml"
+    cobRWebhookResponse1:
+      $ref: "components/examples/webhooks/cobRWebhookResponse1.yaml"
+    cobRWebhookNotification1:
+      $ref: "components/examples/webhooks/cobRWebhookNotification1.yaml"
+    devolucaoResponse1:
+      $ref: "components/examples/pix/devolucaoResponse1.yaml"
+    devolucaoResponse2:
+      $ref: "components/examples/pix/devolucaoResponse2.yaml"
+    devolucaoSolicitada1:
+      $ref: "components/examples/pix/devolucaoSolicitada1.yaml"
+    cobPayload1:
+      $ref: "components/examples/cobrancas/cobPayload1.yaml"
+    cobPayload2:
+      $ref: "components/examples/cobrancas/cobPayload2.yaml"
+    cobPayload3:
+      $ref: "components/examples/cobrancas/cobPayload3.yaml"
+    cobPayload4:
+      $ref: "components/examples/cobrancas/cobPayload4.yaml"
+    cobPayload5:
+      $ref: "components/examples/cobrancas/cobPayload5.yaml"
+    getCobs1:
+      $ref: "components/examples/cobrancas/getCobs1.yaml"
+    getCobs2:
+      $ref: "components/examples/cobrancas/getCobs2.yaml"
+    getCobsV1:
+      $ref: "components/examples/cobrancas-com-vencimento/getCobsV1.yaml"
+    getPix1:
+      $ref: "components/examples/pix/getPix1.yaml"
+    getLotesCobsV:
+      $ref: "components/examples/cobrancas-com-vencimento/getLotesCobsV.yaml"
+    getPayloadLocation1:
+      $ref: "components/examples/locations/getPayloadLocation1.yaml"
+    getPayloadLocationRec1:
+      $ref: "components/examples/locations/getPayloadLocationRec1.yaml"
+    getWebhook1:
+      $ref: "components/examples/webhooks/getWebhook1.yaml"
+    getWebhookRec1:
+      $ref: "components/examples/webhooks/getWebhookRec1.yaml"
+    getRec1:
+      $ref: "components/examples/recorrencias/getRec1.yaml"
+    getCobR1:
+      $ref: "components/examples/cobrancas-recorrentes/getCobR1.yaml"
+    RequisicaoInvalidaCobExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaCobExample1.yaml"
+    OperacaoInvalidaCobExample1:
+      $ref: "components/examples/erros/OperacaoInvalidaCobExample1.yaml"
+    RequisicaoInvalidaCobVExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaCobVExample1.yaml"
+    OperacaoInvalidaCobVExample1:
+      $ref: "components/examples/erros/OperacaoInvalidaCobVExample1.yaml"
+    OperacaoInvalidaCobRExample1:
+      $ref: "components/examples/erros/OperacaoInvalidaCobRExample1.yaml"
+    OperacaoInvalidaCobRExample2:
+      $ref: "components/examples/erros/OperacaoInvalidaCobRExample2.yaml"
+    OperacaoInvalidaRecExample1:
+      $ref: "components/examples/erros/OperacaoInvalidaRecExample1.yaml"
+    OperacaoInvalidaSolicRecExample1:
+      $ref: "components/examples/erros/OperacaoInvalidaSolicRecExample1.yaml"
+    OperacaoInvalidaSolicRecExample2:
+      $ref: "components/examples/erros/OperacaoInvalidaSolicRecExample2.yaml"
+    RequisicaoInvalidaCobPayloadExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaCobPayloadExample1.yaml"
+    RequisicaoInvalidaRecPayloadExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaRecPayloadExample1.yaml"
+    RequisicaoInvalidaCobRTentativaExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaCobRTentativaExample1.yaml"
+    RequisicaoInvalidaLoteCobVExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaLoteCobVExample1.yaml"
+    RequisicaoInvalidaDevolucaoExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaDevolucaoExample1.yaml"
+    RequisicaoInvalidaWebhookExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaWebhookExample1.yaml"
+    RequisicaoInvalidaLocationExample1:
+      $ref: "components/examples/erros/RequisicaoInvalidaLocationExample1.yaml"
+    AcessoNegadoExample1:
+      $ref: "components/examples/erros/AcessoNegadoExample1.yaml"
+    NaoEncontradoExample1:
+      $ref: "components/examples/erros/NaoEncontradoExample1.yaml"
+    ServicoIndisponivelExample1:
+      $ref: "components/examples/erros/ServicoIndisponivelExample1.yaml"
+  requestBodies:
+    CobBody:
+      $ref: "components/requestBodies/cobrancas/CobBody.yaml"
+    CobRBody:
+      $ref: "components/requestBodies/cobrancas-recorrentes/CobRBody.yaml"
+    CobVBody:
+      $ref: "components/requestBodies/cobrancas-com-vencimento/CobVBody.yaml"
+    LoteCobVBody:
+      $ref: "components/requestBodies/cobrancas-com-vencimento/LoteCobVBody.yaml"
+    LoteCobVBodyRevisado:
+      $ref: "components/requestBodies/cobrancas-com-vencimento/LoteCobVBodyRevisado.yaml"
+    CobBodyRevisada:
+      $ref: "components/requestBodies/cobrancas/CobBodyRevisada.yaml"
+    CobRBodyRevisada:
+      $ref: "components/requestBodies/cobrancas-recorrentes/CobRBodyRevisada.yaml"
+    CobVBodyRevisada:
+      $ref: "components/requestBodies/cobrancas-com-vencimento/CobVBodyRevisada.yaml"
+    PayloadLocationBody:
+      $ref: "components/requestBodies/locations/PayloadLocationBody.yaml"
+    PayloadLocationRecBody:
+      $ref: "components/requestBodies/locations/PayloadLocationRecBody.yaml"
+    DevolucaoBody:
+      $ref: "components/requestBodies/pix/DevolucaoBody.yaml"
+    WebhookConfigBody:
+      $ref: "components/requestBodies/webhooks/WebhookConfigBody.yaml"
+    WebhookRecConfigBody:
+      $ref: "components/requestBodies/webhooks/WebhookRecConfigBody.yaml"
+    WebhookCobRConfigBody:
+      $ref: "components/requestBodies/webhooks/WebhookCobRConfigBody.yaml"
+    WebhookCobConfigBody:
+      $ref: "components/requestBodies/webhooks/WebhookCobConfigBody.yaml"
+    WebhookCobVConfigBody:
+      $ref: "components/requestBodies/webhooks/WebhookCobVConfigBody.yaml"
+    SolicRecBody:
+      $ref: "components/requestBodies/solicitacoes-recorrencia/SolicRecBody.yaml"
+    SolicRecBodyRevisada:
+      $ref: "components/requestBodies/solicitacoes-recorrencia/SolicRecBodyRevisada.yaml"
+    RecBody:
+      $ref: "components/requestBodies/recorrencias/RecBody.yaml"
+    RecBodyRevisada:
+      $ref: "components/requestBodies/recorrencias/RecBodyRevisada.yaml"
+    WebhookPixBody:
+      $ref: "components/requestBodies/webhooks/WebhookPixBody.yaml"
+    WebhookRecBody:
+      $ref: "components/requestBodies/webhooks/WebhookRecBody.yaml"
+    WebhookCobRBody:
+      $ref: "components/requestBodies/webhooks/WebhookCobRBody.yaml"
+    WebhookCobBody:
+      $ref: "components/requestBodies/webhooks/WebhookCobBody.yaml"
+    WebhookCobVBody:
+      $ref: "components/requestBodies/webhooks/WebhookCobVBody.yaml"
+  schemas:
+    TxId:
+      $ref: "components/schemas/comuns/TxId.yaml"
+    EndToEndId:
+      $ref: "components/schemas/pix/EndToEndId.yaml"
+    DevolucaoId:
+      $ref: "components/schemas/pix/DevolucaoId.yaml"
+    DevolucaoSolicitadaNatureza:
+      $ref: "components/schemas/pix/DevolucaoSolicitadaNatureza.yaml"
+    DevolucaoNatureza:
+      $ref: "components/schemas/pix/DevolucaoNatureza.yaml"
+    DevolucaoNaturezaPixAutomatico:
+      $ref: "components/schemas/pix/DevolucaoNaturezaPixAutomatico.yaml"
+    PayloadLocationId:
+      $ref: "components/schemas/locations/PayloadLocationId.yaml"
+    PayloadLocationRecId:
+      $ref: "components/schemas/locations/PayloadLocationRecId.yaml"
+    Revisao:
+      $ref: "components/schemas/comuns/Revisao.yaml"
+    PessoaFisica:
+      $ref: "components/schemas/comuns/PessoaFisica.yaml"
+    PessoaJuridica:
+      $ref: "components/schemas/comuns/PessoaJuridica.yaml"
+    PessoaFisicaRecorrencia:
+      $ref: "components/schemas/recorrencias/PessoaFisicaRecorrencia.yaml"
+    PessoaJuridicaRecorrencia:
+      $ref: "components/schemas/recorrencias/PessoaJuridicaRecorrencia.yaml"
+    CPF:
+      $ref: "components/schemas/comuns/CPF.yaml"
+    CNPJ:
+      $ref: "components/schemas/comuns/CNPJ.yaml"
+    DadosComplementaresPessoa:
+      $ref: "components/schemas/comuns/DadosComplementaresPessoa.yaml"
+    DadosDevedor:
+      $ref: "components/schemas/comuns/DadosDevedor.yaml"
+    DadosDevedorRecorrencia:
+      $ref: "components/schemas/recorrencias/DadosDevedorRecorrencia.yaml"
+    DadosRecebedor:
+      $ref: "components/schemas/comuns/DadosRecebedor.yaml"
+    DadosBancarios:
+      $ref: "components/schemas/comuns/DadosBancarios.yaml"
+    DadosBancariosRecebedor:
+      $ref: "components/schemas/comuns/DadosBancariosRecebedor.yaml"
+    DadosPagadorRec:
+      $ref: "components/schemas/recorrencias/DadosPagadorRec.yaml"
+    WebhookSolicitado:
+      $ref: "components/schemas/webhooks/WebhookSolicitado.yaml"
+    WebhookCompleto:
+      $ref: "components/schemas/webhooks/WebhookCompleto.yaml"
+    WebhookRecBase:
+      $ref: "components/schemas/webhooks/WebhookRecBase.yaml"
+    WebhookRecCompleto:
+      $ref: "components/schemas/webhooks/WebhookRecCompleto.yaml"
+    WebhookCobRCompleto:
+      $ref: "components/schemas/webhooks/WebhookCobRCompleto.yaml"
+    WebhookCobCompleto:
+      $ref: "components/schemas/webhooks/WebhookCobCompleto.yaml"
+    WebhookCobVSolicitado:
+      $ref: "components/schemas/webhooks/WebhookCobVSolicitado.yaml"
+    WebhookCobVCompleto:
+      $ref: "components/schemas/webhooks/WebhookCobVCompleto.yaml"
+    InfoBaseAgenciaConta:
+      $ref: "components/schemas/comuns/InfoBaseAgenciaConta.yaml"
+    InfoBaseChave:
+      $ref: "components/schemas/comuns/InfoBaseChave.yaml"
+    WebhookRecSolicitado:
+      $ref: "components/schemas/webhooks/WebhookRecSolicitado.yaml"
+    WebhookCobRSolicitado:
+      $ref: "components/schemas/webhooks/WebhookCobRSolicitado.yaml"
+    WebhookCobSolicitado:
+      $ref: "components/schemas/webhooks/WebhookCobSolicitado.yaml"
+    CobExpiracao:
+      $ref: "components/schemas/cobrancas/CobExpiracao.yaml"
+    CobDataDeVencimento:
+      $ref: "components/schemas/cobrancas/CobDataDeVencimento.yaml"
+    CobApresentacao:
+      $ref: "components/schemas/cobrancas/CobApresentacao.yaml"
+    CobCriacao:
+      $ref: "components/schemas/cobrancas/CobCriacao.yaml"
+    CobVValor:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVValor.yaml"
+    CobValor:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobValor.yaml"
+    CobPayloadValor:
+      $ref: "components/schemas/cobrancas/CobPayloadValor.yaml"
+    CobVPayloadValor:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVPayloadValor.yaml"
+    RecCompleta:
+      $ref: "components/schemas/recorrencias/RecCompleta.yaml"
+    RecCompletaPesquisada:
+      $ref: "components/schemas/recorrencias/RecCompletaPesquisada.yaml"
+    RecGerada:
+      $ref: "components/schemas/recorrencias/RecGerada.yaml"
+    RecSolicitada:
+      $ref: "components/schemas/recorrencias/RecSolicitada.yaml"
+    RecPayload:
+      $ref: "components/schemas/recorrencias/RecPayload.yaml"
+    RecRevisada:
+      $ref: "components/schemas/recorrencias/RecRevisada.yaml"
+    RecNotification:
+      $ref: "components/schemas/recorrencias/RecNotification.yaml"
+    RecAtivacao:
+      $ref: "components/schemas/recorrencias/RecAtivacao.yaml"
+    RecAtivacaoSolicitada:
+      $ref: "components/schemas/recorrencias/RecAtivacaoSolicitada.yaml"
+    RecStatus:
+      $ref: "components/schemas/recorrencias/RecStatus.yaml"
+    RecConfiguracao:
+      $ref: "components/schemas/recorrencias/RecConfiguracao.yaml"
+    RecAtualizacao:
+      $ref: "components/schemas/recorrencias/RecAtualizacao.yaml"
+    RecEncerramento:
+      $ref: "components/schemas/recorrencias/RecEncerramento.yaml"
+    RecId:
+      $ref: "components/schemas/recorrencias/RecId.yaml"
+    RecBase:
+      $ref: "components/schemas/recorrencias/RecBase.yaml"
+    SolicRecId:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecId.yaml"
+    SolicRecBase:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecBase.yaml"
+    SolicRecStatus:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecStatus.yaml"
+    SolicRecAtualizacao:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecAtualizacao.yaml"
+    SolicRecEncerramento:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecEncerramento.yaml"
+    SolicRecSolicitada:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecSolicitada.yaml"
+    SolicRecRevisada:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecRevisada.yaml"
+    SolicRecCompleta:
+      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecCompleta.yaml"
+    TributoCompleto:
+      $ref: "components/schemas/tributos/TributoCompleto.yaml"
+    TributoCompletoPix:
+      $ref: "components/schemas/tributos/TributoCompletoPix.yaml"
+    TributoPayload:
+      $ref: "components/schemas/tributos/TributoPayload.yaml"
+    TributoInformadoCompleto:
+      $ref: "components/schemas/tributos/TributoInformadoCompleto.yaml"
+    TributoInformadoSolicitado:
+      $ref: "components/schemas/tributos/TributoInformadoSolicitado.yaml"
+    RegistroCategoriaTributoInformadoSolicitado:
+      $ref: "components/schemas/tributos/RegistroCategoriaTributoInformadoSolicitado.yaml"
+    RegistroCategoriaTributoInformadoCompleto:
+      $ref: "components/schemas/tributos/RegistroCategoriaTributoInformadoCompleto.yaml"
+    RegistroCategoriaTributoPayload:
+      $ref: "components/schemas/tributos/RegistroCategoriaTributoPayload.yaml"
+    RegistroCategoriaTributoCompleto:
+      $ref: "components/schemas/tributos/RegistroCategoriaTributoCompleto.yaml"
+    RegistroCategoriaTributoCompletoPix:
+      $ref: "components/schemas/tributos/RegistroCategoriaTributoCompletoPix.yaml"
+    ValorTributoDetalheCompleto:
+      $ref: "components/schemas/tributos/ValorTributoDetalheCompleto.yaml"
+    ValorTributoDetalheSolicitado:
+      $ref: "components/schemas/tributos/ValorTributoDetalheSolicitado.yaml"
+    ValorLiquidoEstimado:
+      $ref: "components/schemas/tributos/ValorLiquidoEstimado.yaml"
+    CobRGerada:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRGerada.yaml"
+    CobRCompleta:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRCompleta.yaml"
+    CobRAtualizacao:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRAtualizacao.yaml"
+    CobRTentativas:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRTentativas.yaml"
+    CobRRevisada:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRRevisada.yaml"
+    CobRSolicitada:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRSolicitada.yaml"
+    CobRNotification:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRNotification.yaml"
+    CobNotification:
+      $ref: "components/schemas/cobrancas/CobNotification.yaml"
+    CobVNotification:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVNotification.yaml"
+    CobRConfiguracao:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRConfiguracao.yaml"
+    CobRStatus:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRStatus.yaml"
+    CobRStatusRevisada:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRStatusRevisada.yaml"
+    CobRBase:
+      $ref: "components/schemas/cobrancas-recorrentes/CobRBase.yaml"
+    CobBase:
+      $ref: "components/schemas/cobrancas/CobBase.yaml"
+    CobBaseCopiaCola:
+      $ref: "components/schemas/cobrancas/CobBaseCopiaCola.yaml"
+    CobSolicitada:
+      $ref: "components/schemas/cobrancas/CobSolicitada.yaml"
+    CobVSolicitada:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVSolicitada.yaml"
+    CobRevisada:
+      $ref: "components/schemas/cobrancas/CobRevisada.yaml"
+    CobVRevisada:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVRevisada.yaml"
+    CobGerada:
+      $ref: "components/schemas/cobrancas/CobGerada.yaml"
+    CobVGerada:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVGerada.yaml"
+    CobStatus:
+      $ref: "components/schemas/cobrancas/CobStatus.yaml"
+    CobVStatus:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVStatus.yaml"
+    LoteCobVGerado:
+      $ref: "components/schemas/cobrancas-com-vencimento/LoteCobVGerado.yaml"
+    CobVCompleta:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVCompleta.yaml"
+    CobCompleta:
+      $ref: "components/schemas/cobrancas/CobCompleta.yaml"
+    LoteCobVConsultado:
+      $ref: "components/schemas/cobrancas-com-vencimento/LoteCobVConsultado.yaml"
+    LotesCobVConsultados:
+      $ref: "components/schemas/cobrancas-com-vencimento/LotesCobVConsultados.yaml"
+    CobVPayload:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobVPayload.yaml"
+    CobPayload:
+      $ref: "components/schemas/cobrancas/CobPayload.yaml"
+    PayloadLocation:
+      $ref: "components/schemas/locations/PayloadLocation.yaml"
+    PayloadLocationSolicitada:
+      $ref: "components/schemas/locations/PayloadLocationSolicitada.yaml"
+    PayloadLocationRecSolicitada:
+      $ref: "components/schemas/locations/PayloadLocationRecSolicitada.yaml"
+    PayloadLocationRecGerada:
+      $ref: "components/schemas/locations/PayloadLocationRecGerada.yaml"
+    PayloadLocationRecCompleta:
+      $ref: "components/schemas/locations/PayloadLocationRecCompleta.yaml"
+    PayloadLocationCompleta:
+      $ref: "components/schemas/locations/PayloadLocationCompleta.yaml"
+    PayloadLocationCob:
+      $ref: "components/schemas/locations/PayloadLocationCob.yaml"
+    ParametrosConsultaRec:
+      $ref: "components/schemas/recorrencias/ParametrosConsultaRec.yaml"
+    ParametrosConsultaCob:
+      $ref: "components/schemas/cobrancas/ParametrosConsultaCob.yaml"
+    ParametrosConsultaCobR:
+      $ref: "components/schemas/cobrancas-recorrentes/ParametrosConsultaCobR.yaml"
+    ParametrosConsultaLote:
+      $ref: "components/schemas/cobrancas-com-vencimento/ParametrosConsultaLote.yaml"
+    CobsVConsultadas:
+      $ref: "components/schemas/cobrancas-com-vencimento/CobsVConsultadas.yaml"
+    CobsConsultadas:
+      $ref: "components/schemas/cobrancas/CobsConsultadas.yaml"
+    CobsRConsultadas:
+      $ref: "components/schemas/cobrancas-recorrentes/CobsRConsultadas.yaml"
+    RecsConsultadas:
+      $ref: "components/schemas/recorrencias/RecsConsultadas.yaml"
+    Pix:
+      $ref: "components/schemas/pix/Pix.yaml"
+    PixAutomatico:
+      $ref: "components/schemas/pix/PixAutomatico.yaml"
+    PixValorOriginal:
+      $ref: "components/schemas/pix/PixValorOriginal.yaml"
+    PixValorSaque:
+      $ref: "components/schemas/pix/PixValorSaque.yaml"
+    PixValorTroco:
+      $ref: "components/schemas/pix/PixValorTroco.yaml"
+    PixValorJuros:
+      $ref: "components/schemas/pix/PixValorJuros.yaml"
+    PixValorMulta:
+      $ref: "components/schemas/pix/PixValorMulta.yaml"
+    PixValorDesconto:
+      $ref: "components/schemas/pix/PixValorDesconto.yaml"
+    PixValorAbatimento:
+      $ref: "components/schemas/pix/PixValorAbatimento.yaml"
+    Devolucao:
+      $ref: "components/schemas/pix/Devolucao.yaml"
+    DevolucaoPixAutomatico:
+      $ref: "components/schemas/pix/DevolucaoPixAutomatico.yaml"
+    DevolucaoSolicitada:
+      $ref: "components/schemas/pix/DevolucaoSolicitada.yaml"
+    ParametrosConsultaPayloadLocation:
+      $ref: "components/schemas/locations/ParametrosConsultaPayloadLocation.yaml"
+    ParametrosConsultaPayloadLocationRec:
+      $ref: "components/schemas/locations/ParametrosConsultaPayloadLocationRec.yaml"
+    PayloadLocationConsultadas:
+      $ref: "components/schemas/locations/PayloadLocationConsultadas.yaml"
+    PayloadLocationRecConsultadas:
+      $ref: "components/schemas/locations/PayloadLocationRecConsultadas.yaml"
+    ParametrosConsultaPix:
+      $ref: "components/schemas/pix/ParametrosConsultaPix.yaml"
+    ParametrosConsultaWebhooks:
+      $ref: "components/schemas/webhooks/ParametrosConsultaWebhooks.yaml"
+    PixConsultado:
+      $ref: "components/schemas/pix/PixConsultado.yaml"
+    PixAutomaticoConsultado:
+      $ref: "components/schemas/pix/PixAutomaticoConsultado.yaml"
+    PixConsultados:
+      $ref: "components/schemas/pix/PixConsultados.yaml"
+    WebhooksConsultados:
+      $ref: "components/schemas/webhooks/WebhooksConsultados.yaml"
+    WebhooksRecConsultados:
+      $ref: "components/schemas/webhooks/WebhooksRecConsultados.yaml"
+    Paginacao:
+      $ref: "components/schemas/comuns/Paginacao.yaml"
+    Violacao:
+      $ref: "components/schemas/erros/Violacao.yaml"
+    Problema:
+      $ref: "components/schemas/erros/Problema.yaml"
+    Inicio:
+      $ref: "components/schemas/comuns/Inicio.yaml"
+    Fim:
+      $ref: "components/schemas/comuns/Fim.yaml"
+  parameters:
+    paginaAtual:
+      $ref: "components/parameters/paginaAtual.yaml"
+    itensPorPagina:
+      $ref: "components/parameters/itensPorPagina.yaml"
+  responses:
+    RequisicaoInvalida:
+      $ref: "components/responses/RequisicaoInvalida.yaml"
+    NaoEncontrado:
+      $ref: "components/responses/NaoEncontrado.yaml"
+    AcessoNegado:
+      $ref: "components/responses/AcessoNegado.yaml"
+    ServicoIndisponivel:
+      $ref: "components/responses/ServicoIndisponivel.yaml"

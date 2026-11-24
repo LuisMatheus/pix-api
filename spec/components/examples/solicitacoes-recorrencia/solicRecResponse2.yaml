@@ -1,0 +1,39 @@
+      summary: "Exemplo de solicitação de confirmação de recorrência 2"
+      value:
+        idSolicRec: SC875116782024021577820565312
+        idRec: RR692350012024051502650081069
+        calendario:
+          dataExpiracaoSolicitacao: "2024-12-15T12:17:11.926Z"
+        status: REJEITADA
+        destinatario:
+          agencia: "1179"
+          conta: "73851"
+          cpf: "07031470825"
+          ispbParticipante: "91193552"
+        atualizacao:
+          - data: "2024-12-15T12:18:18.618Z"
+            status: CRIADA
+          - data: "2024-12-15T16:18:18.618Z"
+            status: ENVIADA
+          - data: "2024-12-16T08:50:18.268Z"
+            status: REJEITADA
+        recPayload:
+          idRec: RR692350012024051502650081069
+          vinculo:
+            contrato: "Assinatura Individual"
+            devedor:
+              cpf: "07031470825"
+              nome: "Sebastião Silva"
+            objeto: "Serviços de Entrega de Alimentos"
+          valor:
+            valorMinimoRecebedor: "300.00"
+          calendario:
+            dataFinal: "2025-05-01"
+            dataInicial: "2024-12-01"
+            periodicidade: MENSAL
+          recebedor:
+            cnpj: "25603926517008"
+            nome: "Empresa de Produtos Alimentícios SA"
+          atualizacao:
+            - data: "2023-12-08T16:24:35.233Z"
+              status: CRIADA

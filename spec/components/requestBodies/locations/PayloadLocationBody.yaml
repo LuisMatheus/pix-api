@@ -1,0 +1,9 @@
+      description: "Dados para geração da location."
+      required: true
+      content:
+        "application/json":
+          schema:
+            $ref: "../../schemas/locations/PayloadLocationSolicitada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../../examples/locations/payloadLocationBody1.yaml"

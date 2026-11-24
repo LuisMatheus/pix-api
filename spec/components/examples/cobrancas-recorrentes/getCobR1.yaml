@@ -1,0 +1,45 @@
+      summary: "Exemplo de retorno da consulta de cobranças recorrentes 1"
+      value:
+        parametros:
+          inicio: "2024-04-01T00:00:00Z"
+          fim: "2024-12-01T23:59:59Z"
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 1
+        cobsr:
+          - idRec: RR123456782024061999000566354
+            txid: 7f733863543b4a16b516d839bd4bc34e
+            calendario:
+              criacao: "2024-05-20"
+              dataDeVencimento: "2024-06-20"
+            valor: 
+              original: "50.33"
+            status: ATIVA
+            ajusteDiaUtil: false
+            politicaRetentativa: PERMITE_3R_7D
+            devedor:
+              cep: "63259740"
+              cidade: "Campinas"
+              email: "beltrano.silva@mail.com"
+              logradouro: "Rua Gonçalves Dias 605"
+              uf: "SP"
+            recebedor:
+              conta: "997182"
+              tipoConta: CORRENTE
+            tentativas:
+              - dataLiquidacao: "2024-06-20"
+                tipo: "AGND"
+                status: AGENDADA
+                endToEndId: E12345678202406201221abcdef12345
+                atualizacao:
+                  - data: "2024-05-21T10:40:16.730Z"
+                    status: SOLICITADA
+                  - data: "2024-05-21T17:08:00.520Z"
+                    status: AGENDADA
+            atualizacao:
+              - data: "2024-05-20T14:47:29.470Z"
+                status: CRIADA
+              - data: "2024-05-21T10:18:20.120Z"
+                status: ATIVA

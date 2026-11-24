@@ -1,0 +1,10 @@
+      description: "Dados para notificação."
+      required: true
+      content:
+        "application/json":
+          schema:
+            properties:
+              cobsv:
+                type: "array"
+                items:
+                  $ref: "../../schemas/cobrancas-com-vencimento/CobVNotification.yaml"

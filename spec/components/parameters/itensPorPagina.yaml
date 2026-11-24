@@ -1,0 +1,11 @@
+      in: "query"
+      name: "paginacao.itensPorPagina"
+      required: false
+      schema:
+        type: "integer"
+        format: "int32"
+        title: "Itens por Página"
+        minimum: 1
+        maximum: 1000
+        default: 100
+        description: "Quantidade máxima de registros retornados em cada página. Apenas a última página pode conter uma quantidade menor de registros."

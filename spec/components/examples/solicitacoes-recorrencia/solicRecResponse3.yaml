@@ -1,0 +1,37 @@
+      summary: "Exemplo de solicitação de confirmação de recorrência 1"
+      value:
+        idSolicRec: SC876456782024021577825445312
+        idRec: RN123456782024011577825445612
+        calendario:
+          dataExpiracaoSolicitacao: "2024-06-11T07:17:11.008Z"
+        status: CANCELADA
+        destinatario:
+          agencia: "2569"
+          conta: "550689"
+          cpf: "15231470190"
+          ispbParticipante: "91193552"
+        atualizacao:
+          - data: "2024-05-16T17:01:06.781Z"
+            status: CRIADA
+          - data: "2024-05-30T10:18:18.618Z"
+            status: CANCELADA
+        recPayload:
+          idRec: RN123456782024011577825445612
+          vinculo:
+            contrato: "Banda Larga Fibra Ótica"
+            devedor:
+              cpf: "15231470190"
+              nome: "Fulano de Tal"
+            objeto: "Serviços de Telecomunicações"
+          valor:
+            valorRec: "1200.09"
+          calendario:
+            dataFinal: "2025-05-01"
+            dataInicial: "2024-05-01"
+            periodicidade: MENSAL
+          recebedor:
+            cnpj: "94370926517368"
+            nome: "Empresa de Serviços SA"
+          atualizacao:
+            - data: "2023-12-08T16:24:35.233Z"
+              status: CRIADA

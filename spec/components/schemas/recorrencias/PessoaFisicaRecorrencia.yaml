@@ -1,0 +1,14 @@
+      type: "object"
+      required: ["cpf", "nome"]
+      title: "Pessoa Física"
+      properties:
+        cpf:
+          type: "string"
+          title: "CPF"
+          pattern: "/^\\d{11}$/"
+          description: "CPF do usuário."
+        nome:
+          type: "string"
+          title: "Nome"
+          description: "Nome do usuário."
+          maxLength: 140

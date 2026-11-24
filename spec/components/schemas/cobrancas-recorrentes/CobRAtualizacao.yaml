@@ -1,0 +1,109 @@
+      type: "object"
+      title: "Histórico de Atualização da Cobrança Recorrente"
+      required: ["atualizacao"]
+      properties:
+        atualizacao:
+          type: "array"
+          title: "Histórico de Status"
+          description: "Histórico das mudanças de status das cobranças recorrentes."
+          items:
+            type: "object"
+            required: ["status", "data"]
+            properties:
+              status:
+                type: "string"
+                title: "Status da cobrança"
+                description: "Status da cobrança."
+                enum:
+                  - "CRIADA"
+                  - "ATIVA"
+                  - "CONCLUIDA"
+                  - "EXPIRADA"
+                  - "REJEITADA"
+                  - "CANCELADA"
+              data:
+                type: "string"
+                format: "date-time"
+                description: "Data e hora do registro de status atualizado. Respeita RFC 3339."
+        encerramento:
+          type: "object"
+          title: "Detalhamento do encerramento da cobrança."
+          oneOf:
+            - type: "object"
+              properties:
+                cancelamento:
+                  type: "object"
+                  title: "Informações sobre o cancelamento da cobrança"
+                  required: ["solicitante", "codigo", "descricao"]
+                  description: "Informações sobre o cancelamento da cobrança"
+                  properties:
+                    solicitante:
+                      type: "string"
+                      title: "Solicitante do cancelamento"
+                      enum:
+                        - PSP_PAGADOR
+                        - USUARIO_PAGADOR
+                        - PSP_RECEBEDOR
+                        - USUARIO_RECEBEDOR
+                    codigo:
+                      type: "string"
+                      title: "Código do cancelamento"
+                      description: "Código do cancelamento. Corresponde ao código de cancelamento presente no catálogo de mensagens."
+                      maxLength: 4
+                      enum:
+                        - ACCT
+                        - BLCK
+                        - CCLD
+                        - FAIL
+                        - OTHR
+                        - SLBD
+                        - SLCR
+                    descricao:
+                      type: "string"
+                      title: "Descricao do cancelamento"
+                      description: "Descricao da causa do cancelamento"
+                      maxLength: 400
+            - type: "object"
+              properties:
+                rejeicao:
+                  type: "object"
+                  title: "Informações sobre a rejeição da cobrança"
+                  required: ["codigo", "descricao"]
+                  description: "Informações sobre a rejeição da cobrança"
+                  properties:
+                    codigo:
+                      type: "string"
+                      title: "Código da rejeição"
+                      description: |
+                        Código da rejeição. Corresponde ao código de rejeição presente no catálogo de mensagens. 
+                      
+                        Os códigos: `AB10`, `AC06`, `AM02`, `DS27`, `DTNT`, `FBRD`, `IRNT`, `NIEC`, `NIPA`, `QUNT` e `RC09` estão em desuso.
+                      maxLength: 4
+                      enum:
+                        - AB10
+                        - AC05
+                        - AC06
+                        - AM02
+                        - AM09
+                        - CRNC
+                        - DENC
+                        - DS27
+                        - DTED
+                        - DTNT
+                        - FBRD
+                        - FCD2
+                        - GRER
+                        - IRNT
+                        - MIDI
+                        - MSUC
+                        - NIEC
+                        - NIPA
+                        - NITX
+                        - QUNT
+                        - RC09
+                        - UDEI
+                    descricao:
+                      type: "string"
+                      title: "Descricao da rejeição"
+                      description: "Descricao da causa da rejeição"
+                      maxLength: 400

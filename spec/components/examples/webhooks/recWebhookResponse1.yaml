@@ -1,0 +1,4 @@
+      summary: "Exemplo de webhook de recorrência"
+      value:
+        webhookUrl: https://usuario.recebedor.com/api/webhookrec/
+        criacao: "2023-12-20T12:51:16.485Z"

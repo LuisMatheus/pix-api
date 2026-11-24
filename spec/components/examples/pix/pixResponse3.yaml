@@ -1,0 +1,14 @@
+      summary: "Exemplo de Pix com Saque"
+      value:
+        endToEndId: "E88631478202009091221ghijk78901234"
+        txid: "82433415910c47e5adb6ac3527cca160"
+        valor: "200.00"
+        componentesValor:
+          original:
+            valor: "180.00"
+          saque:
+            valor: "20.00"
+            modalidadeAgente: "AGFSS"
+            prestadorDeServicoDeSaque: "12345678"
+        horario: "2020-09-10T13:03:33.902Z"
+        infoPagador: "Saque Pix"

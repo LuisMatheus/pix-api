@@ -1,0 +1,64 @@
+      type: "object"
+      title: "Detalhamento do encerramento da recorrência."
+      properties:
+        encerramento:
+          type: "object"
+          title: "Detalhamento do encerramento da recorrência."
+          oneOf:
+            - type: "object"
+              properties:
+                rejeicao:
+                  type: "object"
+                  title: "Informações sobre a rejeição da recorrência"
+                  required: ["codigo", "descricao"]
+                  description: "Informações sobre a rejeição da recorrência"
+                  properties:
+                    codigo:
+                      type: "string"
+                      title: "Código da rejeição"
+                      description: "Código da rejeição. Corresponde ao código de rejeição presente no catálogo de mensagens."
+                      enum:
+                        - AP13
+                        - AP14
+                        - AP15
+                      maxLength: 4
+                    descricao:
+                      type: "string"
+                      title: "Descricao da rejeição"
+                      description: "Descricao da causa da rejeição"
+                      maxLength: 400
+            - type: "object"
+              properties:
+                cancelamento:
+                  type: "object"
+                  title: "Informações sobre o cancelamento da recorrência"
+                  required: ["solicitante", "codigo", "descricao"]
+                  description: "Informações sobre o cancelamento da recorrência"
+                  properties:
+                    solicitante:
+                      type: "string"
+                      title: "Solicitante do cancelamento"
+                      enum:
+                        - PSP_PAGADOR
+                        - USUARIO_PAGADOR
+                        - PSP_RECEBEDOR
+                        - USUARIO_RECEBEDOR
+                    codigo:
+                      type: "string"
+                      title: "Código do cancelamento"
+                      description: "Código do cancelamento. Corresponde ao código de cancelamento presente no catálogo de mensagens. **IMPORTANTE:** `PCFD` e `ERSL` estão em desuso (deprecated) sem substitutos."
+                      enum:
+                       - ACCL
+                       - CPCL
+                       - DCSD
+                       - ERSL
+                       - FRUD
+                       - PCFD
+                       - SLCR
+                       - SLDB
+                      maxLength: 4
+                    descricao:
+                      type: "string"
+                      title: "Descricao do cancelamento"
+                      description: "Descricao do cancelamento."
+                      maxLength: 400

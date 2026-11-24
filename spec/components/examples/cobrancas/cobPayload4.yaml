@@ -1,0 +1,31 @@
+      summary: "Exemplo de payload de cobrança imediata 2 com tributos"
+      value:
+        calendario:
+          criacao: "2025-11-20T14:22:10.000Z"
+          apresentacao: "2025-12-01T09:30:00Z"
+          expiracao: 3600
+        txid: "a1b2c3d4e5f6478890abcdef12345678"
+        revisao: 3
+        status: "ATIVA"
+        valor:
+          original: "750.50"
+          modalidadeAlteracao: 0
+        chave: "9f8e7d6c-5b4a-11ee-9a34-0242ac120003"
+        solicitacaoPagador: "Informar número do pedido"
+        infoAdicionais:
+          - nome: "quantidade"
+            valor: "2"
+          - nome: "produto"
+            valor: "Assinatura Mensal"
+        tributo:
+          documentoFiscal:
+            chaveDeAcesso: "nchsgsgddkgjdhsueyrgkasjdh"
+          cbs:
+            informado:
+              valor: "20.00"
+              data: "2025-11-20T14:22:10.000Z"
+          ibs:
+            informado:
+              valor: "35.25"
+              data: "2025-11-20T14:22:10.000Z"
+        valorLiquidoEstimado: "695.25"

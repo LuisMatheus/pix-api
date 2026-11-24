@@ -1,0 +1,11 @@
+      type: "object"
+      properties:
+        desconto:
+          type: "object"
+          required: ["valor"]
+          properties:
+            valor:
+              type: "string"
+              title: "Valor relativo a desconto."
+              description: "Valor do desconto."
+              pattern: "\\d{1,10}\\.\\d{2}"

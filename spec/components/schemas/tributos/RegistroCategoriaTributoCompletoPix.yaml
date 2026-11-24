@@ -1,0 +1,6 @@
+      type: "object"
+      title: "Registro de tributo completo Pix"
+      description: "Detalhamento dos valores completos do tributo, segregados por categoria."
+      required: ["informado","segregado"]
+      allOf:
+        - $ref: "RegistroCategoriaTributoCompleto.yaml"

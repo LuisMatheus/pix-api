@@ -1,0 +1,21 @@
+      summary: "Exemplo de retorno da consulta de cobranças 1"
+      value:
+        parametros:
+          inicio: "2020-04-01T00:00:00Z"
+          fim: "2020-04-02T10:00:00Z"
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 2
+        cobs:
+          - allOf:
+              - $ref: "#/components/examples/cobResponse1/value"
+          - allOf:
+              - $ref: "#/components/examples/cobResponse2/value"
+          - allOf:
+              - $ref: "#/components/examples/cobResponse5/value"
+          - allOf:
+              - $ref: "#/components/examples/cobResponse6/value"
+          - allOf:
+              - $ref: "#/components/examples/cobResponse7/value"

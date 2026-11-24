@@ -1,0 +1,28 @@
+      title: "Cobrança com vencimento completa"
+      required: ["status"]
+      allOf:
+        - $ref: "CobVGerada.yaml"
+        - type: "object"
+          properties:
+            status:
+              $ref: "CobVStatus.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              allOf:
+                - $ref: "../tributos/TributoCompleto.yaml"
+        - $ref: "../tributos/ValorLiquidoEstimado.yaml"
+        - type: "object"
+          properties:
+            pix:
+              type: "array"
+              title: "Pix recebidos"
+              items:
+                allOf:
+                  - $ref: "../pix/PixConsultado.yaml"
+                  - type: "object"
+                    properties:
+                      txid:
+                        allOf:
+                          - $ref: "../comuns/TxId.yaml"
+                          - pattern: "[a-zA-Z0-9]{26,35}"

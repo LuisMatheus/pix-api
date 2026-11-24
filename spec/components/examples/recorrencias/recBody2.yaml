@@ -1,0 +1,14 @@
+      summary: "Exemplo de Recorrência 2"
+      value:
+        vinculo:
+          contrato: "998782003"
+          devedor:
+            cpf: "02989131415"
+            nome: "Beltrano da Silva"
+          objeto: "Serviço de Plano de Saúde."
+        calendario:
+          dataInicial: "2024-10-10"
+          periodicidade: ANUAL
+        valor:
+          valorMinimoRecebedor: "5000.00"
+        politicaRetentativa: PERMITE_3R_7D

@@ -1,0 +1,9 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/SolicRecOperacaoInvalida
+        title: "Operação inválida."
+        status: 400
+        detail: "A solicitação de confirmação de recorrência não respeita o schema."
+        violacoes:
+          - razao: "O objeto solicrec.destinatario não respeita o schema."
+            propriedade: "solicrec.destinatario"

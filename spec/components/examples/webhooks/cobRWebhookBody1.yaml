@@ -1,0 +1,3 @@
+      summary: "Exemplo de criação de webhook de cobrança recorrente"
+      value:
+        webhookUrl: https://usuario.recebedor.com/api/webhookcobr/

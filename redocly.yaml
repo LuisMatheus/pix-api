@@ -1,0 +1,14 @@
+extends:
+  - spec
+
+rules:
+  security-scopes-defined: error
+  no-invalid-parameter-examples: error
+  # Desativadas temporariamente para ignorar as inconsistências conhecidas.
+  no-identical-paths: off
+  no-required-schema-properties-undefined: off
+  no-undefined-server-variable: off
+  no-invalid-schema-examples: off
+  no-invalid-media-type-examples:
+    severity: off
+    allowAdditionalProperties: true

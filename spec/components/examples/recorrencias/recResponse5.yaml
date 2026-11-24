@@ -1,0 +1,38 @@
+      summary: "Exemplo de Recorrência Completa Jornada 1 com Cancelamento"
+      value:
+        idRec: RR1026652320240821lab77511abf
+        status: CANCELADA
+        valor:
+          valorMinimoRecebedor: "800.00"
+        vinculo:
+          contrato: "298620560"
+          devedor:
+            cpf: "12600511100"
+            nome: "Sebastião Silva"
+          objeto: "Faculdade de Engenharia"
+        calendario:
+          dataFinal: "2027-09-01"
+          dataInicial: "2024-10-01"
+          periodicidade: MENSAL
+        politicaRetentativa: PERMITE_3R_7D
+        pagador:
+          codMun: "1509873"
+          cpf: "12600511100"
+          ispbParticipante: "52780028"
+        recebedor:
+          cnpj: "61593007802371"
+          nome: "Universidade Brasileira"
+        encerramento:
+          cancelamento:
+            solicitante: "USUARIO_RECEBEDOR"
+            codigo: "SLCR"
+            descricao: "Cancelamento solicitado pelo usuário recebedor"
+        atualizacao:
+          - data: "2024-08-03T08:30:02.050Z"
+            nome: CRIADA
+          - data: "2024-09-06T09:11:42.205Z"
+            nome: APROVADA
+          - data: "2024-10-06T15:05:33.305Z"
+            nome: CANCELADA
+        ativacao:
+          tipoJornada: JORNADA_1

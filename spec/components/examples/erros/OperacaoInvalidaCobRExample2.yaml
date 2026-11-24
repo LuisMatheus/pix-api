@@ -1,0 +1,6 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/CobROperacaoInvalida
+        title: "Operação inválida."
+        status: 400
+        detail: "Não é possível cancelar uma cobrança em uma data igual ou maior que a data prevista da primeira tentativa de liquidação."

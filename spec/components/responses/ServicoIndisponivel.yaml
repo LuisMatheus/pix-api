@@ -1,0 +1,8 @@
+      description: "Serviço não está disponível no momento. Serviço solicitado pode estar em manutenção ou fora da janela de funcionamento."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "../schemas/erros/Problema.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/erros/ServicoIndisponivelExample1.yaml"

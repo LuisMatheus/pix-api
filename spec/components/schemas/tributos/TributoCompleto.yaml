@@ -1,0 +1,25 @@
+      type: "object"
+      title: "Tributos Detalhados"
+      description: "Informações completas sobre tributos."
+      required: ["cbs", "ibs"]
+      properties:
+        documentoFiscal:
+          type: "object"
+          title: "Documento Fiscal"
+          description: "Informações detalhadas acerca da documentação fiscal."
+          required: ["chaveDeAcesso"]
+          properties:
+            chaveDeAcesso:
+              type: "string"
+              title: "Chave de Acesso para o Documento Fiscal"
+              pattern: "^[a-zA-Z0-9]{1,50}$"
+        cbs:
+          title: "CBS"
+          description: "CBS (Contribuição sobre Bens e Serviços): Tributo federal incidente sobre operações de bens e serviços, cujo valor absoluto será informado para fins de split tributário."
+          allOf:
+            - $ref: "RegistroCategoriaTributoCompleto.yaml"
+        ibs:
+          title: "IBS"
+          description: "IBS (Imposto sobre Bens e Serviços): Tributo estadual/municipal incidente sobre operações de bens e serviços, cujo valor absoluto será informado para fins de split tributário."
+          allOf:
+            - $ref: "RegistroCategoriaTributoCompleto.yaml"

@@ -1,0 +1,13 @@
+      summary: "Exemplo de retorno da consulta de Webhooks 1"
+      value:
+        parametros:
+          inicio: "2023-10-01T00:00:00Z"
+          fim: "2024-04-01T23:59:59Z"
+          paginacao:
+            paginaAtual: 0
+            itensPorPagina: 100
+            quantidadeDePaginas: 1
+            quantidadeTotalDeItens: 1
+        webhooks:
+          - webhookUrl: https://usuario.recebedor.com/api/webhookrec/
+            criacao: "2023-12-20T12:51:16.485Z"

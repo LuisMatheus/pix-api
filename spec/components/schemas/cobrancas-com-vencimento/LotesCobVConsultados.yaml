@@ -1,0 +1,12 @@
+      title: "Lotes de solicitações de cobranças com vencimento"
+      type: "object"
+      required: ["parametros", "lotes"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaLote.yaml"
+        lotes:
+          type: "array"
+          title: "Lotes de solicitações de criação/alteração de cobranças com vencimento"
+          items:
+            allOf:
+              - $ref: "LoteCobVConsultado.yaml"

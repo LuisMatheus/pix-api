@@ -1,0 +1,28 @@
+      summary: "Exemplo de Recorrência Completa Jornada 1 com Convênio"
+      value:
+        idRec: RR3781267820250201123deabc339
+        status: CRIADA
+        valor:
+          valorRec: "170.00"
+        vinculo:
+          contrato: "1793651"
+          devedor:
+            cpf: "01536985566"
+            nome: "Fulano de Tal"
+          objeto: "Serviços de Telefonia"
+        calendario:
+          dataFinal: "2028-03-01"
+          dataInicial: "2025-03-01"
+          periodicidade: MENSAL
+        politicaRetentativa: NAO_PERMITE
+        pagador:
+          codMun: "1509873"
+          cpf: "45832633800"
+          ispbParticipante: "52780028"
+        recebedor:
+          convenio: "Master"
+          cnpj: "56958712500811"
+          nome: "Academia Saúde"
+        atualizacao:
+          - data: "2025-02-01T08:30:02.050Z"
+            nome: CRIADA

@@ -1,0 +1,11 @@
+      type: "object"
+      properties:
+        original:
+          type: "object"
+          required: ["valor"]
+          properties:
+            valor:
+              type: "string"
+              title: "Valor original"
+              description: "Valor original do Pix."
+              pattern: "\\d{1,10}\\.\\d{2}"

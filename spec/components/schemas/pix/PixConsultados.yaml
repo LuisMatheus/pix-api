@@ -1,0 +1,12 @@
+      type: "object"
+      title: "Pix Consultados"
+      required: ["parametros", "cobs"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaPix.yaml"
+        pix:
+          type: "array"
+          title: "Lista de Pix recebidos"
+          items:
+            allOf:
+              - $ref: "PixConsultado.yaml"

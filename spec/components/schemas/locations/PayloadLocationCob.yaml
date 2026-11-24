@@ -1,0 +1,7 @@
+      type: "object"
+      title: "Location do Payload"
+      required: ["id", "tipoCob"]
+      description: "Identificador da localização do payload."
+      properties:
+        id:
+          $ref: "PayloadLocationId.yaml"

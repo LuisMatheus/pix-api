@@ -1,0 +1,25 @@
+      type: "object"
+      properties:
+        troco:
+          type: "object"
+          required: ["valor", "modalidadeAgente", "prestadorDoServicoDeSaque"]
+          properties:
+            valor:
+              type: "string"
+              title: "Valor do Troco Pix"
+              description: "Valor do Troco Pix."
+              pattern: "\\d{1,10}\\.\\d{2}"
+            modalidadeAgente:
+              type: "string"
+              title: "Modalidade do Agente"
+              description: |
+                ##### Modalidade do Agente
+                <table><tr><th>SIGLA</th><th>Descrição</th></tr><tr><td>AGTEC</td><td>Agente Estabelecimento Comercial</td></tr><tr><td>AGTOT</td><td>Agente Outra Espécie de Pessoa Jurídica ou Correspondente no País</td></tr></table>
+              enum:
+                - "AGTEC"
+                - "AGTOT"
+            prestadorDoServicoDeSaque:
+              type: "string"
+              title: "Facilitador de Serviço de Saque"
+              pattern: "^[0-9A-Z]{8}$"
+              description: "ISPB do Facilitador de Serviço de Saque"

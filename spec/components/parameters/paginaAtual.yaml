@@ -1,0 +1,10 @@
+      in: "query"
+      name: "paginacao.paginaAtual"
+      required: false
+      schema:
+        type: "integer"
+        format: "int32"
+        title: "Página atual"
+        minimum: 0
+        default: 0
+        description: "Página a ser retornada pela consulta. Se não for informada, o PSP assumirá que será 0."

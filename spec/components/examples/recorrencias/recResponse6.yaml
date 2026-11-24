@@ -1,0 +1,31 @@
+      summary: "Exemplo de Recorrência Completa com Dados QR Jornada 3"
+      value:
+        idRec: RN1234567820241203fghijkabcde
+        status: CRIADA
+        valor:
+          valorRec: "150.00"
+        vinculo:
+          contrato: "5582610"
+          devedor:
+            cpf: "45164632481"
+            nome: "Fulano de Tal"
+          objeto: "Serviços de Gestão de Imóveis"
+        calendario:
+          dataFinal: "2028-09-01"
+          dataInicial: "2025-02-01"
+          periodicidade: MENSAL
+        politicaRetentativa: NAO_PERMITE
+        loc:
+          criacao: "2024-10-01T10:15:01.115Z"
+          id: 2726
+          location: pix.example.com/qr/v2/rec/94ed2badcbc04c15b0bb7fa353194890
+          idRec: RN1234567820241203fghijkabcde
+        recebedor:
+          cnpj: "12345678000195"
+          nome: "Empresa de Serviços SA"
+        atualizacao:
+          - data: "2024-12-03T08:30:02.050Z"
+            nome: CRIADA
+        dadosQR:
+          jornada: JORNADA_3
+          pixCopiaECola: 00020101021226760014br.gov.bcb.pix2554pix.example.com/qr/v2/8b3da2f39a4140d1a91abd93113bd4415204000053039865802BR5913Fulano de Tal6008BRASILIA62070503***80800014br.gov.bcb.pix2558pix.example.com/qr/v2/rec/94ed2badcbc04c15b0bb7fa35319489063047741

@@ -1,0 +1,31 @@
+      summary: "Exemplo de Recorrência Completa com Dados QR Jornada 4"
+      value:
+        idRec: RN1234567820241130lkwdefghijk
+        status: CRIADA
+        valor:
+          valorRec: "210.00"
+        vinculo:
+          contrato: "11750023"
+          devedor:
+            cpf: "75633122216"
+            nome: "Francisco da Silva"
+          objeto: "Assinatura de Serviços de Transporte"
+        calendario:
+          dataFinal: "2026-12-01"
+          dataInicial: "2025-03-01"
+          periodicidade: MENSAL
+        politicaRetentativa: NAO_PERMITE
+        loc:
+          criacao: "2024-05-19T10:28:05.230Z"
+          id: 6153
+          location: pix.example.com/qr/v2/rec/3ffa640fa4f14080adccb949fa2dc0d0
+          idRec: RN1234567820241130lkwdefghijk
+        recebedor:
+          cnpj: "56989000019533"
+          nome: "Empresa de Logística SA"
+        atualizacao:
+          - data: "2024-11-30T08:30:02.050Z"
+            nome: CRIADA
+        dadosQR:
+          jornada: JORNADA_4
+          pixCopiaECola: 00020101021226810014br.gov.bcb.pix2559pix.example.com/qr/v2/cobv/1e6c54d3ec9449b7a7fc53b6b0f998e75204000053039865802BR5913Fulano de Tal6008BRASILIA62070503***80800014br.gov.bcb.pix2558pix.example.com/qr/v2/rec/3ffa640fa4f14080adccb949fa2dc0d06304A441

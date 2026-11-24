@@ -1,0 +1,34 @@
+      type: "object"
+      title: "Cobrança com vencimento revisada"
+      description: "Dados enviados para revisão da cobrança com vencimento via API Pix"
+      allOf:
+        - type: "object"
+          properties:
+            calendario:
+              title: "Calendário"
+              description: "Os campos aninhados sob o identificador calendário organizam informações a respeito de controle de tempo da cobrança."
+              allOf:
+                - $ref: "../cobrancas/CobDataDeVencimento.yaml"
+        - $ref: "../comuns/DadosDevedor.yaml"
+        - type: "object"
+          properties:
+            loc:
+              allOf:
+                - $ref: "../locations/PayloadLocationCob.yaml"
+        - type: "object"
+          properties:
+            status:
+              type: "string"
+              title: "Status do registro da cobrança"
+              enum:
+                - "REMOVIDA_PELO_USUARIO_RECEBEDOR"
+        - type: "object"
+          properties:
+            valor:
+              $ref: "CobVValor.yaml"
+        - $ref: "../cobrancas/CobBase.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              allOf:
+                - $ref: "../tributos/TributoInformadoSolicitado.yaml"

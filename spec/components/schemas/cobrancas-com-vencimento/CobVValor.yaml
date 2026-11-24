@@ -1,0 +1,119 @@
+      type: "object"
+      title: "Valor da cobrança com vencimento"
+      description: "Valores monetários."
+      properties:
+        original:
+          type: "string"
+          title: "Valor"
+          pattern: "\\d{1,10}\\.\\d{2}"
+          description: "Valor original da cobrança."
+        multa:
+          type: "object"
+          required: ["modalidade", "valorPerc"]
+          title: "Multa aplicada"
+          description: "Multa aplicada à cobrança"
+          properties:
+            modalidade:
+              type: "integer"
+              format: "int32"
+              title: "Modalidade da multa"
+              minimum: 1
+              maximum: 2
+              description: |
+                ##### Modalidade da multa, conforme tabela de domínios.
+                <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo</td><td>1</td></tr><tr><td>Percentual</td><td>2</td></tr></table>
+            valorPerc:
+              type: "string"
+              title: "Valor da multa absoluta"
+              description: 'Multa do documento em valor absoluto ou percentual, conforme "valor.multa.modalidade".'
+              pattern: "\\d{1,10}\\.\\d{2}"
+        juros:
+          type: "object"
+          required: ["modalidade", "valorPerc"]
+          title: "Juro aplicado"
+          description: "Juro aplicado à cobrança"
+          properties:
+            modalidade:
+              type: "integer"
+              format: "int32"
+              minimum: 1
+              maximum: 8
+              title: "Modalidade de juros"
+              description: |
+                ##### Modalidade de juros, conforme tabela de domínios.
+                <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor (dias corridos)</td><td>1</td></tr><tr><td>Percentual ao dia (dias corridos)</td><td>2</td></tr><tr><td>Percentual ao mês (dias corridos)</td><td>3</td></tr><tr><td>Percentual ao ano (dias corridos)</td><td>4</td></tr><tr><td>Valor (dias úteis)</td><td>5</td></tr><tr><td>Percentual ao dia (dias úteis)</td><td>6</td></tr><tr><td>Percentual ao mês (dias úteis)</td><td>7</td></tr><tr><td>Percentual ao ano (dias úteis)</td><td>8</td></tr></table>
+            valorPerc:
+              type: "string"
+              title: "Valor"
+              pattern: "\\d{1,10}\\.\\d{2}"
+        abatimento:
+          title: "Abatimento aplicado"
+          required: ["modalidade", "valorPerc"]
+          description: "Abatimento aplicado à cobrança"
+          properties:
+            modalidade:
+              type: "integer"
+              format: "int32"
+              minimum: 1
+              maximum: 2
+              title: "Modalidade de abatimentos"
+              description: |
+                ##### Modalidade de abatimentos, conforme tabela de domínios.
+                <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo</td><td>1</td></tr><tr><td>Percentual</td><td>2</td></tr></table>
+            valorPerc:
+              type: "string"
+              title: "Abatimentos"
+              description: "Abatimentos ou outras deduções aplicadas ao documento, em valor absoluto ou percentual do valor original do documento."
+              pattern: "\\d{1,10}\\.\\d{2}"
+        desconto:
+          title: "Descontos aplicados"
+          required: ["modalidade"]
+          description: "Descontos aplicados à cobrança"
+          allOf:
+            - type: "object"
+              properties:
+                modalidade:
+                  type: "integer"
+                  format: "int32"
+                  minimum: 1
+                  maximum: 6
+                  title: "Modalidade de descontos"
+                  description: |
+                    ##### Modalidade de desconto, conforme tabela de domínios.
+                    <table><tr><th>Descrição</th><th>Domínio</th></tr><tr><td>Valor Fixo até a[s] data[s] informada[s]</td><td>1</td></tr><tr><td>Percentual até a data informada</td><td>2</td></tr><tr><td>Valor por antecipação dia corrido</td><td>3</td></tr><tr><td>Valor por antecipação dia útil</td><td>4</td></tr><tr><td>Percentual por antecipação dia corrido</td><td>5</td></tr><tr><td>Percentual por antecipação dia útil</td><td>6</td></tr></table>
+
+          oneOf:
+            - type: "object"
+              properties:
+                descontoDataFixa:
+                  title: "Lista de Descontos"
+                  description: "Descontos absolutos aplicados à cobrança."
+                  type: "array"
+                  minItems: 1
+                  maxItems: 3
+                  uniqueItems: true
+                  items:
+                    required: ["data", "valorPerc"]
+                    allOf:
+                      - properties:
+                          data:
+                            title: "Data limite para o desconto absoluto da cobrança"
+                            description: 'Descontos por pagamento antecipado, com data fixa. Matriz com até três elementos, sendo que cada elemento é composto por um par "data e valorPerc", para estabelecer descontos percentuais ou absolutos, até aquela data de pagamento. Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. A data de desconto obrigatoriamente deverá ser menor ou igual à data de vencimento da cobrança.'
+                            type: "string"
+                            format: "date"
+                            example: "2020-04-01"
+                      - properties:
+                          valorPerc:
+                            type: "string"
+                            title: "Valor do desconto absoluto"
+                            description: "Desconto em valor absoluto ou percentual por dia, útil ou corrido, conforme valor.desconto.modalidade"
+                            pattern: "\\d{1,10}\\.\\d{2}"
+            - type: "object"
+              required: ["valorPerc"]
+              properties:
+                valorPerc:
+                  type: "string"
+                  title: "Abatimentos"
+                  description: "Abatimentos ou outras deduções aplicadas ao documento, em valor absoluto ou percentual do valor original do documento."
+                  pattern: "\\d{1,10}\\.\\d{2}"
+

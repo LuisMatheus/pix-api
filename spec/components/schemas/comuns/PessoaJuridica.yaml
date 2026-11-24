@@ -1,0 +1,14 @@
+      type: "object"
+      required: ["cnpj", "nome"]
+      title: "Pessoa Jurídica"
+      properties:
+        cnpj:
+          type: "string"
+          title: "CNPJ"
+          pattern: "^[0-9A-Z]{14}$"
+          description: "CNPJ do usuário."
+        nome:
+          type: "string"
+          title: "Nome"
+          description: "Nome do usuário."
+          maxLength: 200

@@ -1,0 +1,18 @@
+      type: "object"
+      required: ["conta", "ispbParticipante"]
+      properties:
+        conta:
+          type: "string"
+          title: "Conta do Usuário Pagador"
+          description: "Número da conta do usuário pagador."
+          maxLength: 20
+        ispbParticipante:
+          type: "string"
+          title: "ISPB do usuário pagador."
+          description: "ISPB do usuário pagador."
+          pattern: "^[0-9A-Z]{8}$"
+        agencia:
+          type: "string"
+          title: "Agência do Usuário Pagador"
+          description: "Número da agência do usuário pagador."
+          maxLength: 4

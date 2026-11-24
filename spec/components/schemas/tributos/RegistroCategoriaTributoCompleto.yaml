@@ -1,0 +1,25 @@
+      type: "object"
+      title: "Registro de tributo completo"
+      description: "Detalhamento dos valores completos do tributo, segregados por categoria."
+      required: ["informado"]
+      properties:
+        segregado:
+          title: "Tributo segregado"
+          description: "Categoria cujo valor e data correspondem ao que foi efetivamente segregado na liquidação do Pix."
+          allOf:
+            - $ref: "ValorTributoDetalheCompleto.yaml"
+        emAberto:
+          title: "Tributo em aberto"
+          description: "Categoria cujo valor e data correspondem ao registro do último valor em aberto obtido da Plataforma Pública."
+          allOf:
+            - $ref: "ValorTributoDetalheCompleto.yaml"
+        corrigido:
+          title: "Tributo corrigido"
+          description: "Categoria cujo valor e data correspondem ao registro da última correção obtida da Plataforma Pública."
+          allOf:
+            - $ref: "ValorTributoDetalheCompleto.yaml"
+        informado:
+          title: "Tributo informado"
+          description: "Categoria cujo valor é informado pelo recebedor e a data corresponde ao momento de criação do objeto tributo."
+          allOf:
+            - $ref: "ValorTributoDetalheCompleto.yaml"

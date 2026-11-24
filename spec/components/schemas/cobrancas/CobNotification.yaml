@@ -1,0 +1,6 @@
+      type: "object"
+      title: "Cobrança Imediata Notificada"
+      required: ["txid", "status"]
+      description: "Dados enviados para notificação da cobrança imediata via API Pix"
+      allOf:
+        - $ref: "CobCompleta.yaml"

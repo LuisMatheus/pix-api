@@ -1,0 +1,4 @@
+      type: "string"
+      title: "Id da Devolução"
+      description: "Id gerado pelo cliente para representar unicamente uma devolução."
+      pattern: "[a-zA-Z0-9]{1,35}"

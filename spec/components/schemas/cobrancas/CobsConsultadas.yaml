@@ -1,0 +1,13 @@
+      type: "object"
+      title: "Cobranças imediatas consultadas"
+      required: ["parametros", "cobs"]
+      properties:
+        parametros:
+          $ref: "ParametrosConsultaCob.yaml"
+        cobs:
+          type: "array"
+          title: "Lista de cobranças"
+          items:
+            allOf:
+              - $ref: "CobCompleta.yaml"
+              - required: ["status", "txid", "idCob"]

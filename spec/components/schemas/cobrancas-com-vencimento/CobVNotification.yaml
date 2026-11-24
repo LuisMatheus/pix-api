@@ -1,0 +1,6 @@
+      type: "object"
+      title: "Cobrança com Vencimento Notificada"
+      required: ["txid", "status"]
+      description: "Dados enviados para notificação da cobrança com vencimento via API Pix"
+      allOf:
+        - $ref: "CobVCompleta.yaml"

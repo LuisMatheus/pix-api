@@ -1,0 +1,15 @@
+      type: "object"
+      required: ["valor"]
+      properties:
+        valor:
+          type: "string"
+          title: "Valor"
+          pattern: "\\d{1,10}\\.\\d{2}"
+          description: "Valor solicitado para devolução. A soma dos valores de todas as devolucões não podem ultrapassar o valor total do Pix."
+        natureza:
+          $ref: "DevolucaoSolicitadaNatureza.yaml"
+        descricao:
+          type: "string"
+          title: "Mensagem ao pagador relativa à devolução."
+          description: "O campo `descricao`, opcional, determina um texto a ser apresentado ao pagador contendo informações sobre a devolução. Esse texto será preenchido, na pacs.004, pelo PSP do recebedor, no campo RemittanceInformation. O tamanho do campo na pacs.004 está limitado a 140 caracteres."
+          maxLength: 140

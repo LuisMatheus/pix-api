@@ -1,0 +1,6 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/PixDevolucaoInvalida
+        title: "Devolução inválida."
+        status: 400
+        detail: "A presente requisição de devolução não respeita o _schema_ ou não faz sentido semanticamente."

@@ -1,0 +1,13 @@
+      type: "object"
+      title: "Status da Cobrança Recorrente"
+      properties:
+        status:
+          type: "string"
+          title: "Status do registro da cobrança"
+          enum:
+            - "CRIADA"
+            - "ATIVA"
+            - "CONCLUIDA"
+            - "EXPIRADA"
+            - "REJEITADA"
+            - "CANCELADA"

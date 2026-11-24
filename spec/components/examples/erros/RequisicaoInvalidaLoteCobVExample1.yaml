@@ -1,0 +1,11 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/LoteCobVOperacaoInvalida
+        title: "Lote de cobranças inválido."
+        status: 400
+        detail: "A requisição que busca alterar ou criar um lote de cobranças com vencimento não respeita o _schema_ ou está semanticamente errada."
+        violacoes:
+          - razao: "O objeto loteCobV.cobsV não respeita o _schema_."
+            propriedade: "loteCobV.cobsV"
+          - razao: "O campo loteCobV.descricao não respeita o _schema_."
+            propriedade: "loteCobV.descricao"

@@ -1,0 +1,15 @@
+      summary: "Exemplo de criação de cobrança imediata com Saque Pix 3"
+      value:
+        devedor:
+          cnpj: "12345678000195"
+          nome: "Empresa de Serviços SA"
+        valor:
+          original: "10.00"
+          modalidadeAlteracao: 0
+          retirada:
+            troco:
+              valor: "0.00"
+              modalidadeAlteracao: 1
+              modalidadeAgente: "AGTEC"
+              prestadorDoServicoDeSaque: "12345678"
+        chave: "7d9f0335-8dcc-4054-9bf9-0dbd61d36906"

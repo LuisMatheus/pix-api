@@ -1,0 +1,5 @@
+      type: "integer"
+      format: "int64"
+      title: "Id da location"
+      description: "Identificador da location a ser informada na criação da cobrança ."
+      readOnly: true

@@ -1,0 +1,28 @@
+      summary: "Exemplo de webhook de cobrança recorrente"
+      value:
+        cobsr:
+          - idRec: RR1234567820240115abcdefghijk
+            txid: 3136957d93134f2184b369e8f1c0729d
+            status: ATIVA
+            atualizacao:
+            - status: ATIVA
+              data: '2024-08-20T12:34:21.300Z'
+            tentativas:
+            - dataLiquidacao: '2024-20-08'
+              tipo: AGND
+              status: SOLICITADA
+              endToEndId: E12345678202406201221abcdef12345
+            valor: 
+               original: "100.00"
+            tributo:
+              documentoFiscal:
+                chaveDeAcesso: "lkkajfakfjkasjfaks8678126487126878"
+              cbs:
+                informado:
+                  valor: "2.94"
+                  data: "2024-08-20T12:34:21.300Z"
+              ibs:
+                informado:
+                  valor: "5.88"
+                  data: "2024-08-20T12:34:21.300Z"
+            valorLiquidoEstimado: "91.18"

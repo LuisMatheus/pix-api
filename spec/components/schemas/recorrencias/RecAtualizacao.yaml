@@ -1,0 +1,26 @@
+      type: "object"
+      title: "Histórico de atualização da recorrência."
+      required: ["atualizacao"]
+      properties:
+        atualizacao:
+          type: "array"
+          title: "Histórico de Status"
+          description: "Histórico das mudanças de status da recorrência."
+          items:
+            type: "object"
+            required: ["status", "data"]
+            properties:
+              status:
+                type: "string"
+                title: "Status da recorrência"
+                description: "Status da recorrência."
+                enum:
+                  - "CRIADA"
+                  - "APROVADA"
+                  - "REJEITADA"
+                  - "EXPIRADA"
+                  - "CANCELADA"
+              data:
+                type: "string"
+                format: "date-time"
+                description: "Data e hora do registro de status atualizado. Respeita RFC 3339."

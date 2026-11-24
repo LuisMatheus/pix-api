@@ -1,0 +1,20 @@
+      type: "object"
+      required: ["logradouro", "cidade", "uf", "cep"]
+      properties:
+        recebedor:
+          description: "O objeto recebedor organiza as informações sobre o credor da cobrança."
+          oneOf:
+            - $ref: "PessoaFisica.yaml"
+            - type: "object"
+              allOf:
+                - $ref: "PessoaJuridica.yaml"
+                - type: "object"
+                  properties:
+                    nomeFantasia:
+                      type: "string"
+                      title: "Nome fantasia"
+                      description: "Nome fantasia."
+                      maxLength: 200
+          allOf:
+            - required: ["logradouro", "cidade", "uf", "cep"]
+            - $ref: "DadosComplementaresPessoa.yaml"

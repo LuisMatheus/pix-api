@@ -1,0 +1,22 @@
+      type: "object"
+      properties:
+        logradouro:
+          type: "string"
+          title: "Logradouro"
+          description: "Logradouro do usuário."
+          maxLength: 200
+        cidade:
+          type: "string"
+          title: "Cidade"
+          description: "Cidade do usuário."
+          maxLength: 200
+        uf:
+          type: "string"
+          title: "UF"
+          description: "UF do usuário."
+          maxLength: 2
+        cep:
+          type: "string"
+          title: "CEP"
+          description: "CEP do usuário."
+          maxLength: 8

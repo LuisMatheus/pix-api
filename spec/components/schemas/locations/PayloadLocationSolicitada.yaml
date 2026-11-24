@@ -1,0 +1,11 @@
+      type: "object"
+      title: "Location do Payload Solicitada"
+      description: "Identificador da localização do payload solicitada."
+      required: ["tipoCob"]
+      properties:
+        tipoCob:
+          type: "string"
+          title: "Tipo da cobrança"
+          enum:
+            - "cob"
+            - "cobv"

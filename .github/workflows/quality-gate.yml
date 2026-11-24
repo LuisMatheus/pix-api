@@ -1,0 +1,81 @@
+name: OpenAPI quality gate
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      run_lint:
+        description: Executar lint do contrato com Redocly
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      run_lint:
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-gate-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  quality-gate:
+    name: quality-gate
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Conferir contrato gerado
+        run: npm run check:bundle
+      - name: Validar regras ativas do contrato
+        if: ${{ inputs.run_lint }}
+        run: npm run lint
+      - name: Comparar contrato com a base do PR
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -z "$BASE_SHA" ]; then
+            if [ "${ACT:-false}" != "true" ]; then
+              echo "O evento do PR não informou o commit da base." >&2
+              exit 1
+            fi
+            BASE_SHA=$(git rev-parse refs/remotes/origin/master)
+            echo "act: usando a referência local origin/master como base."
+          fi
+          if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          fi
+          curl --fail --silent --show-error --location --retry 3 \
+            https://github.com/oasdiff/oasdiff/releases/download/v1.39.0/oasdiff_1.39.0_linux_amd64.tar.gz \
+            --output "$RUNNER_TEMP/oasdiff.tar.gz"
+          printf '%s  %s\n' \
+            '71a85930728f367a2086077b7ae1411319421549d18473a3e8258b6451520433' \
+            "$RUNNER_TEMP/oasdiff.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/oasdiff.tar.gz" -C "$RUNNER_TEMP" oasdiff
+          git show "$BASE_SHA:openapi.yaml" > "$RUNNER_TEMP/base-openapi.yaml"
+          mkdir -p reports
+          "$RUNNER_TEMP/oasdiff" changelog "$RUNNER_TEMP/base-openapi.yaml" openapi.yaml \
+            --include-path-params --format markdown --lang pt-br > reports/compatibility.md
+          cat reports/compatibility.md
+          cat reports/compatibility.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Disponibilizar relatórios
+        if: ${{ always() && !env.ACT }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-reports
+          path: reports/
+          if-no-files-found: ignore

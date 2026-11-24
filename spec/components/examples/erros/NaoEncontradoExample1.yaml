@@ -1,0 +1,6 @@
+      summary: "Exemplo de erro da requisição 1"
+      value:
+        type: https://pix.bcb.gov.br/api/v2/error/NaoEncontrado
+        title: "Não Encontrado"
+        status: 404
+        detail: "Entidade não encontrada."
