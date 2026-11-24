@@ -1,0 +1,56 @@
+name: Publicar documentação Redoc
+
+on:
+  workflow_run:
+    workflows: [Gerar OpenAPI]
+    branches: [master]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: publish-docs-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publicar Redoc
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        if: ${{ !env.ACT }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - name: Obter arquivos locais com act
+        if: ${{ env.ACT }}
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+      - name: Obter contrato da geração concluída
+        if: ${{ github.event_name == 'workflow_run' && !env.ACT }}
+        uses: actions/download-artifact@v4
+        with:
+          name: openapi-contract
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Gerar documentação Redoc
+        run: npm run build:docs
+      - name: Disponibilizar Redoc local
+        if: ${{ env.ACT }}
+        run: sh scripts/preview-docs-docker.sh
+      - name: Publicar no GitHub Pages
+        if: ${{ !env.ACT && github.ref == 'refs/heads/master' }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site

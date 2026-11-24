@@ -1,6 +1,6 @@
 [![https://img.shields.io/badge/OpenAPI-valid-brightgreen.svg](https://img.shields.io/badge/OpenAPI-valid-brightgreen.svg)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/bacen/pix-api/master/openapi.yaml) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-# [Especificação da API Pix](https://bacen.github.io/pix-api/index.html)
+# [Especificação da API Pix](https://luismatheus.github.io/pix-api/)
 
 * O presente repositório define as especificações funcionais em formato OpenAPI 3.0 referentes à API Pix.
 
@@ -8,7 +8,7 @@
 
 # Link para visualização da API Pix
 
-O branch `master` da API pode ser visualizado __[aqui](https://bacen.github.io/pix-api/index.html)__.
+O branch `master` da API pode ser visualizado __[aqui](https://luismatheus.github.io/pix-api/)__.
 
 # Release atual: 2.11.0-rc1
 
@@ -90,11 +90,13 @@ Para retomar uma regra, altere sua severidade de `off` para `error` em `redocly.
 
 `quality-gate.yml` confere o arquivo gerado e executa o lint quando `run_lint` estiver habilitado. Nos PRs, o `oasdiff` gera um relatório de compatibilidade em português, disponível no resumo da execução e no artefato `contract-reports`. Esse relatório apoia a aprovação do gestor; mudanças de compatibilidade são revisadas conforme o versionamento e as regras da API Pix.
 
-A cada push na `master`, `generate-openapi.yml` gera o contrato e publica a documentação Redoc automaticamente. Geração e publicação são executadas no mesmo job, com um checkout, uma preparação do Node.js e uma instalação das dependências. A geração executa `npm run bundle` uma vez. O lint é executado somente quando `run_lint` estiver habilitado na execução manual. O artefato `openapi-contract` continua disponível para download.
+A cada push na `master`, `generate-openapi.yml` gera o `openapi.yaml`, disponibiliza o artefato `openapi-contract` e grava um commit com o arquivo atualizado, quando houver diferenças. O lint é executado somente quando `run_lint` estiver habilitado na execução manual. O push do contrato usa o `GITHUB_TOKEN` com permissão de escrita, sem aprovação do gestor, e é recusado se a branch remota avançar durante a execução.
 
-Em seguida, o mesmo job gera o Redoc com o contrato recém-gerado, grava um commit com o `openapi.yaml` atualizado na `master`, quando houver diferenças, e publica a documentação na branch `gh-pages`. O push do contrato usa o `GITHUB_TOKEN` com permissão de escrita, sem aprovação do gestor, e é recusado se a branch remota avançar durante a execução. O commit feito com `GITHUB_TOKEN` não dispara outro workflow de push, evitando uma repetição automática da geração. [Comportamento do GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow).
+A publicação fica em `publish-docs.yml`. Após uma execução de **Gerar OpenAPI** na `master` terminar com sucesso, o evento `workflow_run` inicia esse workflow separado. Ele usa o mesmo commit das ferramentas da geração e baixa o artefato `openapi-contract` daquela execução, gera o Redoc e publica na branch `gh-pages`. Uma geração que falhar ou for cancelada não publica a documentação. A página está disponível em [https://luismatheus.github.io/pix-api/](https://luismatheus.github.io/pix-api/).
 
-Você também pode executar **Gerar OpenAPI** manualmente na aba **Actions**, selecionando **Run workflow**. Por padrão, essa execução gera apenas o contrato e seu artefato. Marque **Gerar e publicar a documentação Redoc** (`publish_docs`) para gerar também a documentação. Na branch `master`, o contrato é atualizado automaticamente e a documentação é publicada quando essa opção estiver marcada. Nas demais branches, não há push do contrato nem publicação no GitHub Pages. O workflow usa a configuração de permissões da branch de destino para o push.
+O commit automático feito com `GITHUB_TOKEN` não dispara outro workflow de push. A publicação é encadeada pela conclusão da geração, evitando depender desse segundo push. [Comportamento do GITHUB_TOKEN](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow).
+
+Você também pode executar **Gerar OpenAPI** manualmente na aba **Actions**, selecionando **Run workflow**. Na branch `master`, o contrato é atualizado automaticamente e a conclusão bem-sucedida também inicia o workflow separado de publicação. Nas demais branches, o contrato é disponibilizado como artefato, sem push nem publicação automática da página. Para republicar a documentação sem gerar novamente o contrato, execute **Publicar documentação Redoc** manualmente na `master`; nesse caso, ele usa o `openapi.yaml` versionado no commit selecionado.
 
 ### Aprovação do gestor (opcional)
 
@@ -156,21 +158,17 @@ O resultado é salvo como um artefato ZIP `openapi-contract` dentro de `reports/
 
 Adicione `--input run_lint=true` a uma execução `workflow_dispatch` para ativar o lint do Redocly. Essa opção está disponível em `quality-gate.yml` e `generate-openapi.yml`.
 
-#### Gerar e visualizar o Redoc — `generate-openapi.yml`
+#### Gerar e visualizar o Redoc — `publish-docs.yml`
 
-Para gerar o contrato e o Redoc no mesmo job e iniciar a visualização local:
-
-```bash
-act push -W .github/workflows/generate-openapi.yml
-```
-
-Para gerar também o Redoc em uma execução manual:
+Para gerar o Redoc e iniciar a visualização local:
 
 ```bash
-act workflow_dispatch -W .github/workflows/generate-openapi.yml --input publish_docs=true
+act workflow_dispatch -W .github/workflows/publish-docs.yml
 ```
 
-**Ao gerar o Redoc com `act`, o container `pix-api-docs` fica rodando mesmo depois que o comando termina.** Ele serve a documentação Redoc em [http://localhost:8080](http://localhost:8080). Ao executar o workflow novamente com a documentação habilitada, a visualização é atualizada. A porta 8080 precisa estar disponível.
+Essa execução usa o `openapi.yaml` da raiz, copiado para o container. Se você editou `spec/`, atualize primeiro esse arquivo com `npm run bundle` ou `./scripts/docker-tools.sh bundle`. O `act` não encadeia automaticamente a conclusão da geração com outra execução; rode os workflows separadamente para conferir cada etapa. No GitHub, a publicação automática baixa o artefato da execução concluída.
+
+**Ao executar `publish-docs.yml` com `act`, o container `pix-api-docs` fica rodando mesmo depois que o comando termina.** Ele serve a documentação Redoc em [http://localhost:8080](http://localhost:8080). Ao executar o workflow de publicação novamente, a visualização é atualizada. A porta 8080 precisa estar disponível.
 
 Para encerrar a visualização:
 

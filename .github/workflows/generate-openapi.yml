@@ -5,10 +5,6 @@ on:
     branches: [master]
   workflow_dispatch:
     inputs:
-      publish_docs:
-        description: Gerar e publicar a documentação Redoc
-        type: boolean
-        default: false
       run_lint:
         description: Executar lint do contrato com Redocly
         type: boolean
@@ -47,9 +43,6 @@ jobs:
           name: openapi-contract
           path: openapi.yaml
           if-no-files-found: error
-      - name: Gerar documentação Redoc
-        if: ${{ github.event_name == 'push' || inputs.publish_docs }}
-        run: npm run build:docs
       - name: Atualizar openapi.yaml na master
         if: ${{ !env.ACT && github.ref == 'refs/heads/master' }}
         shell: sh
@@ -66,15 +59,6 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit --only -m 'chore: regenerate openapi.yaml' -- openapi.yaml
           git push origin HEAD:refs/heads/master
-      - name: Disponibilizar Redoc local
-        if: ${{ env.ACT && (github.event_name == 'push' || inputs.publish_docs) }}
-        run: sh scripts/preview-docs-docker.sh
-      - name: Publicar no GitHub Pages
-        if: ${{ !env.ACT && github.ref == 'refs/heads/master' && (github.event_name == 'push' || inputs.publish_docs) }}
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: site
       - name: Informar resultado local
         if: ${{ env.ACT }}
         run: |
