@@ -1,0 +1,15 @@
+      description: "Dados para geração da cobrança imediata."
+      required: true
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/CobSolicitada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/cobBody2.yaml"
+            exemplo2:
+              $ref: "../examples/cobBody6.yaml"
+            exemplo3:
+              $ref: "../examples/cobBody8.yaml"
+            exemplo4:
+              $ref: "../examples/cobBody9.yaml"

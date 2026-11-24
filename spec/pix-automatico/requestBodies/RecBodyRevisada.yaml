@@ -1,0 +1,10 @@
+      description: "Dados para revisão da recorrência."
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/RecRevisada.yaml"
+          examples:
+            retorno1:
+              $ref: "../examples/recBody3.yaml"
+            exemnplo2:
+              $ref: "../examples/recBody4.yaml"

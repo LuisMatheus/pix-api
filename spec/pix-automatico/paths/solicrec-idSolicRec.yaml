@@ -1,0 +1,67 @@
+    parameters:
+      - name: "idSolicRec"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          title: "Id da solicitação da recorrência"
+    get:
+      tags:
+        - "SolicRec"
+      summary: "Consultar solicitação de confirmação de recorrência."
+      security:
+        - OAuth2: [solicrec.read]
+      description: "Consultar solicitação."
+      responses:
+        "200":
+          description: "Dados da solicitação da recorrência."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/SolicRecCompleta.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/solicRecResponse1.yaml"
+                response2:
+                  $ref: "../examples/solicRecResponse2.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+    patch:
+      tags:
+        - "SolicRec"
+      summary: "Revisar solicitação de confirmação de recorrência."
+      security:
+        - OAuth2: [solicrec.write]
+      description: "Revisar solicitação de confirmação de recorrência."
+      requestBody:
+        $ref: "../requestBodies/SolicRecBodyRevisada.yaml"
+      responses:
+        "201":
+          description: "Solicitação de recorrência atualizada"
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/SolicRecCompleta.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/solicRecResponse3.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../compartilhado/schemas/erros/Problema.yaml"
+              examples:
+                requisicao1:
+                  $ref: "../examples/erros/OperacaoInvalidaSolicRecExample2.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+

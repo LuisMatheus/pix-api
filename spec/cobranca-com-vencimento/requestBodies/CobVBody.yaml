@@ -1,0 +1,9 @@
+      description: "Dados para geração da cobrança com vencimento."
+      required: true
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/CobVSolicitada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/cobBody1.yaml"

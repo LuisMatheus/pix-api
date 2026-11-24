@@ -1,9 +1,0 @@
-      description: "Dados para pedido de devolução."
-      required: true
-      content:
-        "application/json":
-          schema:
-            $ref: "../../schemas/pix/DevolucaoSolicitada.yaml"
-          examples:
-            exemplo1:
-              $ref: "../../examples/pix/devolucaoSolicitada1.yaml"

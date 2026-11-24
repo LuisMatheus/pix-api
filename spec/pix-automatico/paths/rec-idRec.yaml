@@ -1,0 +1,82 @@
+    parameters:
+      - name: "idRec"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+          title: "Id da location cadastrada para servir um payload"
+    get:
+      tags:
+        - "Rec"
+      parameters:
+        - name: "txid"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+            title: "TxId da cobrança associada a recorrência."
+            pattern: "[a-zA-Z0-9]{26,35}"
+      summary: "Consultar recorrência."
+      security:
+        - OAuth2: [rec.read]
+      description: "Consultar recorrência."
+      responses:
+        "200":
+          description: "Dados da recorrência."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/RecCompleta.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/recResponse3.yaml"
+                response2:
+                  $ref: "../examples/recResponse4.yaml"
+                response3:
+                  $ref: "../examples/recResponse5.yaml"
+                response4:
+                  $ref: "../examples/recResponse6.yaml"
+                response5:
+                  $ref: "../examples/recResponse7.yaml"
+                response6:
+                  $ref: "../examples/recResponse8.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+    patch:
+      tags:
+        - "Rec"
+      summary: "Revisar recorrência."
+      security:
+        - OAuth2: [rec.write]
+      description: "Revisar recorrência."
+      requestBody:
+        $ref: "../requestBodies/RecBodyRevisada.yaml"
+      responses:
+        "200":
+          description: "Recorrência revisada."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/RecGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../examples/recResponse1.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../compartilhado/schemas/erros/Problema.yaml"
+              examples:
+                requisicao1:
+                  $ref: "../examples/erros/OperacaoInvalidaRecExample1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

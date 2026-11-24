@@ -1,0 +1,9 @@
+      type: "object"
+      title: "Pix Consultado"
+      allOf:
+        - $ref: "Pix.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              allOf:
+                - $ref: "../../compartilhado/schemas/tributos/TributoCompletoPix.yaml"

@@ -1,0 +1,12 @@
+      description: "Dados para notificação."
+      required: true
+      content:
+        "application/json":
+          schema:
+            properties:
+              cobsr:
+                type: "array"
+                items:
+                  $ref: "../schemas/CobRNotification.yaml"
+          example:
+            $ref: "../examples/cobRWebhookNotification1.yaml#/value"

@@ -1,0 +1,13 @@
+      type: "object"
+      title: "Cobranças com vencimento consultadas"
+      required: ["parametros", "cobs"]
+      properties:
+        parametros:
+          $ref: "../../compartilhado/schemas/cobrancas/ParametrosConsultaCob.yaml"
+        cobs:
+          type: "array"
+          title: "Lista de cobranças"
+          items:
+            allOf:
+              - $ref: "CobVCompleta.yaml"
+              - required: ["status", "txid", "idCob"]

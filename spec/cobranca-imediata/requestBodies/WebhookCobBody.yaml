@@ -1,0 +1,10 @@
+      description: "Dados para notificação."
+      required: true
+      content:
+        "application/json":
+          schema:
+            properties:
+              cobs:
+                type: "array"
+                items:
+                  $ref: "../schemas/CobNotification.yaml"

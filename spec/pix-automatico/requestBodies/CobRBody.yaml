@@ -1,0 +1,9 @@
+      description: "Dados para geração da cobrança recorrente."
+      required: true
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/CobRSolicitada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/cobRBody1.yaml"

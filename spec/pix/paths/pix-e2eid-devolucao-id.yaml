@@ -1,0 +1,71 @@
+    parameters:
+      - name: "e2eid"
+        in: "path"
+        required: true
+        schema:
+          $ref: "../schemas/EndToEndId.yaml"
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          $ref: "../schemas/DevolucaoId.yaml"
+    put:
+      tags:
+        - "Pix"
+      summary: "Solicitar devolução."
+      security:
+        - OAuth2: [pix.write]
+      description: |
+        Endpoint para solicitar uma devolução através de um e2eid do Pix e do ID da devolução. O motivo que será atribuído à PACS.004 será "MD06" ou "SL02" de acordo com a aba RTReason da PACS.004 que consta no Catálogo de Mensagens do Pix a depender da `natureza` da devolução (Vide a descrição deste campo).
+      requestBody:
+        $ref: "../requestBodies/DevolucaoBody.yaml"
+      responses:
+        "201":
+          description: "Dados da devolução."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/Devolucao.yaml"
+              examples:
+                retorno1:
+                  $ref: "../examples/devolucaoResponse1.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../compartilhado/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../examples/erros/RequisicaoInvalidaDevolucaoExample1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+    get:
+      tags:
+        - "Pix"
+      summary: "Consultar devolução."
+      security:
+        - OAuth2: [pix.read]
+      description: "Endpoint para consultar uma devolução através de um End To End ID do Pix e do ID da devolução"
+      responses:
+        "200":
+          description: "Dados da devolução."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/Devolucao.yaml"
+              examples:
+                retorno1:
+                  $ref: "../examples/devolucaoResponse1.yaml"
+                retorno2:
+                  $ref: "../examples/devolucaoResponse2.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

@@ -1,0 +1,88 @@
+    post:
+      tags:
+        - "PayloadLocation"
+      summary: "Criar location do payload."
+      security:
+        - OAuth2: [payloadlocation.write]
+      description: |-
+        Criar location do payload
+      requestBody:
+        $ref: "../../requestBodies/locations/PayloadLocationBody.yaml"
+      responses:
+        "201":
+          description: "Dados da location do Payload."
+          headers:
+            location:
+              schema:
+                type: "string"
+                format: "uri"
+                title: "Identificador da location criada."
+                description: "Identificador da location criada."
+                example: "pix.example.com/api/loc/1234567"
+          content:
+            "application/json":
+              schema:
+                $ref: "../../schemas/locations/PayloadLocation.yaml"
+              examples:
+                getPayloadLocation1:
+                  $ref: "../../examples/locations/payloadLocationResponse5.yaml"
+                getPayloadLocation2:
+                  $ref: "../../examples/locations/payloadLocationResponse6.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../examples/erros/RequisicaoInvalidaLocationExample1.yaml"
+        "403":
+          $ref: "../../responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../responses/ServicoIndisponivel.yaml"
+    get:
+      parameters:
+        - in: "query"
+          name: "inicio"
+          required: true
+          schema:
+            $ref: "../../schemas/comuns/Inicio.yaml"
+        - in: "query"
+          name: "fim"
+          required: true
+          schema:
+            $ref: "../../schemas/comuns/Fim.yaml"
+        - name: "txIdPresente"
+          in: "query"
+          schema:
+            type: "boolean"
+        - name: "tipoCob"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "cob"
+              - "cobv"
+        - $ref: "../../parameters/paginaAtual.yaml"
+        - $ref: "../../parameters/itensPorPagina.yaml"
+      tags:
+        - "PayloadLocation"
+      summary: "Consultar locations cadastradas."
+      security:
+        - OAuth2: [payloadlocation.read]
+      description: "Endpoint para consultar locations cadastradas"
+      responses:
+        "200":
+          description: "lista dos locations cadastrados de acordo com o critério de busca."
+          content:
+            "application/json":
+              schema:
+                $ref: "../../schemas/locations/PayloadLocationConsultadas.yaml"
+              examples:
+                getPayloadLocations:
+                  $ref: "../../examples/locations/getPayloadLocation1.yaml"
+        "403":
+          $ref: "../../responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../responses/ServicoIndisponivel.yaml"

@@ -1,0 +1,24 @@
+      type: "object"
+      title: "Dados do Pagador"
+      required: ["ispbParticipante"]
+      properties:
+        pagador:
+          allOf:
+            - type: "object"
+              properties:
+                ispbParticipante:
+                  type: "string"
+                  title: "ISPB do PSP pagador."
+                  description: "ISPB do PSP pagador."
+                  pattern: "^[0-9A-Z]{8}$"
+            - type: "object"
+              properties:
+                codMun:
+                  title: "Código do município"
+                  description: |
+                    Código baseado na Tabela de Códigos de Municípios do __[IBGE](https://www.ibge.gov.br/explica/codigos-dos-municipios.php)__ que apresenta a lista dos municípios brasileiros associados a um código composto de 7 dígitos, sendo os dois primeiros referentes ao código da Unidade da Federação.
+                  type: "string"
+                  pattern: "/^\\d{7}$/"
+          oneOf:
+            - $ref: "../../compartilhado/schemas/comuns/CPF.yaml"
+            - $ref: "../../compartilhado/schemas/comuns/CNPJ.yaml"

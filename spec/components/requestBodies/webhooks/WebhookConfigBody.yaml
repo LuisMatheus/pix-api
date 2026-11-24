@@ -1,8 +1,0 @@
-      required: true
-      content:
-        "application/json":
-          schema:
-            $ref: "../../schemas/webhooks/WebhookSolicitado.yaml"
-          examples:
-            exemplo1:
-              $ref: "../../examples/webhooks/webhookBody1.yaml"

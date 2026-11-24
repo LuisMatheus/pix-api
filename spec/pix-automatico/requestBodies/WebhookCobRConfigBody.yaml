@@ -1,0 +1,8 @@
+      required: true
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/WebhookCobRSolicitado.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/cobRWebhookBody1.yaml"

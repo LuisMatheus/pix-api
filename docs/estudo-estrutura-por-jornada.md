@@ -2,9 +2,9 @@
 
 A reorganização é viável. A estrutura proposta aproxima as rotas, modelos, corpos de requisição e exemplos de cada jornada. Um protótipo com os 320 arquivos de origem redistribuídos gerou um `openapi.yaml` idêntico byte a byte ao da `master` no commit `2f599ff`.
 
-## Estrutura proposta
+## Estrutura por jornada
 
-O contrato atual agrupa as rotas em `spec/paths/` e os componentes por tipo em `spec/components/`. Uma alteração em Pix Automático pode passar pelas pastas de recorrências, solicitações, cobranças recorrentes, locations e webhooks, além do tipo de componente. Com a jornada como primeiro nível, cada módulo reúne seus próprios `paths/`, `schemas/`, `requestBodies/` e `examples/`, conforme necessário. O índice de rotas e nomes públicos de componentes fica em [`spec/openapi.yaml`](../spec/openapi.yaml).
+A estrutura anterior agrupava as rotas em `spec/paths/` e os componentes por tipo em `spec/components/`. Uma alteração em Pix Automático podia passar pelas pastas de recorrências, solicitações, cobranças recorrentes, locations e webhooks, além do tipo de componente. Com a jornada como primeiro nível, cada módulo reúne seus próprios `paths/`, `schemas/`, `requestBodies/` e `examples/`, conforme necessário. O índice de rotas e nomes públicos de componentes fica em [`spec/openapi.yaml`](../spec/openapi.yaml).
 
 | Pasta em `spec/` | Escopo | Caminhos | Arquivos YAML |
 | --- | --- | ---: | ---: |
@@ -19,7 +19,7 @@ As contagens excluem o índice `spec/openapi.yaml`. Cada caminho conserva todas 
 ## Limites entre as jornadas
 
 - **Pix recebido e cobrança imediata.** A consulta e a devolução de um Pix recebido atendem diferentes origens de pagamento. A criação, revisão e recuperação do payload de cobrança imediata, incluindo os campos de Saque e Troco, têm seu próprio módulo. Os modelos de consulta ao Pix recebido ficam em `pix/` para uso pelas cobranças.
-- **Pix Automático e recorrência.** `Rec`, `SolicRec` e `CobR` fazem parte do Pix Automático. As jornadas de autorização `JORNADA_1` a `JORNADA_4` usam recursos desse mesmo módulo. As jornadas 3 e 4 também podem combinar a recorrência com uma cobrança de outro módulo. [Enumeração do tipo de jornada](../spec/components/schemas/recorrencias/RecAtivacao.yaml)
+- **Pix Automático e recorrência.** `Rec`, `SolicRec` e `CobR` fazem parte do Pix Automático. As jornadas de autorização `JORNADA_1` a `JORNADA_4` usam recursos desse mesmo módulo. As jornadas 3 e 4 também podem combinar a recorrência com uma cobrança de outro módulo. [Enumeração do tipo de jornada](../spec/pix-automatico/schemas/RecAtivacao.yaml)
 - **Pix Agendado recorrente.** Nesse produto, o pagador programa os pagamentos. No Pix Automático, o recebedor programa as cobranças com autorização prévia do pagador. Os 31 caminhos da API Pix neste repositório cobrem serviços do PSP recebedor e a recuperação de payloads. Uma pasta própria para Pix Agendado recorrente passa a fazer sentido quando houver operações dedicadas no contrato. [Relatório de Gestão do Pix 2023–2025, p. 8](https://www.bcb.gov.br/content/estabilidadefinanceira/pix/relatorio_de_gestao_pix/relatorio_gestao_pix_2026.pdf#page=8)
 - **Locations e webhooks.** `/loc*` gerencia locations usadas por cobranças imediatas e com vencimento. `/locrec*` pertence ao Pix Automático. Cada webhook específico fica com sua jornada. As bases de cobrança e os exemplos usados em mais de um módulo, como `cobBody4` e `cobBody5`, têm uma fonte única em `compartilhado/`.
 
@@ -31,6 +31,6 @@ Com Node.js 22.22.2 e Redocly 2.82.0, os comandos `npm run bundle`, `npm run che
 
 ## Adoção
 
-O agrupamento por jornada facilita alterações que envolvem rotas, modelos e exemplos em conjunto. A estrutura atual favorece buscas por tipo de componente e evita os renomes em uma sincronização com a origem do fork. Um índice de jornadas no README teria custo menor e ajudaria na navegação, embora os arquivos de cada fluxo continuassem distribuídos.
+O agrupamento por jornada facilita alterações que envolvem rotas, modelos e exemplos em conjunto. A estrutura anterior favorecia buscas por tipo de componente. Os renomes exigem atenção ao trazer mudanças da origem do fork e ao atualizar links externos que apontam diretamente para módulos movidos.
 
-Para adotar a estrutura proposta, comece por Pix Automático, que reúne 13 dos 31 caminhos e é o grupo mais espalhado na estrutura atual. Em seguida, migre Pix recebido e as duas modalidades de cobrança. Mantenha os movimentos e ajustes de `$ref` em commits separados de mudanças funcionais. Em cada etapa, rode a geração e a conferência do contrato, compare o resultado com o da base e atualize os caminhos de fonte citados na documentação do repositório. Os workflows podem usar a entrada atual em `spec/openapi.yaml`. Links externos que apontem diretamente para módulos movidos precisarão ser atualizados.
+A migração aplicou a estrutura do protótipo e atualizou os caminhos citados no README. Os workflows usam `spec/openapi.yaml` como entrada. A conferência do contrato compara a saída gerada com o `openapi.yaml` versionado na raiz.

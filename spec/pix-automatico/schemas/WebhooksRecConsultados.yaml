@@ -1,0 +1,12 @@
+      type: "object"
+      title: "Webhooks de Recorrências Consultados"
+      required: ["webhooksrec"]
+      properties:
+        parametros:
+          $ref: "../../compartilhado/schemas/webhooks/ParametrosConsultaWebhooks.yaml"
+        webhooksrec:
+          type: "array"
+          title: "Lista de Webhooks de Recorrências consultados"
+          items:
+            allOf:
+              - $ref: "WebhookRecCompleto.yaml"

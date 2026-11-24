@@ -1,0 +1,16 @@
+      description: "Dados para notificação dos Pix."
+      required: true
+      content:
+        "application/json":
+          schema:
+            properties:
+              pix:
+                type: "array"
+                items:
+                  allOf:
+                    - $ref: "../schemas/PixConsultado.yaml"
+                example:
+                  - allOf:
+                      - $ref: "#/components/examples/pixWebhook1/value"
+                  - allOf:
+                      - $ref: "#/components/examples/pixWebhook2/value"

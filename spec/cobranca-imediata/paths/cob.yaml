@@ -1,0 +1,100 @@
+    post:
+      tags:
+        - "Cob"
+      summary: "Criar cobrança imediata."
+      security:
+        - OAuth2: [cob.write]
+      description: |-
+        Endpoint para criar uma cobrança imediata, neste caso, o txid deve ser definido pelo PSP.
+      requestBody:
+        $ref: "../requestBodies/CobBody.yaml"
+      responses:
+        "201":
+          description: "Cobrança imediata criada"
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/CobGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../examples/cobResponse1.yaml"
+                retorno2:
+                  $ref: "../examples/cobResponse5.yaml"
+                retorno3:
+                  $ref: "../examples/cobResponse6.yaml"
+                retorno4:
+                  $ref: "../examples/cobResponse7.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../compartilhado/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../examples/erros/RequisicaoInvalidaCobExample1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+    get:
+      parameters:
+        - in: "query"
+          name: "inicio"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Inicio.yaml"
+        - in: "query"
+          name: "fim"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Fim.yaml"
+        - name: "cpf"
+          in: "query"
+          schema:
+            type: "string"
+            title: "CPF"
+            pattern: "/^\\d{11}$/"
+            description: "Filtro pelo CPF do devedor. Não pode ser utilizado ao mesmo tempo que o CNPJ."
+        - name: "cnpj"
+          in: "query"
+          schema:
+            type: "string"
+            title: "CNPJ"
+            pattern: "^[0-9A-Z]{14}$"
+            description: "Filtro pelo CNPJ do devedor. Não pode ser utilizado ao mesmo tempo que o CPF."
+        - name: "locationPresente"
+          in: "query"
+          schema:
+            type: "boolean"
+        - name: "status"
+          in: "query"
+          schema:
+            type: "string"
+            title: "Status do registro da cobrança"
+            description: "Filtro pelo status da cobrança."
+        - $ref: "../../compartilhado/parameters/paginaAtual.yaml"
+        - $ref: "../../compartilhado/parameters/itensPorPagina.yaml"
+      tags:
+        - "Cob"
+      summary: "Consultar lista de cobranças imediatas."
+      security:
+        - OAuth2: [cob.read]
+      description: |-
+        Endpoint para consultar cobranças imediatas através de parâmetros como início, fim, cpf, cnpj e status.
+      responses:
+        "200":
+          description: "Lista de cobranças imediatas."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/CobsConsultadas.yaml"
+              examples:
+                getCobs1:
+                  $ref: "../examples/getCobs1.yaml"
+                getCobs2:
+                  $ref: "../examples/getCobs2.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

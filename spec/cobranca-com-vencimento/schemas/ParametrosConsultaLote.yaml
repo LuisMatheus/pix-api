@@ -1,0 +1,19 @@
+      type: "object"
+      title: "Parâmetros de consulta de lotes de cobrança com vencimento."
+      description: "Parâmetros utilizados para a realização de uma consulta de lote de cobranças com vencimento."
+      required: ["inicio", "fim", "paginacao"]
+      properties:
+        inicio:
+          type: "string"
+          format: "date-time"
+          title: "Data de Início"
+          description: "Data inicial utilizada na consulta. Respeita RFC 3339."
+          example: "2020-04-01T00:00:00Z"
+        fim:
+          type: "string"
+          format: "date-time"
+          title: "Data de Fim"
+          description: "Data de fim utilizada na consulta. Respeita RFC 3339."
+          example: "2020-04-01T17:00:00Z"
+        paginacao:
+          $ref: "../../compartilhado/schemas/comuns/Paginacao.yaml"

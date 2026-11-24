@@ -1,0 +1,8 @@
+      description: "Dados para geração da solicitação da recorrência."
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/SolicRecSolicitada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/solicRecBody1.yaml"

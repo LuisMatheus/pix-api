@@ -1,0 +1,81 @@
+    put:
+      tags:
+        - WebhookCobR
+      summary: Configurar Webhook.
+      description: |
+        Endpoint para configuração do serviço de notificações acerca de cobranças recorrentes. Somente cobranças recorrentes associadas ao usuário recebedor serão notificadas.
+      security:
+        - OAuth2: [webhookcobr.write]
+      requestBody:
+        $ref: "../requestBodies/WebhookCobRConfigBody.yaml"
+      responses:
+        "200":
+          description: Webhook para notificações.
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../compartilhado/schemas/erros/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../../compartilhado/examples/erros/RequisicaoInvalidaWebhookExample1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+      callbacks:
+        cobr:
+          "{$request.body#/webhookUrl}/cobr":
+            post:
+              description: ""
+              security: []
+              requestBody:
+                $ref: "../requestBodies/WebhookCobRBody.yaml"
+              responses:
+                "200":
+                  description: "Notificação recebida com sucesso"
+    get:
+      tags:
+        - WebhookCobR
+      summary: "Exibir informações acerca do Webhook."
+      description: |
+        Endpoint para recuperação de informações sobre o Webhook.
+      security:
+        - OAuth2: [webhookcobr.read]
+      responses:
+        "200":
+          description: "Dados do webhook."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/WebhookCobRCompleto.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/cobRWebhookResponse1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+    delete:
+      tags:
+        - WebhookCobR
+      summary: "Cancelar o Webhook."
+      description: |
+        Endpoint para cancelamento do webhook. Não é a única forma pela qual um webhook pode ser
+        removido.
+      security:
+        - OAuth2: [webhookcobr.write]
+      responses:
+        "204":
+          description: "Webhook para notificações foi cancelado."
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

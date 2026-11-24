@@ -1,0 +1,43 @@
+      type: "object"
+      title: "Recorrência Completa Pesquisada"
+      required: ["status","recebedor"]
+      description: "Atributos de Configuração de Recorrência"
+      allOf:
+        - type: "object"
+          properties:
+            idRec:
+              $ref: "RecId.yaml"
+        - $ref: "RecBase.yaml"
+        - type: "object"
+          properties:
+            recebedor:
+              oneOf:
+                - $ref: "PessoaJuridicaRecorrencia.yaml"
+              allOf:
+                - type: "object"
+                  properties:
+                    convenio:
+                      type: "string"
+                      title: "Convênio"
+                      description: "Convênio entre usuário e participante recebedor."
+                      maxLength: 60
+        - $ref: "DadosPagadorRec.yaml"
+        - $ref: "RecStatus.yaml"
+        - $ref: "RecConfiguracao.yaml"
+        - type: "object"
+          properties:
+            loc:
+              allOf:
+                - $ref: "PayloadLocationRecCompleta.yaml"
+        - $ref: "RecAtualizacao.yaml"
+        - $ref: "RecEncerramento.yaml"
+        - type: "object"
+          properties:
+            solicitacao:
+              type: "array"
+              title: "Solicitações vinculadas"
+              description: "Solicitações vinculadas"
+              items:
+                allOf:
+                  - $ref: "SolicRecCompleta.yaml"
+        - $ref: "RecAtivacao.yaml"

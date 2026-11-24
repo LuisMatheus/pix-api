@@ -1,0 +1,8 @@
+      description: "Dados para revisão da solicitação da recorrência."
+      content:
+        "application/json":
+          schema:
+            $ref: "../schemas/SolicRecRevisada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/solicRecBody2.yaml"

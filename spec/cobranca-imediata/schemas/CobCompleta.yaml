@@ -1,0 +1,28 @@
+      title: "Cobrança imediata completa"
+      required: ["status"]
+      allOf:
+        - $ref: "CobGerada.yaml"
+        - type: "object"
+          properties:
+            status:
+              $ref: "CobStatus.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              allOf:
+                - $ref: "../../compartilhado/schemas/tributos/TributoCompleto.yaml"
+        - $ref: "../../compartilhado/schemas/tributos/ValorLiquidoEstimado.yaml"
+        - type: "object"
+          properties:
+            pix:
+              type: "array"
+              title: "Pix recebidos"
+              items:
+                allOf:
+                  - $ref: "../../pix/schemas/PixConsultado.yaml"
+                  - type: "object"
+                    properties:
+                      txid:
+                        allOf:
+                          - $ref: "../../compartilhado/schemas/comuns/TxId.yaml"
+                          - pattern: "[a-zA-Z0-9]{26,35}"

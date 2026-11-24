@@ -1,0 +1,14 @@
+      type: "object"
+      title: "Pix Automático Consultado"
+      allOf:
+        - $ref: "PixAutomatico.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              $ref: "../../compartilhado/schemas/tributos/TributoCompletoPix.yaml"
+        - type: "object"
+          properties:
+            txid:
+              allOf:
+                - $ref: "../../compartilhado/schemas/comuns/TxId.yaml"
+                - pattern: "[a-zA-Z0-9]{26,35}"

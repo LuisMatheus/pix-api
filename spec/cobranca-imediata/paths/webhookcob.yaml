@@ -1,0 +1,75 @@
+    put:
+      tags:
+        - WebhookCob
+      summary: Configurar Webhook.
+      description: |
+        Endpoint para configuração do serviço de notificações acerca de cobranças imediatas. Somente cobranças imediatas associadas ao usuário recebedor serão notificadas.
+      security:
+        - OAuth2: [webhookcob.write]
+      requestBody:
+        $ref: "../requestBodies/WebhookCobConfigBody.yaml"
+      responses:
+        "200":
+          description: Webhook para notificações.
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../compartilhado/schemas/erros/Problema.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+      callbacks:
+        cob:
+          "{$request.body#/webhookUrl}/cob":
+            post:
+              description: ""
+              security: []
+              requestBody:
+                $ref: "../requestBodies/WebhookCobBody.yaml"
+              responses:
+                "200":
+                  description: "Notificação recebida com sucesso"
+    get:
+      tags:
+        - WebhookCob
+      summary: "Exibir informações acerca do Webhook."
+      description: |
+        Endpoint para recuperação de informações sobre o Webhook.
+      security:
+        - OAuth2: [webhookcob.read]
+      responses:
+        "200":
+          description: "Dados do webhook."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/WebhookCobCompleto.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"
+    delete:
+      tags:
+        - WebhookCob
+      summary: "Cancelar o Webhook."
+      description: |
+        Endpoint para cancelamento do webhook. Não é a única forma pela qual um webhook pode ser
+        removido.
+      security:
+        - OAuth2: [webhookcob.write]
+      responses:
+        "204":
+          description: "Webhook para notificações foi cancelado."
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../compartilhado/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

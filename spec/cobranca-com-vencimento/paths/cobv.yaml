@@ -1,0 +1,66 @@
+    get:
+      parameters:
+        - in: "query"
+          name: "inicio"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Inicio.yaml"
+        - in: "query"
+          name: "fim"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Fim.yaml"
+        - name: "cpf"
+          in: "query"
+          schema:
+            type: "string"
+            title: "CPF"
+            pattern: "/^\\d{11}$/"
+            description: "Filtro pelo CPF do devedor. Não pode ser utilizado ao mesmo tempo que o CNPJ."
+        - name: "cnpj"
+          in: "query"
+          schema:
+            type: "string"
+            title: "CNPJ"
+            pattern: "^[0-9A-Z]{14}$"
+            description: "Filtro pelo CNPJ do devedor. Não pode ser utilizado ao mesmo tempo que o CPF."
+        - name: "locationPresente"
+          in: "query"
+          schema:
+            type: "boolean"
+        - name: "status"
+          in: "query"
+          schema:
+            type: "string"
+            title: "Status do registro da cobrança"
+            description: "Filtro pelo status da cobrança."
+        - name: "loteCobVId"
+          in: "query"
+          schema:
+            type: "integer"
+            format: "int32"
+            title: "Id do lote de cobrança com vencimento"
+            description: "Id do lote de cobrança com vencimento."
+        - $ref: "../../compartilhado/parameters/paginaAtual.yaml"
+        - $ref: "../../compartilhado/parameters/itensPorPagina.yaml"
+      tags:
+        - "CobV"
+      summary: "Consultar lista de cobranças com vencimento."
+      security:
+        - OAuth2: [cobv.read]
+      description: |-
+        Endpoint para consultar cobranças com vencimento através de parâmetros como início, fim, cpf, cnpj e status.
+      responses:
+        "200":
+          description: "Lista de cobranças com vencimento."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/CobsVConsultadas.yaml"
+              examples:
+                getCobs1:
+                  $ref: "../examples/getCobsV1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

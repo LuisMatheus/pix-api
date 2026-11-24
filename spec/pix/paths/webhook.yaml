@@ -1,0 +1,34 @@
+    get:
+      parameters:
+        - in: "query"
+          name: "inicio"
+          required: false
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Inicio.yaml"
+        - in: "query"
+          name: "fim"
+          required: false
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Fim.yaml"
+        - $ref: "../../compartilhado/parameters/paginaAtual.yaml"
+        - $ref: "../../compartilhado/parameters/itensPorPagina.yaml"
+      tags:
+        - "Webhook"
+      summary: "Consultar webhooks cadastrados."
+      security:
+        - OAuth2: [webhook.read]
+      description: "Endpoint para consultar Webhooks cadastrados"
+      responses:
+        "200":
+          description: "lista dos locations cadastrados de acordo com o critério de busca."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/WebhooksConsultados.yaml"
+              examples:
+                getCobs1:
+                  $ref: "../examples/getWebhook1.yaml"
+        "403":
+          $ref: "../../compartilhado/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../compartilhado/responses/ServicoIndisponivel.yaml"

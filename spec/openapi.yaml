@@ -861,649 +861,649 @@ tags:
       Reúne endpoints para gerenciamento de notificações de cobranças com vencimento por parte do PSP recebedor ao usuário recebedor.
 paths:
   /cob/{txid}:
-    $ref: "paths/cobrancas/cob-txid.yaml"
+    $ref: "cobranca-imediata/paths/cob-txid.yaml"
   "/cob":
-    $ref: "paths/cobrancas/cob.yaml"
+    $ref: "cobranca-imediata/paths/cob.yaml"
   "/cobv/{txid}":
-    $ref: "paths/cobrancas-com-vencimento/cobv-txid.yaml"
+    $ref: "cobranca-com-vencimento/paths/cobv-txid.yaml"
   "/cobv":
-    $ref: "paths/cobrancas-com-vencimento/cobv.yaml"
+    $ref: "cobranca-com-vencimento/paths/cobv.yaml"
   "/lotecobv/{id}":
-    $ref: "paths/cobrancas-com-vencimento/lotecobv-id.yaml"
+    $ref: "cobranca-com-vencimento/paths/lotecobv-id.yaml"
   "/lotecobv":
-    $ref: "paths/cobrancas-com-vencimento/lotecobv.yaml"
+    $ref: "cobranca-com-vencimento/paths/lotecobv.yaml"
   "/locrec":
-    $ref: "paths/locations/locrec.yaml"
+    $ref: "pix-automatico/paths/locrec.yaml"
   "/locrec/{id}":
-    $ref: "paths/locations/locrec-id.yaml"
+    $ref: "pix-automatico/paths/locrec-id.yaml"
   "/locrec/{id}/idRec":
-    $ref: "paths/locations/locrec-id-idRec.yaml"
+    $ref: "pix-automatico/paths/locrec-id-idRec.yaml"
   "/loc":
-    $ref: "paths/locations/loc.yaml"
+    $ref: "compartilhado/paths/locations/loc.yaml"
   "/loc/{id}":
-    $ref: "paths/locations/loc-id.yaml"
+    $ref: "compartilhado/paths/locations/loc-id.yaml"
   "/loc/{id}/txid":
-    $ref: "paths/locations/loc-id-txid.yaml"
+    $ref: "compartilhado/paths/locations/loc-id-txid.yaml"
   "/pix/{e2eid}":
-    $ref: "paths/pix/pix-e2eid.yaml"
+    $ref: "pix/paths/pix-e2eid.yaml"
   "/pix":
-    $ref: "paths/pix/pix.yaml"
+    $ref: "pix/paths/pix.yaml"
   "/pix/{e2eid}/devolucao/{id}":
-    $ref: "paths/pix/pix-e2eid-devolucao-id.yaml"
+    $ref: "pix/paths/pix-e2eid-devolucao-id.yaml"
   "/{pixUrlAccessToken}":
-    $ref: "paths/cobrancas/pixUrlAccessToken.yaml"
+    $ref: "cobranca-imediata/paths/pixUrlAccessToken.yaml"
   "/cobv/{pixUrlAccessToken}":
-    $ref: "paths/cobrancas-com-vencimento/cobv-pixUrlAccessToken.yaml"
+    $ref: "cobranca-com-vencimento/paths/cobv-pixUrlAccessToken.yaml"
   "/rec/{recUrlAccessToken}":
-    $ref: "paths/recorrencias/rec-recUrlAccessToken.yaml"
+    $ref: "pix-automatico/paths/rec-recUrlAccessToken.yaml"
   "/webhook/{chave}":
-    $ref: "paths/webhooks/webhook-chave.yaml"
+    $ref: "pix/paths/webhook-chave.yaml"
   "/webhook":
-    $ref: "paths/webhooks/webhook.yaml"
+    $ref: "pix/paths/webhook.yaml"
   "/webhookrec":
-    $ref: "paths/webhooks/webhookrec.yaml"
+    $ref: "pix-automatico/paths/webhookrec.yaml"
   "/webhookcobr":
-    $ref: "paths/webhooks/webhookcobr.yaml"
+    $ref: "pix-automatico/paths/webhookcobr.yaml"
   "/webhookcob":
-    $ref: "paths/webhooks/webhookcob.yaml"
+    $ref: "cobranca-imediata/paths/webhookcob.yaml"
   "/webhookcobv":
-    $ref: "paths/webhooks/webhookcobv.yaml"
+    $ref: "cobranca-com-vencimento/paths/webhookcobv.yaml"
   "/rec/{idRec}":
-    $ref: "paths/recorrencias/rec-idRec.yaml"
+    $ref: "pix-automatico/paths/rec-idRec.yaml"
   "/rec":
-    $ref: "paths/recorrencias/rec.yaml"
+    $ref: "pix-automatico/paths/rec.yaml"
   "/solicrec":
-    $ref: "paths/solicitacoes-recorrencia/solicrec.yaml"
+    $ref: "pix-automatico/paths/solicrec.yaml"
   "/solicrec/{idSolicRec}":
-    $ref: "paths/solicitacoes-recorrencia/solicrec-idSolicRec.yaml"
+    $ref: "pix-automatico/paths/solicrec-idSolicRec.yaml"
   "/cobr/{txid}":
-    $ref: "paths/cobrancas-recorrentes/cobr-txid.yaml"
+    $ref: "pix-automatico/paths/cobr-txid.yaml"
   "/cobr":
-    $ref: "paths/cobrancas-recorrentes/cobr.yaml"
+    $ref: "pix-automatico/paths/cobr.yaml"
   "/cobr/{txid}/retentativa/{data}":
-    $ref: "paths/cobrancas-recorrentes/cobr-txid-retentativa-data.yaml"
+    $ref: "pix-automatico/paths/cobr-txid-retentativa-data.yaml"
 components:
   securitySchemes:
     OAuth2:
-      $ref: "components/securitySchemes/OAuth2.yaml"
+      $ref: "compartilhado/securitySchemes/OAuth2.yaml"
   examples:
     cobBody1:
-      $ref: "components/examples/cobrancas/cobBody1.yaml"
+      $ref: "cobranca-com-vencimento/examples/cobBody1.yaml"
     cobBody2:
-      $ref: "components/examples/cobrancas/cobBody2.yaml"
+      $ref: "cobranca-imediata/examples/cobBody2.yaml"
     cobBody3:
-      $ref: "components/examples/cobrancas/cobBody3.yaml"
+      $ref: "cobranca-imediata/examples/cobBody3.yaml"
     cobBody4:
-      $ref: "components/examples/cobrancas/cobBody4.yaml"
+      $ref: "compartilhado/examples/cobrancas/cobBody4.yaml"
     cobBody5:
-      $ref: "components/examples/cobrancas/cobBody5.yaml"
+      $ref: "compartilhado/examples/cobrancas/cobBody5.yaml"
     cobBody6:
-      $ref: "components/examples/cobrancas/cobBody6.yaml"
+      $ref: "cobranca-imediata/examples/cobBody6.yaml"
     cobBody7:
-      $ref: "components/examples/cobrancas/cobBody7.yaml"
+      $ref: "cobranca-com-vencimento/examples/cobBody7.yaml"
     cobBody8:
-      $ref: "components/examples/cobrancas/cobBody8.yaml"
+      $ref: "cobranca-imediata/examples/cobBody8.yaml"
     cobBody9:
-      $ref: "components/examples/cobrancas/cobBody9.yaml"
+      $ref: "cobranca-imediata/examples/cobBody9.yaml"
     cobRBody1:
-      $ref: "components/examples/cobrancas-recorrentes/cobRBody1.yaml"
+      $ref: "pix-automatico/examples/cobRBody1.yaml"
     cobRBody2:
-      $ref: "components/examples/cobrancas-recorrentes/cobRBody2.yaml"
+      $ref: "pix-automatico/examples/cobRBody2.yaml"
     cobRResponse1:
-      $ref: "components/examples/cobrancas-recorrentes/cobRResponse1.yaml"
+      $ref: "pix-automatico/examples/cobRResponse1.yaml"
     cobRResponse2:
-      $ref: "components/examples/cobrancas-recorrentes/cobRResponse2.yaml"
+      $ref: "pix-automatico/examples/cobRResponse2.yaml"
     cobRResponse3:
-      $ref: "components/examples/cobrancas-recorrentes/cobRResponse3.yaml"
+      $ref: "pix-automatico/examples/cobRResponse3.yaml"
     cobRResponse4:
-      $ref: "components/examples/cobrancas-recorrentes/cobRResponse4.yaml"
+      $ref: "pix-automatico/examples/cobRResponse4.yaml"
     loteCobVBody1:
-      $ref: "components/examples/cobrancas-com-vencimento/loteCobVBody1.yaml"
+      $ref: "cobranca-com-vencimento/examples/loteCobVBody1.yaml"
     loteCobVBodyRevisado1:
-      $ref: "components/examples/cobrancas-com-vencimento/loteCobVBodyRevisado1.yaml"
+      $ref: "cobranca-com-vencimento/examples/loteCobVBodyRevisado1.yaml"
     cobResponse1:
-      $ref: "components/examples/cobrancas/cobResponse1.yaml"
+      $ref: "cobranca-imediata/examples/cobResponse1.yaml"
     cobResponse2:
-      $ref: "components/examples/cobrancas/cobResponse2.yaml"
+      $ref: "cobranca-imediata/examples/cobResponse2.yaml"
     cobResponse3:
-      $ref: "components/examples/cobrancas/cobResponse3.yaml"
+      $ref: "cobranca-imediata/examples/cobResponse3.yaml"
     cobResponse4:
-      $ref: "components/examples/cobrancas/cobResponse4.yaml"
+      $ref: "cobranca-com-vencimento/examples/cobResponse4.yaml"
     cobResponse5:
-      $ref: "components/examples/cobrancas/cobResponse5.yaml"
+      $ref: "cobranca-imediata/examples/cobResponse5.yaml"
     cobResponse6:
-      $ref: "components/examples/cobrancas/cobResponse6.yaml"
+      $ref: "cobranca-imediata/examples/cobResponse6.yaml"
     cobResponse7:
-      $ref: "components/examples/cobrancas/cobResponse7.yaml"
+      $ref: "cobranca-imediata/examples/cobResponse7.yaml"
     recBody1:
-      $ref: "components/examples/recorrencias/recBody1.yaml"
+      $ref: "pix-automatico/examples/recBody1.yaml"
     recBody2:
-      $ref: "components/examples/recorrencias/recBody2.yaml"
+      $ref: "pix-automatico/examples/recBody2.yaml"
     recBody3:
-      $ref: "components/examples/recorrencias/recBody3.yaml"
+      $ref: "pix-automatico/examples/recBody3.yaml"
     recBody4:
-      $ref: "components/examples/recorrencias/recBody4.yaml"
+      $ref: "pix-automatico/examples/recBody4.yaml"
     recResponse1:
-      $ref: "components/examples/recorrencias/recResponse1.yaml"
+      $ref: "pix-automatico/examples/recResponse1.yaml"
     recResponse2:
-      $ref: "components/examples/recorrencias/recResponse2.yaml"
+      $ref: "pix-automatico/examples/recResponse2.yaml"
     recResponse3:
-      $ref: "components/examples/recorrencias/recResponse3.yaml"
+      $ref: "pix-automatico/examples/recResponse3.yaml"
     recResponse4:
-      $ref: "components/examples/recorrencias/recResponse4.yaml"
+      $ref: "pix-automatico/examples/recResponse4.yaml"
     recResponse5:
-      $ref: "components/examples/recorrencias/recResponse5.yaml"
+      $ref: "pix-automatico/examples/recResponse5.yaml"
     recResponse6:
-      $ref: "components/examples/recorrencias/recResponse6.yaml"
+      $ref: "pix-automatico/examples/recResponse6.yaml"
     recResponse7:
-      $ref: "components/examples/recorrencias/recResponse7.yaml"
+      $ref: "pix-automatico/examples/recResponse7.yaml"
     recResponse8:
-      $ref: "components/examples/recorrencias/recResponse8.yaml"
+      $ref: "pix-automatico/examples/recResponse8.yaml"
     recWebhookNotification1:
-      $ref: "components/examples/webhooks/recWebhookNotification1.yaml"
+      $ref: "pix-automatico/examples/recWebhookNotification1.yaml"
     recPayload1:
-      $ref: "components/examples/recorrencias/recPayload1.yaml"
+      $ref: "pix-automatico/examples/recPayload1.yaml"
     solicRecBody1:
-      $ref: "components/examples/solicitacoes-recorrencia/solicRecBody1.yaml"
+      $ref: "pix-automatico/examples/solicRecBody1.yaml"
     solicRecBody2:
-      $ref: "components/examples/solicitacoes-recorrencia/solicRecBody2.yaml"
+      $ref: "pix-automatico/examples/solicRecBody2.yaml"
     solicRecResponse1:
-      $ref: "components/examples/solicitacoes-recorrencia/solicRecResponse1.yaml"
+      $ref: "pix-automatico/examples/solicRecResponse1.yaml"
     solicRecResponse2:
-      $ref: "components/examples/solicitacoes-recorrencia/solicRecResponse2.yaml"
+      $ref: "pix-automatico/examples/solicRecResponse2.yaml"
     solicRecResponse3:
-      $ref: "components/examples/solicitacoes-recorrencia/solicRecResponse3.yaml"
+      $ref: "pix-automatico/examples/solicRecResponse3.yaml"
     loteCobVResponse1:
-      $ref: "components/examples/cobrancas-com-vencimento/loteCobVResponse1.yaml"
+      $ref: "cobranca-com-vencimento/examples/loteCobVResponse1.yaml"
     loteCobVResponse2:
-      $ref: "components/examples/cobrancas-com-vencimento/loteCobVResponse2.yaml"
+      $ref: "cobranca-com-vencimento/examples/loteCobVResponse2.yaml"
     payloadLocationBody1:
-      $ref: "components/examples/locations/payloadLocationBody1.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationBody1.yaml"
     payloadLocationBody2:
-      $ref: "components/examples/locations/payloadLocationBody2.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationBody2.yaml"
     payloadLocationResponse1:
-      $ref: "components/examples/locations/payloadLocationResponse1.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationResponse1.yaml"
     payloadLocationResponse2:
-      $ref: "components/examples/locations/payloadLocationResponse2.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationResponse2.yaml"
     payloadLocationResponse3:
-      $ref: "components/examples/locations/payloadLocationResponse3.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationResponse3.yaml"
     payloadLocationResponse4:
-      $ref: "components/examples/locations/payloadLocationResponse4.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationResponse4.yaml"
     payloadLocationResponse5:
-      $ref: "components/examples/locations/payloadLocationResponse5.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationResponse5.yaml"
     payloadLocationResponse6:
-      $ref: "components/examples/locations/payloadLocationResponse6.yaml"
+      $ref: "compartilhado/examples/locations/payloadLocationResponse6.yaml"
     payloadLocationRecResponse1:
-      $ref: "components/examples/locations/payloadLocationRecResponse1.yaml"
+      $ref: "pix-automatico/examples/payloadLocationRecResponse1.yaml"
     payloadLocationRecResponse2:
-      $ref: "components/examples/locations/payloadLocationRecResponse2.yaml"
+      $ref: "pix-automatico/examples/payloadLocationRecResponse2.yaml"
     pixResponse1:
-      $ref: "components/examples/pix/pixResponse1.yaml"
+      $ref: "pix/examples/pixResponse1.yaml"
     pixResponse2:
-      $ref: "components/examples/pix/pixResponse2.yaml"
+      $ref: "pix/examples/pixResponse2.yaml"
     pixResponse3:
-      $ref: "components/examples/pix/pixResponse3.yaml"
+      $ref: "pix/examples/pixResponse3.yaml"
     webhookBody1:
-      $ref: "components/examples/webhooks/webhookBody1.yaml"
+      $ref: "pix/examples/webhookBody1.yaml"
     webhookResponse1:
-      $ref: "components/examples/webhooks/webhookResponse1.yaml"
+      $ref: "pix/examples/webhookResponse1.yaml"
     pixWebhook1:
-      $ref: "components/examples/webhooks/pixWebhook1.yaml"
+      $ref: "pix/examples/pixWebhook1.yaml"
     pixWebhook2:
-      $ref: "components/examples/webhooks/pixWebhook2.yaml"
+      $ref: "pix/examples/pixWebhook2.yaml"
     recWebhookBody1:
-      $ref: "components/examples/webhooks/recWebhookBody1.yaml"
+      $ref: "pix-automatico/examples/recWebhookBody1.yaml"
     recWebhookResponse1:
-      $ref: "components/examples/webhooks/recWebhookResponse1.yaml"
+      $ref: "pix-automatico/examples/recWebhookResponse1.yaml"
     cobRWebhookBody1:
-      $ref: "components/examples/webhooks/cobRWebhookBody1.yaml"
+      $ref: "pix-automatico/examples/cobRWebhookBody1.yaml"
     cobRWebhookResponse1:
-      $ref: "components/examples/webhooks/cobRWebhookResponse1.yaml"
+      $ref: "pix-automatico/examples/cobRWebhookResponse1.yaml"
     cobRWebhookNotification1:
-      $ref: "components/examples/webhooks/cobRWebhookNotification1.yaml"
+      $ref: "pix-automatico/examples/cobRWebhookNotification1.yaml"
     devolucaoResponse1:
-      $ref: "components/examples/pix/devolucaoResponse1.yaml"
+      $ref: "pix/examples/devolucaoResponse1.yaml"
     devolucaoResponse2:
-      $ref: "components/examples/pix/devolucaoResponse2.yaml"
+      $ref: "pix/examples/devolucaoResponse2.yaml"
     devolucaoSolicitada1:
-      $ref: "components/examples/pix/devolucaoSolicitada1.yaml"
+      $ref: "pix/examples/devolucaoSolicitada1.yaml"
     cobPayload1:
-      $ref: "components/examples/cobrancas/cobPayload1.yaml"
+      $ref: "cobranca-imediata/examples/cobPayload1.yaml"
     cobPayload2:
-      $ref: "components/examples/cobrancas/cobPayload2.yaml"
+      $ref: "cobranca-com-vencimento/examples/cobPayload2.yaml"
     cobPayload3:
-      $ref: "components/examples/cobrancas/cobPayload3.yaml"
+      $ref: "cobranca-imediata/examples/cobPayload3.yaml"
     cobPayload4:
-      $ref: "components/examples/cobrancas/cobPayload4.yaml"
+      $ref: "cobranca-imediata/examples/cobPayload4.yaml"
     cobPayload5:
-      $ref: "components/examples/cobrancas/cobPayload5.yaml"
+      $ref: "cobranca-com-vencimento/examples/cobPayload5.yaml"
     getCobs1:
-      $ref: "components/examples/cobrancas/getCobs1.yaml"
+      $ref: "cobranca-imediata/examples/getCobs1.yaml"
     getCobs2:
-      $ref: "components/examples/cobrancas/getCobs2.yaml"
+      $ref: "cobranca-imediata/examples/getCobs2.yaml"
     getCobsV1:
-      $ref: "components/examples/cobrancas-com-vencimento/getCobsV1.yaml"
+      $ref: "cobranca-com-vencimento/examples/getCobsV1.yaml"
     getPix1:
-      $ref: "components/examples/pix/getPix1.yaml"
+      $ref: "pix/examples/getPix1.yaml"
     getLotesCobsV:
-      $ref: "components/examples/cobrancas-com-vencimento/getLotesCobsV.yaml"
+      $ref: "cobranca-com-vencimento/examples/getLotesCobsV.yaml"
     getPayloadLocation1:
-      $ref: "components/examples/locations/getPayloadLocation1.yaml"
+      $ref: "compartilhado/examples/locations/getPayloadLocation1.yaml"
     getPayloadLocationRec1:
-      $ref: "components/examples/locations/getPayloadLocationRec1.yaml"
+      $ref: "pix-automatico/examples/getPayloadLocationRec1.yaml"
     getWebhook1:
-      $ref: "components/examples/webhooks/getWebhook1.yaml"
+      $ref: "pix/examples/getWebhook1.yaml"
     getWebhookRec1:
-      $ref: "components/examples/webhooks/getWebhookRec1.yaml"
+      $ref: "pix-automatico/examples/getWebhookRec1.yaml"
     getRec1:
-      $ref: "components/examples/recorrencias/getRec1.yaml"
+      $ref: "pix-automatico/examples/getRec1.yaml"
     getCobR1:
-      $ref: "components/examples/cobrancas-recorrentes/getCobR1.yaml"
+      $ref: "pix-automatico/examples/getCobR1.yaml"
     RequisicaoInvalidaCobExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaCobExample1.yaml"
+      $ref: "cobranca-imediata/examples/erros/RequisicaoInvalidaCobExample1.yaml"
     OperacaoInvalidaCobExample1:
-      $ref: "components/examples/erros/OperacaoInvalidaCobExample1.yaml"
+      $ref: "cobranca-imediata/examples/erros/OperacaoInvalidaCobExample1.yaml"
     RequisicaoInvalidaCobVExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaCobVExample1.yaml"
+      $ref: "cobranca-com-vencimento/examples/erros/RequisicaoInvalidaCobVExample1.yaml"
     OperacaoInvalidaCobVExample1:
-      $ref: "components/examples/erros/OperacaoInvalidaCobVExample1.yaml"
+      $ref: "cobranca-com-vencimento/examples/erros/OperacaoInvalidaCobVExample1.yaml"
     OperacaoInvalidaCobRExample1:
-      $ref: "components/examples/erros/OperacaoInvalidaCobRExample1.yaml"
+      $ref: "pix-automatico/examples/erros/OperacaoInvalidaCobRExample1.yaml"
     OperacaoInvalidaCobRExample2:
-      $ref: "components/examples/erros/OperacaoInvalidaCobRExample2.yaml"
+      $ref: "pix-automatico/examples/erros/OperacaoInvalidaCobRExample2.yaml"
     OperacaoInvalidaRecExample1:
-      $ref: "components/examples/erros/OperacaoInvalidaRecExample1.yaml"
+      $ref: "pix-automatico/examples/erros/OperacaoInvalidaRecExample1.yaml"
     OperacaoInvalidaSolicRecExample1:
-      $ref: "components/examples/erros/OperacaoInvalidaSolicRecExample1.yaml"
+      $ref: "pix-automatico/examples/erros/OperacaoInvalidaSolicRecExample1.yaml"
     OperacaoInvalidaSolicRecExample2:
-      $ref: "components/examples/erros/OperacaoInvalidaSolicRecExample2.yaml"
+      $ref: "pix-automatico/examples/erros/OperacaoInvalidaSolicRecExample2.yaml"
     RequisicaoInvalidaCobPayloadExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaCobPayloadExample1.yaml"
+      $ref: "compartilhado/examples/erros/RequisicaoInvalidaCobPayloadExample1.yaml"
     RequisicaoInvalidaRecPayloadExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaRecPayloadExample1.yaml"
+      $ref: "pix-automatico/examples/erros/RequisicaoInvalidaRecPayloadExample1.yaml"
     RequisicaoInvalidaCobRTentativaExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaCobRTentativaExample1.yaml"
+      $ref: "pix-automatico/examples/erros/RequisicaoInvalidaCobRTentativaExample1.yaml"
     RequisicaoInvalidaLoteCobVExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaLoteCobVExample1.yaml"
+      $ref: "cobranca-com-vencimento/examples/erros/RequisicaoInvalidaLoteCobVExample1.yaml"
     RequisicaoInvalidaDevolucaoExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaDevolucaoExample1.yaml"
+      $ref: "pix/examples/erros/RequisicaoInvalidaDevolucaoExample1.yaml"
     RequisicaoInvalidaWebhookExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaWebhookExample1.yaml"
+      $ref: "compartilhado/examples/erros/RequisicaoInvalidaWebhookExample1.yaml"
     RequisicaoInvalidaLocationExample1:
-      $ref: "components/examples/erros/RequisicaoInvalidaLocationExample1.yaml"
+      $ref: "compartilhado/examples/erros/RequisicaoInvalidaLocationExample1.yaml"
     AcessoNegadoExample1:
-      $ref: "components/examples/erros/AcessoNegadoExample1.yaml"
+      $ref: "compartilhado/examples/erros/AcessoNegadoExample1.yaml"
     NaoEncontradoExample1:
-      $ref: "components/examples/erros/NaoEncontradoExample1.yaml"
+      $ref: "compartilhado/examples/erros/NaoEncontradoExample1.yaml"
     ServicoIndisponivelExample1:
-      $ref: "components/examples/erros/ServicoIndisponivelExample1.yaml"
+      $ref: "compartilhado/examples/erros/ServicoIndisponivelExample1.yaml"
   requestBodies:
     CobBody:
-      $ref: "components/requestBodies/cobrancas/CobBody.yaml"
+      $ref: "cobranca-imediata/requestBodies/CobBody.yaml"
     CobRBody:
-      $ref: "components/requestBodies/cobrancas-recorrentes/CobRBody.yaml"
+      $ref: "pix-automatico/requestBodies/CobRBody.yaml"
     CobVBody:
-      $ref: "components/requestBodies/cobrancas-com-vencimento/CobVBody.yaml"
+      $ref: "cobranca-com-vencimento/requestBodies/CobVBody.yaml"
     LoteCobVBody:
-      $ref: "components/requestBodies/cobrancas-com-vencimento/LoteCobVBody.yaml"
+      $ref: "cobranca-com-vencimento/requestBodies/LoteCobVBody.yaml"
     LoteCobVBodyRevisado:
-      $ref: "components/requestBodies/cobrancas-com-vencimento/LoteCobVBodyRevisado.yaml"
+      $ref: "cobranca-com-vencimento/requestBodies/LoteCobVBodyRevisado.yaml"
     CobBodyRevisada:
-      $ref: "components/requestBodies/cobrancas/CobBodyRevisada.yaml"
+      $ref: "cobranca-imediata/requestBodies/CobBodyRevisada.yaml"
     CobRBodyRevisada:
-      $ref: "components/requestBodies/cobrancas-recorrentes/CobRBodyRevisada.yaml"
+      $ref: "pix-automatico/requestBodies/CobRBodyRevisada.yaml"
     CobVBodyRevisada:
-      $ref: "components/requestBodies/cobrancas-com-vencimento/CobVBodyRevisada.yaml"
+      $ref: "cobranca-com-vencimento/requestBodies/CobVBodyRevisada.yaml"
     PayloadLocationBody:
-      $ref: "components/requestBodies/locations/PayloadLocationBody.yaml"
+      $ref: "compartilhado/requestBodies/locations/PayloadLocationBody.yaml"
     PayloadLocationRecBody:
-      $ref: "components/requestBodies/locations/PayloadLocationRecBody.yaml"
+      $ref: "pix-automatico/requestBodies/PayloadLocationRecBody.yaml"
     DevolucaoBody:
-      $ref: "components/requestBodies/pix/DevolucaoBody.yaml"
+      $ref: "pix/requestBodies/DevolucaoBody.yaml"
     WebhookConfigBody:
-      $ref: "components/requestBodies/webhooks/WebhookConfigBody.yaml"
+      $ref: "pix/requestBodies/WebhookConfigBody.yaml"
     WebhookRecConfigBody:
-      $ref: "components/requestBodies/webhooks/WebhookRecConfigBody.yaml"
+      $ref: "pix-automatico/requestBodies/WebhookRecConfigBody.yaml"
     WebhookCobRConfigBody:
-      $ref: "components/requestBodies/webhooks/WebhookCobRConfigBody.yaml"
+      $ref: "pix-automatico/requestBodies/WebhookCobRConfigBody.yaml"
     WebhookCobConfigBody:
-      $ref: "components/requestBodies/webhooks/WebhookCobConfigBody.yaml"
+      $ref: "cobranca-imediata/requestBodies/WebhookCobConfigBody.yaml"
     WebhookCobVConfigBody:
-      $ref: "components/requestBodies/webhooks/WebhookCobVConfigBody.yaml"
+      $ref: "cobranca-com-vencimento/requestBodies/WebhookCobVConfigBody.yaml"
     SolicRecBody:
-      $ref: "components/requestBodies/solicitacoes-recorrencia/SolicRecBody.yaml"
+      $ref: "pix-automatico/requestBodies/SolicRecBody.yaml"
     SolicRecBodyRevisada:
-      $ref: "components/requestBodies/solicitacoes-recorrencia/SolicRecBodyRevisada.yaml"
+      $ref: "pix-automatico/requestBodies/SolicRecBodyRevisada.yaml"
     RecBody:
-      $ref: "components/requestBodies/recorrencias/RecBody.yaml"
+      $ref: "pix-automatico/requestBodies/RecBody.yaml"
     RecBodyRevisada:
-      $ref: "components/requestBodies/recorrencias/RecBodyRevisada.yaml"
+      $ref: "pix-automatico/requestBodies/RecBodyRevisada.yaml"
     WebhookPixBody:
-      $ref: "components/requestBodies/webhooks/WebhookPixBody.yaml"
+      $ref: "pix/requestBodies/WebhookPixBody.yaml"
     WebhookRecBody:
-      $ref: "components/requestBodies/webhooks/WebhookRecBody.yaml"
+      $ref: "pix-automatico/requestBodies/WebhookRecBody.yaml"
     WebhookCobRBody:
-      $ref: "components/requestBodies/webhooks/WebhookCobRBody.yaml"
+      $ref: "pix-automatico/requestBodies/WebhookCobRBody.yaml"
     WebhookCobBody:
-      $ref: "components/requestBodies/webhooks/WebhookCobBody.yaml"
+      $ref: "cobranca-imediata/requestBodies/WebhookCobBody.yaml"
     WebhookCobVBody:
-      $ref: "components/requestBodies/webhooks/WebhookCobVBody.yaml"
+      $ref: "cobranca-com-vencimento/requestBodies/WebhookCobVBody.yaml"
   schemas:
     TxId:
-      $ref: "components/schemas/comuns/TxId.yaml"
+      $ref: "compartilhado/schemas/comuns/TxId.yaml"
     EndToEndId:
-      $ref: "components/schemas/pix/EndToEndId.yaml"
+      $ref: "pix/schemas/EndToEndId.yaml"
     DevolucaoId:
-      $ref: "components/schemas/pix/DevolucaoId.yaml"
+      $ref: "pix/schemas/DevolucaoId.yaml"
     DevolucaoSolicitadaNatureza:
-      $ref: "components/schemas/pix/DevolucaoSolicitadaNatureza.yaml"
+      $ref: "pix/schemas/DevolucaoSolicitadaNatureza.yaml"
     DevolucaoNatureza:
-      $ref: "components/schemas/pix/DevolucaoNatureza.yaml"
+      $ref: "pix/schemas/DevolucaoNatureza.yaml"
     DevolucaoNaturezaPixAutomatico:
-      $ref: "components/schemas/pix/DevolucaoNaturezaPixAutomatico.yaml"
+      $ref: "pix-automatico/schemas/DevolucaoNaturezaPixAutomatico.yaml"
     PayloadLocationId:
-      $ref: "components/schemas/locations/PayloadLocationId.yaml"
+      $ref: "compartilhado/schemas/locations/PayloadLocationId.yaml"
     PayloadLocationRecId:
-      $ref: "components/schemas/locations/PayloadLocationRecId.yaml"
+      $ref: "pix-automatico/schemas/PayloadLocationRecId.yaml"
     Revisao:
-      $ref: "components/schemas/comuns/Revisao.yaml"
+      $ref: "compartilhado/schemas/comuns/Revisao.yaml"
     PessoaFisica:
-      $ref: "components/schemas/comuns/PessoaFisica.yaml"
+      $ref: "compartilhado/schemas/comuns/PessoaFisica.yaml"
     PessoaJuridica:
-      $ref: "components/schemas/comuns/PessoaJuridica.yaml"
+      $ref: "compartilhado/schemas/comuns/PessoaJuridica.yaml"
     PessoaFisicaRecorrencia:
-      $ref: "components/schemas/recorrencias/PessoaFisicaRecorrencia.yaml"
+      $ref: "pix-automatico/schemas/PessoaFisicaRecorrencia.yaml"
     PessoaJuridicaRecorrencia:
-      $ref: "components/schemas/recorrencias/PessoaJuridicaRecorrencia.yaml"
+      $ref: "pix-automatico/schemas/PessoaJuridicaRecorrencia.yaml"
     CPF:
-      $ref: "components/schemas/comuns/CPF.yaml"
+      $ref: "compartilhado/schemas/comuns/CPF.yaml"
     CNPJ:
-      $ref: "components/schemas/comuns/CNPJ.yaml"
+      $ref: "compartilhado/schemas/comuns/CNPJ.yaml"
     DadosComplementaresPessoa:
-      $ref: "components/schemas/comuns/DadosComplementaresPessoa.yaml"
+      $ref: "compartilhado/schemas/comuns/DadosComplementaresPessoa.yaml"
     DadosDevedor:
-      $ref: "components/schemas/comuns/DadosDevedor.yaml"
+      $ref: "compartilhado/schemas/comuns/DadosDevedor.yaml"
     DadosDevedorRecorrencia:
-      $ref: "components/schemas/recorrencias/DadosDevedorRecorrencia.yaml"
+      $ref: "pix-automatico/schemas/DadosDevedorRecorrencia.yaml"
     DadosRecebedor:
-      $ref: "components/schemas/comuns/DadosRecebedor.yaml"
+      $ref: "compartilhado/schemas/comuns/DadosRecebedor.yaml"
     DadosBancarios:
-      $ref: "components/schemas/comuns/DadosBancarios.yaml"
+      $ref: "compartilhado/schemas/comuns/DadosBancarios.yaml"
     DadosBancariosRecebedor:
-      $ref: "components/schemas/comuns/DadosBancariosRecebedor.yaml"
+      $ref: "compartilhado/schemas/comuns/DadosBancariosRecebedor.yaml"
     DadosPagadorRec:
-      $ref: "components/schemas/recorrencias/DadosPagadorRec.yaml"
+      $ref: "pix-automatico/schemas/DadosPagadorRec.yaml"
     WebhookSolicitado:
-      $ref: "components/schemas/webhooks/WebhookSolicitado.yaml"
+      $ref: "pix/schemas/WebhookSolicitado.yaml"
     WebhookCompleto:
-      $ref: "components/schemas/webhooks/WebhookCompleto.yaml"
+      $ref: "pix/schemas/WebhookCompleto.yaml"
     WebhookRecBase:
-      $ref: "components/schemas/webhooks/WebhookRecBase.yaml"
+      $ref: "pix-automatico/schemas/WebhookRecBase.yaml"
     WebhookRecCompleto:
-      $ref: "components/schemas/webhooks/WebhookRecCompleto.yaml"
+      $ref: "pix-automatico/schemas/WebhookRecCompleto.yaml"
     WebhookCobRCompleto:
-      $ref: "components/schemas/webhooks/WebhookCobRCompleto.yaml"
+      $ref: "pix-automatico/schemas/WebhookCobRCompleto.yaml"
     WebhookCobCompleto:
-      $ref: "components/schemas/webhooks/WebhookCobCompleto.yaml"
+      $ref: "cobranca-imediata/schemas/WebhookCobCompleto.yaml"
     WebhookCobVSolicitado:
-      $ref: "components/schemas/webhooks/WebhookCobVSolicitado.yaml"
+      $ref: "cobranca-com-vencimento/schemas/WebhookCobVSolicitado.yaml"
     WebhookCobVCompleto:
-      $ref: "components/schemas/webhooks/WebhookCobVCompleto.yaml"
+      $ref: "cobranca-com-vencimento/schemas/WebhookCobVCompleto.yaml"
     InfoBaseAgenciaConta:
-      $ref: "components/schemas/comuns/InfoBaseAgenciaConta.yaml"
+      $ref: "compartilhado/schemas/comuns/InfoBaseAgenciaConta.yaml"
     InfoBaseChave:
-      $ref: "components/schemas/comuns/InfoBaseChave.yaml"
+      $ref: "compartilhado/schemas/comuns/InfoBaseChave.yaml"
     WebhookRecSolicitado:
-      $ref: "components/schemas/webhooks/WebhookRecSolicitado.yaml"
+      $ref: "pix-automatico/schemas/WebhookRecSolicitado.yaml"
     WebhookCobRSolicitado:
-      $ref: "components/schemas/webhooks/WebhookCobRSolicitado.yaml"
+      $ref: "pix-automatico/schemas/WebhookCobRSolicitado.yaml"
     WebhookCobSolicitado:
-      $ref: "components/schemas/webhooks/WebhookCobSolicitado.yaml"
+      $ref: "cobranca-imediata/schemas/WebhookCobSolicitado.yaml"
     CobExpiracao:
-      $ref: "components/schemas/cobrancas/CobExpiracao.yaml"
+      $ref: "cobranca-imediata/schemas/CobExpiracao.yaml"
     CobDataDeVencimento:
-      $ref: "components/schemas/cobrancas/CobDataDeVencimento.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobDataDeVencimento.yaml"
     CobApresentacao:
-      $ref: "components/schemas/cobrancas/CobApresentacao.yaml"
+      $ref: "compartilhado/schemas/cobrancas/CobApresentacao.yaml"
     CobCriacao:
-      $ref: "components/schemas/cobrancas/CobCriacao.yaml"
+      $ref: "compartilhado/schemas/cobrancas/CobCriacao.yaml"
     CobVValor:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVValor.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVValor.yaml"
     CobValor:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobValor.yaml"
+      $ref: "cobranca-imediata/schemas/CobValor.yaml"
     CobPayloadValor:
-      $ref: "components/schemas/cobrancas/CobPayloadValor.yaml"
+      $ref: "cobranca-imediata/schemas/CobPayloadValor.yaml"
     CobVPayloadValor:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVPayloadValor.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVPayloadValor.yaml"
     RecCompleta:
-      $ref: "components/schemas/recorrencias/RecCompleta.yaml"
+      $ref: "pix-automatico/schemas/RecCompleta.yaml"
     RecCompletaPesquisada:
-      $ref: "components/schemas/recorrencias/RecCompletaPesquisada.yaml"
+      $ref: "pix-automatico/schemas/RecCompletaPesquisada.yaml"
     RecGerada:
-      $ref: "components/schemas/recorrencias/RecGerada.yaml"
+      $ref: "pix-automatico/schemas/RecGerada.yaml"
     RecSolicitada:
-      $ref: "components/schemas/recorrencias/RecSolicitada.yaml"
+      $ref: "pix-automatico/schemas/RecSolicitada.yaml"
     RecPayload:
-      $ref: "components/schemas/recorrencias/RecPayload.yaml"
+      $ref: "pix-automatico/schemas/RecPayload.yaml"
     RecRevisada:
-      $ref: "components/schemas/recorrencias/RecRevisada.yaml"
+      $ref: "pix-automatico/schemas/RecRevisada.yaml"
     RecNotification:
-      $ref: "components/schemas/recorrencias/RecNotification.yaml"
+      $ref: "pix-automatico/schemas/RecNotification.yaml"
     RecAtivacao:
-      $ref: "components/schemas/recorrencias/RecAtivacao.yaml"
+      $ref: "pix-automatico/schemas/RecAtivacao.yaml"
     RecAtivacaoSolicitada:
-      $ref: "components/schemas/recorrencias/RecAtivacaoSolicitada.yaml"
+      $ref: "pix-automatico/schemas/RecAtivacaoSolicitada.yaml"
     RecStatus:
-      $ref: "components/schemas/recorrencias/RecStatus.yaml"
+      $ref: "pix-automatico/schemas/RecStatus.yaml"
     RecConfiguracao:
-      $ref: "components/schemas/recorrencias/RecConfiguracao.yaml"
+      $ref: "pix-automatico/schemas/RecConfiguracao.yaml"
     RecAtualizacao:
-      $ref: "components/schemas/recorrencias/RecAtualizacao.yaml"
+      $ref: "pix-automatico/schemas/RecAtualizacao.yaml"
     RecEncerramento:
-      $ref: "components/schemas/recorrencias/RecEncerramento.yaml"
+      $ref: "pix-automatico/schemas/RecEncerramento.yaml"
     RecId:
-      $ref: "components/schemas/recorrencias/RecId.yaml"
+      $ref: "pix-automatico/schemas/RecId.yaml"
     RecBase:
-      $ref: "components/schemas/recorrencias/RecBase.yaml"
+      $ref: "pix-automatico/schemas/RecBase.yaml"
     SolicRecId:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecId.yaml"
+      $ref: "pix-automatico/schemas/SolicRecId.yaml"
     SolicRecBase:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecBase.yaml"
+      $ref: "pix-automatico/schemas/SolicRecBase.yaml"
     SolicRecStatus:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecStatus.yaml"
+      $ref: "pix-automatico/schemas/SolicRecStatus.yaml"
     SolicRecAtualizacao:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecAtualizacao.yaml"
+      $ref: "pix-automatico/schemas/SolicRecAtualizacao.yaml"
     SolicRecEncerramento:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecEncerramento.yaml"
+      $ref: "pix-automatico/schemas/SolicRecEncerramento.yaml"
     SolicRecSolicitada:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecSolicitada.yaml"
+      $ref: "pix-automatico/schemas/SolicRecSolicitada.yaml"
     SolicRecRevisada:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecRevisada.yaml"
+      $ref: "pix-automatico/schemas/SolicRecRevisada.yaml"
     SolicRecCompleta:
-      $ref: "components/schemas/solicitacoes-recorrencia/SolicRecCompleta.yaml"
+      $ref: "pix-automatico/schemas/SolicRecCompleta.yaml"
     TributoCompleto:
-      $ref: "components/schemas/tributos/TributoCompleto.yaml"
+      $ref: "compartilhado/schemas/tributos/TributoCompleto.yaml"
     TributoCompletoPix:
-      $ref: "components/schemas/tributos/TributoCompletoPix.yaml"
+      $ref: "compartilhado/schemas/tributos/TributoCompletoPix.yaml"
     TributoPayload:
-      $ref: "components/schemas/tributos/TributoPayload.yaml"
+      $ref: "compartilhado/schemas/tributos/TributoPayload.yaml"
     TributoInformadoCompleto:
-      $ref: "components/schemas/tributos/TributoInformadoCompleto.yaml"
+      $ref: "compartilhado/schemas/tributos/TributoInformadoCompleto.yaml"
     TributoInformadoSolicitado:
-      $ref: "components/schemas/tributos/TributoInformadoSolicitado.yaml"
+      $ref: "compartilhado/schemas/tributos/TributoInformadoSolicitado.yaml"
     RegistroCategoriaTributoInformadoSolicitado:
-      $ref: "components/schemas/tributos/RegistroCategoriaTributoInformadoSolicitado.yaml"
+      $ref: "compartilhado/schemas/tributos/RegistroCategoriaTributoInformadoSolicitado.yaml"
     RegistroCategoriaTributoInformadoCompleto:
-      $ref: "components/schemas/tributos/RegistroCategoriaTributoInformadoCompleto.yaml"
+      $ref: "compartilhado/schemas/tributos/RegistroCategoriaTributoInformadoCompleto.yaml"
     RegistroCategoriaTributoPayload:
-      $ref: "components/schemas/tributos/RegistroCategoriaTributoPayload.yaml"
+      $ref: "compartilhado/schemas/tributos/RegistroCategoriaTributoPayload.yaml"
     RegistroCategoriaTributoCompleto:
-      $ref: "components/schemas/tributos/RegistroCategoriaTributoCompleto.yaml"
+      $ref: "compartilhado/schemas/tributos/RegistroCategoriaTributoCompleto.yaml"
     RegistroCategoriaTributoCompletoPix:
-      $ref: "components/schemas/tributos/RegistroCategoriaTributoCompletoPix.yaml"
+      $ref: "compartilhado/schemas/tributos/RegistroCategoriaTributoCompletoPix.yaml"
     ValorTributoDetalheCompleto:
-      $ref: "components/schemas/tributos/ValorTributoDetalheCompleto.yaml"
+      $ref: "compartilhado/schemas/tributos/ValorTributoDetalheCompleto.yaml"
     ValorTributoDetalheSolicitado:
-      $ref: "components/schemas/tributos/ValorTributoDetalheSolicitado.yaml"
+      $ref: "compartilhado/schemas/tributos/ValorTributoDetalheSolicitado.yaml"
     ValorLiquidoEstimado:
-      $ref: "components/schemas/tributos/ValorLiquidoEstimado.yaml"
+      $ref: "compartilhado/schemas/tributos/ValorLiquidoEstimado.yaml"
     CobRGerada:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRGerada.yaml"
+      $ref: "pix-automatico/schemas/CobRGerada.yaml"
     CobRCompleta:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRCompleta.yaml"
+      $ref: "pix-automatico/schemas/CobRCompleta.yaml"
     CobRAtualizacao:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRAtualizacao.yaml"
+      $ref: "pix-automatico/schemas/CobRAtualizacao.yaml"
     CobRTentativas:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRTentativas.yaml"
+      $ref: "pix-automatico/schemas/CobRTentativas.yaml"
     CobRRevisada:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRRevisada.yaml"
+      $ref: "pix-automatico/schemas/CobRRevisada.yaml"
     CobRSolicitada:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRSolicitada.yaml"
+      $ref: "pix-automatico/schemas/CobRSolicitada.yaml"
     CobRNotification:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRNotification.yaml"
+      $ref: "pix-automatico/schemas/CobRNotification.yaml"
     CobNotification:
-      $ref: "components/schemas/cobrancas/CobNotification.yaml"
+      $ref: "cobranca-imediata/schemas/CobNotification.yaml"
     CobVNotification:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVNotification.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVNotification.yaml"
     CobRConfiguracao:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRConfiguracao.yaml"
+      $ref: "pix-automatico/schemas/CobRConfiguracao.yaml"
     CobRStatus:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRStatus.yaml"
+      $ref: "pix-automatico/schemas/CobRStatus.yaml"
     CobRStatusRevisada:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRStatusRevisada.yaml"
+      $ref: "pix-automatico/schemas/CobRStatusRevisada.yaml"
     CobRBase:
-      $ref: "components/schemas/cobrancas-recorrentes/CobRBase.yaml"
+      $ref: "pix-automatico/schemas/CobRBase.yaml"
     CobBase:
-      $ref: "components/schemas/cobrancas/CobBase.yaml"
+      $ref: "compartilhado/schemas/cobrancas/CobBase.yaml"
     CobBaseCopiaCola:
-      $ref: "components/schemas/cobrancas/CobBaseCopiaCola.yaml"
+      $ref: "compartilhado/schemas/cobrancas/CobBaseCopiaCola.yaml"
     CobSolicitada:
-      $ref: "components/schemas/cobrancas/CobSolicitada.yaml"
+      $ref: "cobranca-imediata/schemas/CobSolicitada.yaml"
     CobVSolicitada:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVSolicitada.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVSolicitada.yaml"
     CobRevisada:
-      $ref: "components/schemas/cobrancas/CobRevisada.yaml"
+      $ref: "cobranca-imediata/schemas/CobRevisada.yaml"
     CobVRevisada:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVRevisada.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVRevisada.yaml"
     CobGerada:
-      $ref: "components/schemas/cobrancas/CobGerada.yaml"
+      $ref: "cobranca-imediata/schemas/CobGerada.yaml"
     CobVGerada:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVGerada.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVGerada.yaml"
     CobStatus:
-      $ref: "components/schemas/cobrancas/CobStatus.yaml"
+      $ref: "cobranca-imediata/schemas/CobStatus.yaml"
     CobVStatus:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVStatus.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVStatus.yaml"
     LoteCobVGerado:
-      $ref: "components/schemas/cobrancas-com-vencimento/LoteCobVGerado.yaml"
+      $ref: "cobranca-com-vencimento/schemas/LoteCobVGerado.yaml"
     CobVCompleta:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVCompleta.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVCompleta.yaml"
     CobCompleta:
-      $ref: "components/schemas/cobrancas/CobCompleta.yaml"
+      $ref: "cobranca-imediata/schemas/CobCompleta.yaml"
     LoteCobVConsultado:
-      $ref: "components/schemas/cobrancas-com-vencimento/LoteCobVConsultado.yaml"
+      $ref: "cobranca-com-vencimento/schemas/LoteCobVConsultado.yaml"
     LotesCobVConsultados:
-      $ref: "components/schemas/cobrancas-com-vencimento/LotesCobVConsultados.yaml"
+      $ref: "cobranca-com-vencimento/schemas/LotesCobVConsultados.yaml"
     CobVPayload:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobVPayload.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobVPayload.yaml"
     CobPayload:
-      $ref: "components/schemas/cobrancas/CobPayload.yaml"
+      $ref: "cobranca-imediata/schemas/CobPayload.yaml"
     PayloadLocation:
-      $ref: "components/schemas/locations/PayloadLocation.yaml"
+      $ref: "compartilhado/schemas/locations/PayloadLocation.yaml"
     PayloadLocationSolicitada:
-      $ref: "components/schemas/locations/PayloadLocationSolicitada.yaml"
+      $ref: "compartilhado/schemas/locations/PayloadLocationSolicitada.yaml"
     PayloadLocationRecSolicitada:
-      $ref: "components/schemas/locations/PayloadLocationRecSolicitada.yaml"
+      $ref: "pix-automatico/schemas/PayloadLocationRecSolicitada.yaml"
     PayloadLocationRecGerada:
-      $ref: "components/schemas/locations/PayloadLocationRecGerada.yaml"
+      $ref: "pix-automatico/schemas/PayloadLocationRecGerada.yaml"
     PayloadLocationRecCompleta:
-      $ref: "components/schemas/locations/PayloadLocationRecCompleta.yaml"
+      $ref: "pix-automatico/schemas/PayloadLocationRecCompleta.yaml"
     PayloadLocationCompleta:
-      $ref: "components/schemas/locations/PayloadLocationCompleta.yaml"
+      $ref: "compartilhado/schemas/locations/PayloadLocationCompleta.yaml"
     PayloadLocationCob:
-      $ref: "components/schemas/locations/PayloadLocationCob.yaml"
+      $ref: "compartilhado/schemas/locations/PayloadLocationCob.yaml"
     ParametrosConsultaRec:
-      $ref: "components/schemas/recorrencias/ParametrosConsultaRec.yaml"
+      $ref: "pix-automatico/schemas/ParametrosConsultaRec.yaml"
     ParametrosConsultaCob:
-      $ref: "components/schemas/cobrancas/ParametrosConsultaCob.yaml"
+      $ref: "compartilhado/schemas/cobrancas/ParametrosConsultaCob.yaml"
     ParametrosConsultaCobR:
-      $ref: "components/schemas/cobrancas-recorrentes/ParametrosConsultaCobR.yaml"
+      $ref: "pix-automatico/schemas/ParametrosConsultaCobR.yaml"
     ParametrosConsultaLote:
-      $ref: "components/schemas/cobrancas-com-vencimento/ParametrosConsultaLote.yaml"
+      $ref: "cobranca-com-vencimento/schemas/ParametrosConsultaLote.yaml"
     CobsVConsultadas:
-      $ref: "components/schemas/cobrancas-com-vencimento/CobsVConsultadas.yaml"
+      $ref: "cobranca-com-vencimento/schemas/CobsVConsultadas.yaml"
     CobsConsultadas:
-      $ref: "components/schemas/cobrancas/CobsConsultadas.yaml"
+      $ref: "cobranca-imediata/schemas/CobsConsultadas.yaml"
     CobsRConsultadas:
-      $ref: "components/schemas/cobrancas-recorrentes/CobsRConsultadas.yaml"
+      $ref: "pix-automatico/schemas/CobsRConsultadas.yaml"
     RecsConsultadas:
-      $ref: "components/schemas/recorrencias/RecsConsultadas.yaml"
+      $ref: "pix-automatico/schemas/RecsConsultadas.yaml"
     Pix:
-      $ref: "components/schemas/pix/Pix.yaml"
+      $ref: "pix/schemas/Pix.yaml"
     PixAutomatico:
-      $ref: "components/schemas/pix/PixAutomatico.yaml"
+      $ref: "pix-automatico/schemas/PixAutomatico.yaml"
     PixValorOriginal:
-      $ref: "components/schemas/pix/PixValorOriginal.yaml"
+      $ref: "pix/schemas/PixValorOriginal.yaml"
     PixValorSaque:
-      $ref: "components/schemas/pix/PixValorSaque.yaml"
+      $ref: "pix/schemas/PixValorSaque.yaml"
     PixValorTroco:
-      $ref: "components/schemas/pix/PixValorTroco.yaml"
+      $ref: "pix/schemas/PixValorTroco.yaml"
     PixValorJuros:
-      $ref: "components/schemas/pix/PixValorJuros.yaml"
+      $ref: "pix/schemas/PixValorJuros.yaml"
     PixValorMulta:
-      $ref: "components/schemas/pix/PixValorMulta.yaml"
+      $ref: "pix/schemas/PixValorMulta.yaml"
     PixValorDesconto:
-      $ref: "components/schemas/pix/PixValorDesconto.yaml"
+      $ref: "pix/schemas/PixValorDesconto.yaml"
     PixValorAbatimento:
-      $ref: "components/schemas/pix/PixValorAbatimento.yaml"
+      $ref: "pix/schemas/PixValorAbatimento.yaml"
     Devolucao:
-      $ref: "components/schemas/pix/Devolucao.yaml"
+      $ref: "pix/schemas/Devolucao.yaml"
     DevolucaoPixAutomatico:
-      $ref: "components/schemas/pix/DevolucaoPixAutomatico.yaml"
+      $ref: "pix-automatico/schemas/DevolucaoPixAutomatico.yaml"
     DevolucaoSolicitada:
-      $ref: "components/schemas/pix/DevolucaoSolicitada.yaml"
+      $ref: "pix/schemas/DevolucaoSolicitada.yaml"
     ParametrosConsultaPayloadLocation:
-      $ref: "components/schemas/locations/ParametrosConsultaPayloadLocation.yaml"
+      $ref: "compartilhado/schemas/locations/ParametrosConsultaPayloadLocation.yaml"
     ParametrosConsultaPayloadLocationRec:
-      $ref: "components/schemas/locations/ParametrosConsultaPayloadLocationRec.yaml"
+      $ref: "pix-automatico/schemas/ParametrosConsultaPayloadLocationRec.yaml"
     PayloadLocationConsultadas:
-      $ref: "components/schemas/locations/PayloadLocationConsultadas.yaml"
+      $ref: "compartilhado/schemas/locations/PayloadLocationConsultadas.yaml"
     PayloadLocationRecConsultadas:
-      $ref: "components/schemas/locations/PayloadLocationRecConsultadas.yaml"
+      $ref: "pix-automatico/schemas/PayloadLocationRecConsultadas.yaml"
     ParametrosConsultaPix:
-      $ref: "components/schemas/pix/ParametrosConsultaPix.yaml"
+      $ref: "pix/schemas/ParametrosConsultaPix.yaml"
     ParametrosConsultaWebhooks:
-      $ref: "components/schemas/webhooks/ParametrosConsultaWebhooks.yaml"
+      $ref: "compartilhado/schemas/webhooks/ParametrosConsultaWebhooks.yaml"
     PixConsultado:
-      $ref: "components/schemas/pix/PixConsultado.yaml"
+      $ref: "pix/schemas/PixConsultado.yaml"
     PixAutomaticoConsultado:
-      $ref: "components/schemas/pix/PixAutomaticoConsultado.yaml"
+      $ref: "pix-automatico/schemas/PixAutomaticoConsultado.yaml"
     PixConsultados:
-      $ref: "components/schemas/pix/PixConsultados.yaml"
+      $ref: "pix/schemas/PixConsultados.yaml"
     WebhooksConsultados:
-      $ref: "components/schemas/webhooks/WebhooksConsultados.yaml"
+      $ref: "pix/schemas/WebhooksConsultados.yaml"
     WebhooksRecConsultados:
-      $ref: "components/schemas/webhooks/WebhooksRecConsultados.yaml"
+      $ref: "pix-automatico/schemas/WebhooksRecConsultados.yaml"
     Paginacao:
-      $ref: "components/schemas/comuns/Paginacao.yaml"
+      $ref: "compartilhado/schemas/comuns/Paginacao.yaml"
     Violacao:
-      $ref: "components/schemas/erros/Violacao.yaml"
+      $ref: "compartilhado/schemas/erros/Violacao.yaml"
     Problema:
-      $ref: "components/schemas/erros/Problema.yaml"
+      $ref: "compartilhado/schemas/erros/Problema.yaml"
     Inicio:
-      $ref: "components/schemas/comuns/Inicio.yaml"
+      $ref: "compartilhado/schemas/comuns/Inicio.yaml"
     Fim:
-      $ref: "components/schemas/comuns/Fim.yaml"
+      $ref: "compartilhado/schemas/comuns/Fim.yaml"
   parameters:
     paginaAtual:
-      $ref: "components/parameters/paginaAtual.yaml"
+      $ref: "compartilhado/parameters/paginaAtual.yaml"
     itensPorPagina:
-      $ref: "components/parameters/itensPorPagina.yaml"
+      $ref: "compartilhado/parameters/itensPorPagina.yaml"
   responses:
     RequisicaoInvalida:
-      $ref: "components/responses/RequisicaoInvalida.yaml"
+      $ref: "compartilhado/responses/RequisicaoInvalida.yaml"
     NaoEncontrado:
-      $ref: "components/responses/NaoEncontrado.yaml"
+      $ref: "compartilhado/responses/NaoEncontrado.yaml"
     AcessoNegado:
-      $ref: "components/responses/AcessoNegado.yaml"
+      $ref: "compartilhado/responses/AcessoNegado.yaml"
     ServicoIndisponivel:
-      $ref: "components/responses/ServicoIndisponivel.yaml"
+      $ref: "compartilhado/responses/ServicoIndisponivel.yaml"
