@@ -1,4 +1,6 @@
-[![https://img.shields.io/badge/OpenAPI-valid-brightgreen.svg](https://img.shields.io/badge/OpenAPI-valid-brightgreen.svg)](http://online.swagger.io/validator?url=https://raw.githubusercontent.com/bacen/pix-api/master/openapi.yaml) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Gerar OpenAPI](https://github.com/LuisMatheus/pix-api/actions/workflows/generate-openapi.yml/badge.svg?branch=master)](https://github.com/LuisMatheus/pix-api/actions/workflows/generate-openapi.yml)
+[![Publicar Redoc](https://github.com/LuisMatheus/pix-api/actions/workflows/publish-docs.yml/badge.svg?branch=master)](https://github.com/LuisMatheus/pix-api/actions/workflows/publish-docs.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # [Especificação da API Pix](https://luismatheus.github.io/pix-api/)
 
