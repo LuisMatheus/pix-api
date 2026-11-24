@@ -12,3 +12,16 @@ rules:
   no-invalid-media-type-examples:
     severity: off
     allowAdditionalProperties: true
+
+plugins:
+  - ./scripts/descricao-redoc.mjs
+
+apis:
+  pix:
+    root: ./spec/openapi.yaml
+    decorators:
+      descricao-redoc/compor-secoes:
+        arquivos:
+          - spec/01 - API Pix/descricao.md
+          - spec/02 - Evolução da API Pix/descricao.md
+          - spec/03 - Tratamento de erros/descricao.md

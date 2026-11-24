@@ -1,0 +1,13 @@
+      type: "object"
+      title: "Recorrência Notificada"
+      required: ["idRec","status",atualizacao"]
+      description: "Atributos de Notificação de Recorrência"
+      allOf:
+        - type: "object"
+          properties:
+            idRec:
+              $ref: "../../06 - Gerenciamento de recorrências/schemas/RecId.yaml"
+        - $ref: "../../06 - Gerenciamento de recorrências/schemas/RecStatus.yaml"
+        - $ref: "../../06 - Gerenciamento de recorrências/schemas/RecAtualizacao.yaml"
+        - $ref: "../../06 - Gerenciamento de recorrências/schemas/RecEncerramento.yaml"
+        - $ref: "../../06 - Gerenciamento de recorrências/schemas/RecAtivacao.yaml"

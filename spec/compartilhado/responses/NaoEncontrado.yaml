@@ -1,8 +1,0 @@
-      description: "Recurso solicitado não foi encontrado."
-      content:
-        application/problem+json:
-          schema:
-            $ref: "../schemas/erros/Problema.yaml"
-          examples:
-            exemplo1:
-              $ref: "../examples/erros/NaoEncontradoExample1.yaml"

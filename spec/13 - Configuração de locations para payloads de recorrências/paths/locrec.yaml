@@ -1,0 +1,75 @@
+    post:
+      tags:
+        - "PayloadLocationRec"
+      summary: "Criar location do payload."
+      security:
+        - OAuth2: [payloadlocationrec.write]
+      description: |-
+        Criar location do payload
+      responses:
+        "201":
+          description: "Dados da location do Payload."
+          headers:
+            location:
+              schema:
+                type: "string"
+                format: "uri"
+                title: "Identificador da location criada."
+                description: "Identificador da location criada."
+                example: "pix.example.com/api/loc/1234567"
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/PayloadLocationRecGerada.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/payloadLocationRecResponse2.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"
+    get:
+      parameters:
+        - in: "query"
+          name: "inicio"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Inicio.yaml"
+        - in: "query"
+          name: "fim"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Fim.yaml"
+        - name: "idRecPresente"
+          in: "query"
+          schema:
+            type: "boolean"
+        - name: "convenio"
+          in: "query"
+          schema:
+            type: "string"
+            title: "Convênio"
+            maxLength: 60
+            description: "Filtro pelo convênio associado."
+        - $ref: "../../compartilhado/parameters/paginaAtual.yaml"
+        - $ref: "../../compartilhado/parameters/itensPorPagina.yaml"
+      tags:
+        - "PayloadLocationRec"
+      summary: "Consultar locations cadastradas."
+      security:
+        - OAuth2: [payloadlocationrec.read]
+      description: "Endpoint para consultar locations cadastradas"
+      responses:
+        "200":
+          description: "lista dos locations cadastrados de acordo com o critério de busca."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/PayloadLocationRecConsultadas.yaml"
+              examples:
+                getPayloadLocationsRec:
+                  $ref: "../examples/getPayloadLocationRec1.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"

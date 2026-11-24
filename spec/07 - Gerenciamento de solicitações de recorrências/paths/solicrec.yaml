@@ -1,0 +1,34 @@
+    post:
+      tags:
+        - "SolicRec"
+      summary: "Criar solicitação de confirmação de recorrência."
+      security:
+        - OAuth2: [solicrec.write]
+      description: "Criar solicitação de confirmação de recorrência."
+      requestBody:
+        $ref: "../requestBodies/SolicRecBody.yaml"
+      responses:
+        "201":
+          description: "Solicitação de recorrência criada"
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/SolicRecCompleta.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/solicRecResponse1.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../03 - Tratamento de erros/schemas/Problema.yaml"
+              examples:
+                requisicao1:
+                  $ref: "../examples/erros/OperacaoInvalidaSolicRecExample1.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../03 - Tratamento de erros/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"

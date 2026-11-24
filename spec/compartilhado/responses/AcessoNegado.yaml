@@ -1,8 +1,0 @@
-      description: "Requisição de participante autenticado que viola alguma regra de autorização."
-      content:
-        application/problem+json:
-          schema:
-            $ref: "../schemas/erros/Problema.yaml"
-          examples:
-            exemplo1:
-              $ref: "../examples/erros/AcessoNegadoExample1.yaml"

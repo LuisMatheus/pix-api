@@ -1,9 +1,0 @@
-      type: "object"
-      title: "Location do Payload Completa"
-      description: "Identificador da localização do payload completo."
-      allOf:
-        - $ref: "PayloadLocationRecGerada.yaml"
-        - type: "object"
-          properties:
-            idRec:
-              $ref: "../../Rec/schemas/RecId.yaml"

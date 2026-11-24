@@ -1,0 +1,32 @@
+      type: "object"
+      title: "Recorrência Gerada"
+      required: ["recebedor"]
+      description: "Atributos de Configuração de Recorrência"
+      allOf:
+        - type: "object"
+          properties:
+            idRec:
+              $ref: "RecId.yaml"
+        - $ref: "RecBase.yaml"
+        - type: "object"
+          properties:
+            recebedor:
+              oneOf:
+                - $ref: "PessoaJuridicaRecorrencia.yaml"
+              allOf:
+                - type: "object"
+                  properties:
+                    convenio:
+                      type: "string"
+                      title: "Convênio"
+                      description: "Convênio entre usuário e participante recebedor."
+                      maxLength: 60
+        - $ref: "RecStatus.yaml"
+        - type: "object"
+          properties:
+            loc:
+              allOf:
+                - $ref: "../../13 - Configuração de locations para payloads de recorrências/schemas/PayloadLocationRecCompleta.yaml"
+        - $ref: "RecAtualizacao.yaml"
+        - $ref: "RecEncerramento.yaml"
+        - $ref: "RecAtivacao.yaml"

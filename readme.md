@@ -24,34 +24,35 @@ A geração usa `redocly bundle` para reunir os módulos e converter suas refer�
 
 ```text
 spec/
-  openapi.yaml                 # Metadados, tags e referências
-  CobPayload/
-  RecPayload/
-  Rec/
-  SolicRec/
-  CobR/
-  Cob/
-    paths/
-    schemas/
-    requestBodies/
-    examples/
-  CobV/
-  LoteCobV/
-  PayloadLocation/
-  PayloadLocationRec/
-  Pix/
-  Webhook/
-  WebhookRec/
-  WebhookCobR/
-  WebhookCob/
-  WebhookCobV/
-  compartilhado/              # Bases reutilizadas, erros gerais, tributos e OAuth2
-scripts/                       # Geração e verificação
+  openapi.yaml
+  01 - API Pix/
+  02 - Evolução da API Pix/
+  03 - Tratamento de erros/
+  04 - Reúne endpoints (locations) que retornam o Payload JSON que representa uma Cobrança/
+  05 - Reúne endpoints (locations) que retornam o Payload JSON que representa uma Recorrência/
+  06 - Gerenciamento de recorrências/
+  07 - Gerenciamento de solicitações de recorrências/
+  08 - Gerenciamento de cobranças associadas a uma recorrência/
+  09 - Gerenciamento de cobranças para pagamento imediato/
+  10 - Gerenciamento de cobranças com vencimento/
+  11 - Gerenciamento de cobranças com vencimento em lote/
+  12 - Configuração de locations para payloads/
+  13 - Configuração de locations para payloads de recorrências/
+  14 - Gerenciamento de Pix recebidos/
+  15 - Gerenciamento de notificações/
+  16 - Gerenciamento de notificações de recorrências/
+  17 - Gerenciamento de notificações de cobranças recorrentes/
+  18 - Gerenciamento de notificações de cobranças imediatas/
+  19 - Gerenciamento de notificações de cobranças com vencimento/
+  compartilhado/
+scripts/
 ```
 
-As pastas usam o identificador `name` das tags que aparecem no menu do Redoc. Por exemplo, a seção de gerenciamento de cobranças imediatas usa a tag `Cob`. Os títulos de introdução, evolução e tratamento de erros fazem parte da descrição geral em `spec/openapi.yaml`.
+Os nomes das pastas seguem os títulos do menu do Redoc. Os prefixos numéricos reproduzem a ordem do menu no explorador de arquivos. As três primeiras pastas fornecem os textos de `info.description`, reunidos pelo Redocly na ordem configurada em `redocly.yaml`. A pasta `03 - Tratamento de erros/` também contém os modelos, exemplos e respostas de erro usados em várias operações.
 
-As operações de um mesmo caminho ficam juntas. O arquivo `spec/Cob/paths/cob-txid.yaml` reúne as operações de `/cob/{txid}`. Os callbacks ficam junto da operação que cadastra a URL de notificação. Use `$ref` para reutilizar componentes entre tags. O Redocly preserva como dados os `$ref` dentro de `value` e `example`. Use dados literais nesses campos e referências a exemplos completos nas entradas de `examples`.
+As pastas de operações reúnem `paths/`, `schemas/`, `requestBodies/` e `examples/` conforme necessário. Por exemplo, `spec/09 - Gerenciamento de cobranças para pagamento imediato/paths/cob-txid.yaml` reúne as operações de `/cob/{txid}`. Os callbacks ficam junto da operação que cadastra a URL de notificação. Componentes como paginação, tributos e OAuth2 ficam em `compartilhado/`.
+
+Use `$ref` para reutilizar componentes entre seções. O Redocly preserva como dados os `$ref` dentro de `value` e `example`. Use dados literais nesses campos e referências a exemplos completos nas entradas de `examples`.
 
 ### Execução local (padrão)
 

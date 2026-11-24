@@ -1,0 +1,99 @@
+    get:
+      parameters:
+        - in: "query"
+          name: "inicio"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Inicio.yaml"
+        - in: "query"
+          name: "fim"
+          required: true
+          schema:
+            $ref: "../../compartilhado/schemas/comuns/Fim.yaml"
+        - name: "cpf"
+          in: "query"
+          schema:
+            type: "string"
+            title: "CPF"
+            pattern: "/^\\d{11}$/"
+            description: "Filtro pelo CPF do devedor. Não pode ser utilizado ao mesmo tempo que o CNPJ."
+        - name: "cnpj"
+          in: "query"
+          schema:
+            type: "string"
+            title: "CNPJ"
+            pattern: "^[0-9A-Z]{14}$"
+            description: "Filtro pelo CNPJ do devedor. Não pode ser utilizado ao mesmo tempo que o CPF."
+        - name: "locationPresente"
+          in: "query"
+          schema:
+            type: "boolean"
+        - name: "status"
+          in: "query"
+          schema:
+            type: "string"
+            title: "Status do registro da recorrência"
+            description: "Filtro pelo status da recorrência."
+        - name: "convenio"
+          in: "query"
+          schema:
+            type: "string"
+            title: "Convênio"
+            maxLength: 60
+            description: "Filtro pelo convênio associado."
+        - $ref: "../../compartilhado/parameters/paginaAtual.yaml"
+        - $ref: "../../compartilhado/parameters/itensPorPagina.yaml"
+      tags:
+        - "Rec"
+      summary: "Consultar lista de recorrências."
+      security:
+        - OAuth2: [rec.read]
+      description: "Consultar lista de recorrências."
+      responses:
+        "200":
+          description: "OK"
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/RecsConsultadas.yaml"
+              examples:
+                retorno1:
+                  $ref: "../examples/getRec1.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"
+    post:
+      tags:
+        - "Rec"
+      summary: "Criar recorrência."
+      security:
+        - OAuth2: [rec.write]
+      description: "Criar recorrência"
+      requestBody:
+        $ref: "../requestBodies/RecBody.yaml"
+      responses:
+        "201":
+          description: "Recorrência criada"
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/RecGerada.yaml"
+              examples:
+                retorno1:
+                  $ref: "../examples/recResponse1.yaml"
+                retorno2:
+                  $ref: "../examples/recResponse2.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../03 - Tratamento de erros/schemas/Problema.yaml"
+              examples:
+                requisicao1:
+                  $ref: "../examples/erros/OperacaoInvalidaRecExample1.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"

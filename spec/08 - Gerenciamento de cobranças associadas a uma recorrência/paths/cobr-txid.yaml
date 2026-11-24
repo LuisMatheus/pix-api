@@ -1,0 +1,102 @@
+    parameters:
+      - name: txid
+        in: path
+        required: true
+        schema:
+          $ref: "../../compartilhado/schemas/comuns/TxId.yaml"
+    put:
+      tags:
+        - "CobR"
+      summary: "Criar cobrança recorrente."
+      security:
+        - OAuth2: [cobr.write]
+      description: |-
+        Endpoint para criar uma cobrança recorrente.
+      requestBody:
+        $ref: "../requestBodies/CobRBody.yaml"
+      responses:
+        "201":
+          description: "Cobrança imediata recorrente."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/CobRGerada.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/cobRResponse2.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../03 - Tratamento de erros/schemas/Problema.yaml"
+              examples:
+                requisicao1:
+                  $ref: "../examples/erros/OperacaoInvalidaCobRExample1.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../03 - Tratamento de erros/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"
+    patch:
+      tags:
+        - "CobR"
+      summary: "Revisar cobrança recorrente."
+      security:
+        - OAuth2: [cobr.write]
+      requestBody:
+        $ref: "../requestBodies/CobRBodyRevisada.yaml"
+      responses:
+        "200":
+          description: "Cobrança recorrente revisada."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/CobRGerada.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/cobRResponse4.yaml"
+        "400":
+          description: "Requisição com formato inválido."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "../../03 - Tratamento de erros/schemas/Problema.yaml"
+              examples:
+                exemplo1:
+                  $ref: "../examples/erros/OperacaoInvalidaCobRExample2.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../03 - Tratamento de erros/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"
+    get:
+      tags:
+        - "CobR"
+      summary: "Consultar cobrança recorrente."
+      security:
+        - OAuth2: [cobr.read]
+      description: |-
+        Endpoint para consultar uma cobrança recorrente através de um determinado txid.
+      responses:
+        "200":
+          description: "Dados da cobrança recorrente."
+          content:
+            "application/json":
+              schema:
+                $ref: "../schemas/CobRCompleta.yaml"
+              examples:
+                response1:
+                  $ref: "../examples/cobRResponse2.yaml"
+                response2:
+                  $ref: "../examples/cobRResponse3.yaml"
+                response3:
+                  $ref: "../examples/cobRResponse4.yaml"
+        "403":
+          $ref: "../../03 - Tratamento de erros/responses/AcessoNegado.yaml"
+        "404":
+          $ref: "../../03 - Tratamento de erros/responses/NaoEncontrado.yaml"
+        "503":
+          $ref: "../../03 - Tratamento de erros/responses/ServicoIndisponivel.yaml"

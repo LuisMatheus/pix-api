@@ -1,0 +1,23 @@
+      description: "Dados para geração de lote de cobranças com vencimento."
+      required: true
+      content:
+        "application/json":
+          schema:
+            required: ["descricao", "cobsv"]
+            properties:
+              descricao:
+                type: "string"
+                title: "Descrição do lote"
+              cobsv:
+                type: "array"
+                items:
+                  allOf:
+                    - type: "object"
+                      required: ["txid"]
+                      properties:
+                        txid:
+                          $ref: "../../compartilhado/schemas/comuns/TxId.yaml"
+                    - $ref: "../../10 - Gerenciamento de cobranças com vencimento/schemas/CobVSolicitada.yaml"
+          examples:
+            exemplo1:
+              $ref: "../examples/loteCobVBody1.yaml"
