@@ -100,6 +100,29 @@ O commit automático feito com `GITHUB_TOKEN` não dispara outro workflow de pus
 
 Você também pode executar **Gerar OpenAPI** manualmente na aba **Actions**, selecionando **Run workflow**. Na branch `master`, o contrato é atualizado automaticamente e a conclusão bem-sucedida também inicia o workflow separado de publicação. Nas demais branches, o contrato é disponibilizado como artefato, sem push nem publicação automática da página. Para republicar a documentação sem gerar novamente o contrato, execute **Publicar documentação Redoc** manualmente na `master`; nesse caso, ele usa o `openapi.yaml` versionado no commit selecionado.
 
+### Releases do fork
+
+O workflow `release.yml` publica uma release automaticamente quando uma tag `fork-v*` é enviada. O versionamento do fork é independente da versão da API Pix: uma tag como `fork-v1.0.0` não altera `info.version` no contrato nem substitui as tags herdadas do Banco Central.
+
+Antes de criar a tag, aguarde a geração do contrato terminar e atualize sua `master` local. Para publicar uma versão estável do fork:
+
+```bash
+git switch master
+git pull --ff-only origin master
+git tag -a fork-v1.0.0 -m "Release 1.0.0 do fork"
+git push origin fork-v1.0.0
+```
+
+Escolha uma versão nova a cada release. Para uma pré-release, use uma tag como `fork-v1.1.0-rc.1`; o workflow reconhece o sufixo e marca a release como pré-release. Tags SemVer inválidas são recusadas.
+
+O workflow gera o contrato e exige que ele corresponda ao `openapi.yaml` versionado na tag. Em seguida, gera o Redoc e publica estes arquivos em [Releases do fork](https://github.com/LuisMatheus/pix-api/releases):
+
+- `openapi.yaml`: contrato da versão publicada.
+- `redoc.html`: documentação correspondente, com os scripts carregados pela CDN da Redocly.
+- `SHA256SUMS`: checksums SHA256 dos dois arquivos.
+
+As notas da release são geradas pelo GitHub, com uma identificação do fork. A release é preparada como rascunho e publicada depois do envio dos arquivos. Se o envio falhar, a execução pode ser repetida para completar o rascunho. Uma release já publicada não é sobrescrita.
+
 ### Aprovação do gestor (opcional)
 
 O fluxo atual de geração funciona sem etapa de aprovação. Para exigir aprovação futuramente, um administrador pode configurar a proteção da `master` no GitHub:
@@ -178,12 +201,30 @@ Para encerrar a visualização:
 docker rm -f pix-api-docs
 ```
 
+#### Simular uma release — `release.yml`
+
+O evento abaixo simula o envio de uma tag, sem criar uma tag local ou remota:
+
+```bash
+printf '%s\n' '{"ref":"refs/tags/fork-v0.0.0-local"}' > /tmp/pix-api-release-event.json
+act push -W .github/workflows/release.yml -e /tmp/pix-api-release-event.json \
+  --artifact-server-path "$PWD/reports/act-release-artifacts"
+```
+
+O pacote gerado fica no artefato `release-fork-v0.0.0-local`, dentro de `reports/act-release-artifacts`. A simulação gera os arquivos e verifica os checksums; a criação da release no GitHub fica desativada durante o `act`.
+
 #### Listar os workflows
 
-Todos os workflows aceitam execução manual. Para listar seus jobs:
+Para listar os workflows de execução manual:
 
 ```bash
 act workflow_dispatch --list
+```
+
+O workflow de release usa o evento de push de tag. Para listar seu job:
+
+```bash
+act push -W .github/workflows/release.yml --list
 ```
 
 A imagem de execução está configurada em `.actrc`. O `act` copia os arquivos locais para os containers, inclusive alterações ainda sem commit.

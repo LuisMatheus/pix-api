@@ -1,0 +1,93 @@
+name: Publicar release do fork
+
+on:
+  push:
+    tags: ['fork-v*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Preparar e publicar release
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+      - name: Validar versão do fork
+        id: version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { appendFileSync } from 'node:fs';
+          const tag = process.env.RELEASE_TAG;
+          const match = /^fork-v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/.exec(tag);
+          const invalidPrerelease = match?.[4]?.split('.').some(id => /^[0-9]+$/.test(id) && id.length > 1 && id.startsWith('0'));
+          if (!match || match[0] !== tag || invalidPrerelease) throw new Error('Use uma tag SemVer do fork, como fork-v1.0.0 ou fork-v1.1.0-rc.1.');
+          appendFileSync(process.env.GITHUB_OUTPUT, `tag=${tag}\nprerelease=${Boolean(match[4])}\n`);
+          console.log(`Release: ${tag}; pré-release: ${Boolean(match[4])}.`);
+          NODE
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Gerar contrato da tag
+        run: |
+          npm run bundle
+          git diff --exit-code -- openapi.yaml
+      - name: Gerar documentação Redoc
+        run: npm run build:docs
+      - name: Preparar arquivos da release
+        run: |
+          mkdir -p reports/release
+          cp openapi.yaml reports/release/openapi.yaml
+          cp site/index.html reports/release/redoc.html
+          cd reports/release
+          sha256sum openapi.yaml redoc.html > SHA256SUMS
+          sha256sum --check SHA256SUMS
+      - name: Disponibilizar pacote da release
+        if: ${{ !env.ACT || env.ACTIONS_RUNTIME_URL != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ steps.version.outputs.tag }}
+          path: reports/release/
+          if-no-files-found: error
+      - name: Publicar release no GitHub
+        if: ${{ !env.ACT }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          IS_PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          state=$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft' 2>/dev/null || true)
+          if [ "$state" = 'false' ]; then
+            echo "A release $RELEASE_TAG já foi publicada; seu conteúdo será preservado."
+            exit 0
+          fi
+          if [ "$state" != 'true' ]; then
+            gh release create "$RELEASE_TAG" --draft --verify-tag \
+              --title "$RELEASE_TAG" --generate-notes \
+              --notes "Distribuição do fork $GH_REPO. A versão da API Pix permanece em info.version do contrato anexado. O redoc.html usa a CDN da Redocly, assim como a página publicada."
+          fi
+          gh release upload "$RELEASE_TAG" \
+            reports/release/openapi.yaml reports/release/redoc.html reports/release/SHA256SUMS \
+            --clobber
+          gh release edit "$RELEASE_TAG" --draft=false --prerelease="$IS_PRERELEASE"
+      - name: Informar resultado local
+        if: ${{ env.ACT }}
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          IS_PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          echo "Simulação da release $RELEASE_TAG; pré-release: $IS_PRERELEASE."
+          echo 'Arquivos preparados: openapi.yaml, redoc.html e SHA256SUMS.'
+          echo 'Com act, nenhuma tag ou release é criada no GitHub.'
