@@ -1,0 +1,22 @@
+      type: "object"
+      title: "Recorrência Solicitada"
+      description: "Atributos de Configuração de Recorrência"
+      allOf:
+        - $ref: "RecBase.yaml"
+        - type: "object"
+          properties:
+            recebedor:
+              type: "object"
+              properties:
+                convenio:
+                  type: "string"
+                  title: "Convênio"
+                  description: "Convênio entre usuário e participante recebedor."
+                  maxLength: 60
+        - $ref: "RecConfiguracao.yaml"
+        - type: "object"
+          properties:
+            loc:
+              allOf:
+                - $ref: "../../PayloadLocationRec/schemas/PayloadLocationRecId.yaml"
+        - $ref: "RecAtivacaoSolicitada.yaml"

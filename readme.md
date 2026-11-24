@@ -24,22 +24,34 @@ A geração usa `redocly bundle` para reunir os módulos e converter suas refer�
 
 ```text
 spec/
-  openapi.yaml                 # Metadados e referências
-  pix/                         # Pix recebidos, devoluções e webhooks de recebimento
-  cobranca-imediata/
-  cobranca-com-vencimento/
-  pix-automatico/
-    paths/                     # Um arquivo por caminho
+  openapi.yaml                 # Metadados, tags e referências
+  CobPayload/
+  RecPayload/
+  Rec/
+  SolicRec/
+  CobR/
+  Cob/
+    paths/
     schemas/
     requestBodies/
     examples/
-  compartilhado/              # Locations de cobrança e componentes reutilizados
+  CobV/
+  LoteCobV/
+  PayloadLocation/
+  PayloadLocationRec/
+  Pix/
+  Webhook/
+  WebhookRec/
+  WebhookCobR/
+  WebhookCob/
+  WebhookCobV/
+  compartilhado/              # Bases reutilizadas, erros gerais, tributos e OAuth2
 scripts/                       # Geração e verificação
 ```
 
-Cada jornada reúne rotas, modelos, exemplos e corpos de requisição nas subpastas correspondentes. O Pix Automático inclui as recorrências, as solicitações de recorrência e as cobranças recorrentes. As locations para cobranças imediatas ou com vencimento ficam em `compartilhado/`, junto a componentes comuns como paginação, erros gerais, tributos e OAuth2. [Estudo da organização por jornada](docs/estudo-estrutura-por-jornada.md)
+As pastas usam o identificador `name` das tags que aparecem no menu do Redoc. Por exemplo, a seção de gerenciamento de cobranças imediatas usa a tag `Cob`. Os títulos de introdução, evolução e tratamento de erros fazem parte da descrição geral em `spec/openapi.yaml`.
 
-As operações de um mesmo caminho ficam juntas. Por exemplo, `spec/cobranca-imediata/paths/cob-txid.yaml` reúne as operações de `/cob/{txid}`. Os callbacks permanecem junto da operação que cadastra a URL de notificação. Use `$ref` para reutilizar modelos e exemplos. O Redocly mantém como texto as referências dentro dos dados de exemplos. Nesses casos, use o caminho interno do contrato final, como `#/components/examples/cobResponse1/value`.
+As operações de um mesmo caminho ficam juntas. O arquivo `spec/Cob/paths/cob-txid.yaml` reúne as operações de `/cob/{txid}`. Os callbacks ficam junto da operação que cadastra a URL de notificação. Use `$ref` para reutilizar componentes entre tags. O Redocly preserva como dados os `$ref` dentro de `value` e `example`. Use dados literais nesses campos e referências a exemplos completos nas entradas de `examples`.
 
 ### Execução local (padrão)
 

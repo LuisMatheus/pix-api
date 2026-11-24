@@ -1,0 +1,42 @@
+      type: "object"
+      title: "Cobrança Recorrente Notificada"
+      required: ["idRec", "txid", "status", "atualizacao"]
+      description: "Dados enviados para notificação da cobrança recorrente via API Pix"
+      allOf:
+        - type: "object"
+          properties:
+            idRec:
+              $ref: "../../Rec/schemas/RecId.yaml"
+        - type: "object"
+          properties:
+            txid:
+              $ref: "../../compartilhado/schemas/comuns/TxId.yaml"
+        - $ref: "../../CobR/schemas/CobRStatus.yaml"
+        - $ref: "../../CobR/schemas/CobRAtualizacao.yaml"
+        - $ref: "../../CobR/schemas/CobRTentativas.yaml"
+        - type: "object"
+          properties:
+            valor:
+              type: "object"
+              title: "Valor da cobrança recorrente"
+              required: ["original"]
+              description: "Valor da cobrança recorrente. Deve ser preenchido quando houver informação de tributo preenchida."
+              properties:
+                original:
+                  type: "string"
+                  title: "Valor"
+                  pattern: "\\d{1,10}\\.\\d{2}"
+                  description: "Valor original da cobrança."
+        - type: "object"
+          properties:
+            tributo:
+              $ref: "../../compartilhado/schemas/tributos/TributoCompleto.yaml"
+        - $ref: "../../compartilhado/schemas/tributos/ValorLiquidoEstimado.yaml"
+        - type: "object"
+          properties:
+            pix:
+              type: "array"
+              title: "Pix recebidos"
+              items:
+                allOf:
+                  - $ref: "../../CobR/schemas/PixAutomaticoConsultado.yaml"

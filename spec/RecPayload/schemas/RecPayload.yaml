@@ -1,0 +1,26 @@
+      type: "object"
+      title: "Payload da Recorrência"
+      required: ["idRec","atualizacao","recebedor"]
+      description: "Atributos de Configuração de Recorrência"
+      allOf:
+        - type: "object"
+          properties:
+            idRec:
+              $ref: "../../Rec/schemas/RecId.yaml"
+        - $ref: "../../Rec/schemas/RecBase.yaml"
+        - type: "object"
+          properties:
+            recebedor:
+              oneOf:
+                - $ref: "../../Rec/schemas/PessoaJuridicaRecorrencia.yaml"
+              allOf:
+                - type: "object"
+                  required: ["ispbParticipante"]
+                  properties:
+                    ispbParticipante:
+                      type: "string"
+                      title: "ISPB do usuário recebedor."
+                      description: "ISPB do usuário recebedor."
+                      pattern: "^[0-9A-Z]{8}$"
+        - $ref: "../../Rec/schemas/RecConfiguracao.yaml"
+        - $ref: "../../Rec/schemas/RecAtualizacao.yaml"

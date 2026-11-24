@@ -1,0 +1,15 @@
+      type: "object"
+      title: "Cobrança Recorrente Solicitada"
+      required: ["idRec", "calendario", "valor", "recebedor"]
+      description: "Dados enviados para criação da cobrança recorrente via API Pix"
+      allOf:
+        - type: "object"
+          properties:
+            idRec:
+              $ref: "../../Rec/schemas/RecId.yaml"
+        - $ref: "CobRBase.yaml"
+        - $ref: "DadosDevedorRecorrencia.yaml"
+        - type: "object"
+          properties:
+            tributo:
+              $ref: "../../compartilhado/schemas/tributos/TributoInformadoSolicitado.yaml"

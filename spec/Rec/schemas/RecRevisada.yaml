@@ -1,0 +1,57 @@
+      type: "object"
+      title: "Recorrência Revisada"
+      description: "Atributos de Revisão da Configuração de Recorrência"
+      allOf:
+        - type: "object"
+          title: "Status da Recorrência"
+          properties:
+            status:
+              type: "string"
+              title: "Status do registro da recorrência"
+              enum:
+                - "CANCELADA"
+        - type: "object"
+          properties:
+            vinculo:
+              type: "object"
+              properties:
+                devedor:
+                  description: "O objeto devedor organiza as informações sobre o devedor da recorrência."
+                  oneOf:
+                    -  type: "object"
+                       required: ["nome"]
+                       title: "Pessoa Física"
+                       properties:
+                        nome:
+                          type: "string"
+                          title: "Nome"
+                          description: "Nome do usuário."
+                          maxLength: 140
+                    -  type: "object"
+                       required: ["nome"]
+                       title: "Pessoa Jurídica"
+                       properties:
+                        nome:
+                          type: "string"
+                          title: "Nome"
+                          description: "Nome do usuário."
+                          maxLength: 140
+        - type: "object"
+          properties:
+            loc:
+              allOf:
+                - $ref: "../../PayloadLocationRec/schemas/PayloadLocationRecId.yaml"
+        - type: "object"
+          properties:
+            calendario:
+              type: "object"
+              title: "Informações sobre calendário da recorrência"
+              description: "Informações sobre calendário da recorrência"
+              properties:
+                dataInicial:
+                  type: "string"
+                  format: "date"
+                  title: "Data estimada de primeiro pagamento."
+                  description: "Trata-se de uma data, no formato `YYYY-MM-DD`, segundo ISO 8601. Data estimada de primeiro pagamento."
+                  example: "2023-04-01"
+        - $ref: "RecAtivacaoSolicitada.yaml"
