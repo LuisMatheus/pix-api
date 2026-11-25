@@ -4736,14 +4736,55 @@ components:
             paginaAtual: 0
             itensPorPagina: 100
             quantidadeDePaginas: 1
-            quantidadeTotalDeItens: 2
+            quantidadeTotalDeItens: 3
         pix:
-          - allOf:
-              - $ref: '#/components/examples/pixResponse1/value'
-          - allOf:
-              - $ref: '#/components/examples/pixResponse2/value'
-          - allOf:
-              - $ref: '#/components/examples/pixResponse3/value'
+          - endToEndId: E12345678202009091221abcdef12345
+            txid: cd1fe328c875481285a6f233ae41b662
+            valor: '100.00'
+            horario: '2020-09-10T13:03:33.902Z'
+            infoPagador: Reforma da casa
+            tributo:
+              documentoFiscal:
+                chaveDeAcesso: laos93846878sdjadhjda6768adkj14814
+              cbs:
+                segregado:
+                  valor: '3.50'
+                  data: '2020-09-10T21:01:22.202Z'
+                informado:
+                  valor: '3.50'
+                  data: '2020-09-10T13:03:33.902Z'
+              ibs:
+                segregado:
+                  valor: '6.60'
+                  data: '2020-09-10T21:01:22.202Z'
+                informado:
+                  valor: '6.60'
+                  data: '2020-09-10T13:03:33.902Z'
+            valorLiquido: '89.90'
+            devolucoes:
+              - id: 000AAA111
+                rtrId: D12345678202009091000abcde123456
+                valor: '11.00'
+                horario:
+                  solicitacao: '2020-09-10T13:03:33.902Z'
+                status: EM_PROCESSAMENTO
+          - endToEndId: E12345678202009091221ghijk78901234
+            txid: 5b933948f3224266b1050ac54319e775
+            valor: '200.00'
+            horario: '2020-09-10T13:03:33.902Z'
+            infoPagador: Revisão do carro
+          - endToEndId: E88631478202009091221ghijk78901234
+            txid: 82433415910c47e5adb6ac3527cca160
+            valor: '200.00'
+            componentesValor:
+              original:
+                valor: '180.00'
+              saque:
+                valor: '20.00'
+                modalidadeAgente: AGFSS
+                prestadorDeServicoDeSaque: '12345678'
+            horario: '2020-09-10T13:03:33.902Z'
+            infoPagador: Saque Pix
     getLotesCobsV:
       summary: Exemplo de retorno da consulta de Pix 1
       value:

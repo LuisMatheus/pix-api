@@ -88,6 +88,10 @@ O Redoc é gerado em `site/` usando `redocly build-docs`. Para reduzir o HTML, o
 
 Se preferir gerar o contrato pelo Docker, execute `./scripts/docker-tools.sh bundle`. O script usa as dependências de `package-lock.json` em um container temporário e grava o `openapi.yaml` no computador.
 
+### Editar os exemplos de `GET /pix` no VS Code
+
+Na pasta de exemplos de Pix recebidos, edite `getPix1.yaml` para alterar o exemplo de consulta. Os objetos em `value.pix` são os dados exibidos na resposta. Ao adicionar ou remover itens, ajuste a paginação do exemplo. Abra a prévia da 42Crunch para `spec/openapi.yaml` durante a edição e rode `npm run bundle` antes de abrir o PR.
+
 ### Validação do contrato e pendências existentes
 
 A validação usa o lint do Redocly e a comparação de compatibilidade do oasdiff nos PRs. Para executar o lint localmente:

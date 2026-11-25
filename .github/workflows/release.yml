@@ -32,10 +32,8 @@ jobs:
         run: node scripts/release-changelog.mjs validate
       - name: Instalar dependências
         run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Gerar contrato da tag
-        run: |
-          npm run bundle
-          git diff --exit-code -- openapi.yaml
+      - name: Conferir contrato da tag
+        run: npm run check:bundle
       - name: Gerar documentação Redoc
         run: npm run build:docs
       - name: Gerar changelog do contrato em português
