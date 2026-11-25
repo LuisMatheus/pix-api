@@ -30,7 +30,7 @@
           description: "Filtro pela finalidade MED. Quando preenchido com `true` apenas os Pix (PACS008) cuja finalidade seja uma devolução no âmbito do MED serão retornados. Quando preenchido com `false` todos os Pix que não forem MED serão retornados. Na ausência deste filtro, qualquer Pix que atenda aos demais parâmetros de pesquisa será retornado na resposta."
         cpf:
           type: "string"
-          pattern: "/^\\d{11}$/"
+          pattern: "^\\d{11}$"
           description: "CPF"
         cnpj:
           type: "string"

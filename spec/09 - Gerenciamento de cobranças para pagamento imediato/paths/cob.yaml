@@ -54,7 +54,7 @@
           schema:
             type: "string"
             title: "CPF"
-            pattern: "/^\\d{11}$/"
+            pattern: "^\\d{11}$"
             description: "Filtro pelo CPF do devedor. Não pode ser utilizado ao mesmo tempo que o CNPJ."
         - name: "cnpj"
           in: "query"

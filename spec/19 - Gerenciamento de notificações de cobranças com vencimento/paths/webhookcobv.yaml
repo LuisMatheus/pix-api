@@ -5,7 +5,7 @@
       description: |
         Endpoint para configuração do serviço de notificações acerca de cobranças recorrentes. Somente cobranças recorrentes associadas ao usuário recebedor serão notificadas.
       security:
-        - OAuth2: [webhookcobV.write]
+        - OAuth2: [webhookcobv.write]
       requestBody:
         $ref: "../requestBodies/WebhookCobVConfigBody.yaml"
       responses:

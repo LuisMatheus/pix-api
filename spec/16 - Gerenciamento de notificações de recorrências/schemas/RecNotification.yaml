@@ -1,6 +1,6 @@
       type: "object"
       title: "Recorrência Notificada"
-      required: ["idRec","status",atualizacao"]
+      required: ["idRec","status","atualizacao"]
       description: "Atributos de Notificação de Recorrência"
       allOf:
         - type: "object"
