@@ -94,6 +94,8 @@ Na pasta de exemplos de Pix recebidos, edite `getPix1.yaml` para alterar o exemp
 
 ### Validação do contrato e pendências existentes
 
+O [guia de testes](tests/README.md) descreve as validações de contrato e quando adicionar testes de requisição.
+
 A validação usa o lint do Redocly e a comparação de compatibilidade do oasdiff nos PRs. Para executar o lint localmente:
 
 ```bash

@@ -1,6 +1,6 @@
       summary: "Exemplo de Pix 2"
       value:
-        endToEndId: "E12345678202009091221ghijk78901234"
+        endToEndId: "E12345678202009091221ghijk789012"
         txid: "5b933948f3224266b1050ac54319e775"
         valor: "200.00"
         horario: "2020-09-10T13:03:33.902Z"
