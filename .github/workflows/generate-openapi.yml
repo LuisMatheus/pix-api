@@ -37,14 +37,13 @@ jobs:
         if: ${{ inputs.run_lint }}
         run: npm run lint
       - name: Disponibilizar openapi.yaml
-        if: ${{ !env.ACT || env.ACTIONS_RUNTIME_URL != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: openapi-contract
           path: openapi.yaml
           if-no-files-found: error
       - name: Atualizar openapi.yaml na master
-        if: ${{ !env.ACT && github.ref == 'refs/heads/master' }}
+        if: github.ref == 'refs/heads/master'
         shell: sh
         run: |
           set -eu
@@ -59,10 +58,3 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit --only -m 'chore: regenerate openapi.yaml' -- openapi.yaml
           git push origin HEAD:refs/heads/master
-      - name: Informar resultado local
-        if: ${{ env.ACT }}
-        run: |
-          echo 'Contrato gerado. Commits e pushes são executados somente no GitHub.'
-          if [ -z "${ACTIONS_RUNTIME_URL:-}" ]; then
-            echo 'Para salvar o artefato com act, adicione --artifact-server-path "$PWD/reports/act-artifacts".'
-          fi

@@ -86,6 +86,8 @@ O Redoc é gerado em `site/` usando `redocly build-docs`. Para reduzir o HTML, o
 
 `check:bundle` confere se o arquivo da raiz corresponde aos módulos atuais em `spec/`.
 
+Se preferir gerar o contrato pelo Docker, execute `./scripts/docker-tools.sh bundle`. O script usa as dependências de `package-lock.json` em um container temporário e grava o `openapi.yaml` no computador.
+
 ### Validação do contrato e pendências existentes
 
 A validação usa o lint do Redocly e a comparação de compatibilidade do oasdiff nos PRs. Para executar o lint localmente:
@@ -107,6 +109,8 @@ Para retomar uma regra, altere sua severidade de `off` para `error` em `redocly.
 ### Geração automática e publicação
 
 `quality-gate.yml` confere o arquivo gerado e executa o lint quando `run_lint` estiver habilitado. Nos PRs, o `oasdiff` gera um relatório de compatibilidade em português, disponível no resumo da execução e no artefato `contract-reports`. Esse relatório apoia a aprovação do gestor; mudanças de compatibilidade são revisadas conforme o versionamento e as regras da API Pix.
+
+A comparação usa o commit exato da base do PR. Se ele não estiver no checkout, o workflow busca apenas esse commit, com profundidade 1 e sem tags.
 
 A cada push na `master`, `generate-openapi.yml` gera o `openapi.yaml`, disponibiliza o artefato `openapi-contract` e grava um commit com o arquivo atualizado, quando houver diferenças. O lint é executado somente quando `run_lint` estiver habilitado na execução manual. O push do contrato usa o `GITHUB_TOKEN` com permissão de escrita, sem aprovação do gestor, e é recusado se a branch remota avançar durante a execução.
 
@@ -131,12 +135,13 @@ git push origin fork-v1.0.0
 
 Escolha uma versão nova a cada release. Para uma pré-release, use uma tag como `fork-v1.1.0-rc.1`; o workflow reconhece o sufixo e marca a release como pré-release. Tags SemVer inválidas são recusadas.
 
-O workflow gera o contrato e exige que ele corresponda ao `openapi.yaml` versionado na tag. Em seguida, gera o Redoc e publica estes arquivos em [Releases do fork](https://github.com/LuisMatheus/pix-api/releases):
+O workflow gera o contrato e exige que ele corresponda ao `openapi.yaml` versionado na tag. Em seguida, publica a especificação com os mesmos nomes de arquivo do projeto original em [Releases do fork](https://github.com/LuisMatheus/pix-api/releases).
 
-- `openapi.yaml`: contrato da versão publicada.
-- `redoc.html`: documentação correspondente, com os scripts carregados pela CDN da Redocly.
+- `spec.yaml`: cópia do `openapi.yaml` da versão publicada.
+- `spec.json`: o mesmo contrato no formato JSON.
+- `spec.html`: documentação Redoc, com os scripts carregados pela CDN da Redocly.
 - `changelog.md`: histórico com a seção da versão publicada e o relatório do oasdiff em português.
-- `SHA256SUMS`: checksums SHA256 dos três arquivos.
+- `SHA256SUMS`: checksums SHA256 da especificação nos três formatos e do changelog.
 
 O oasdiff compara o contrato da tag atual com o da maior versão SemVer anterior do fork que esteja no histórico do commit publicado. Tags do Banco Central são desconsideradas. Na primeira release do fork, o contrato é registrado como base inicial; nas seguintes, o relatório identifica as alterações, ou informa que não houve mudanças no contrato.
 
@@ -154,102 +159,3 @@ O fluxo atual de geração funciona sem etapa de aprovação. Para exigir aprova
 4. Aplicar as regras também a administradores e impedir push direto e force push.
 
 O `.github/CODEOWNERS` atribui contrato e automações a `@LuisMatheus`, que precisa ter acesso de escrita. Essas regras de aprovação dependem da configuração do GitHub. Ao exigi-las, a atualização automática por push direto também precisa ser revista. No GitHub Pages, mantenha a publicação pela branch `gh-pages`, pasta `/`.
-
-### Testar os workflows com act (opcional)
-
-Como alternativa à execução local, instale Docker e o [act](https://github.com/nektos/act) para testar os workflows em containers. Nessa opção, Node.js e npm são preparados pelos workflows dentro dos containers.
-
-Após editar `spec/`, você também pode gerar o contrato pelo Docker:
-
-```bash
-./scripts/docker-tools.sh bundle
-```
-
-Esse script grava o `openapi.yaml` no computador e usa as dependências de `package-lock.json` dentro de um container temporário.
-
-Execute os comandos abaixo na raiz do repositório. O evento passado ao `act` corresponde aos eventos configurados no `on` de cada workflow.
-
-#### Validar o contrato — `quality-gate.yml`
-
-Para conferir a montagem e gerar o relatório de compatibilidade de um PR:
-
-```bash
-act pull_request -W .github/workflows/quality-gate.yml
-```
-
-No evento local sem payload de PR, a comparação usa a referência local `origin/master`. No GitHub, usa o commit exato da base informado pelo PR. O checkout baixa apenas um commit; se o commit-base não estiver disponível, o workflow faz uma busca direcionada com profundidade 1, sem baixar o histórico completo nem as tags.
-
-Para uma execução manual da conferência de montagem, com a comparação de PR desativada:
-
-```bash
-act workflow_dispatch -W .github/workflows/quality-gate.yml
-```
-
-Para ativar também o lint opcional do Redocly:
-
-```bash
-act workflow_dispatch -W .github/workflows/quality-gate.yml --input run_lint=true
-```
-
-#### Gerar o contrato — `generate-openapi.yml`
-
-Para gerar o `openapi.yaml` e salvar o artefato localmente:
-
-```bash
-act workflow_dispatch -W .github/workflows/generate-openapi.yml \
-  --artifact-server-path "$PWD/reports/act-artifacts"
-```
-
-O resultado é salvo como um artefato ZIP `openapi-contract` dentro de `reports/act-artifacts`. A execução com `act` mantém commits e pushes remotos desativados. Para atualizar o arquivo da raiz no computador, use `npm run bundle` no fluxo local padrão.
-
-Adicione `--input run_lint=true` a uma execução `workflow_dispatch` para ativar o lint do Redocly. Essa opção está disponível em `quality-gate.yml` e `generate-openapi.yml`.
-
-#### Gerar e visualizar o Redoc — `publish-docs.yml`
-
-Para gerar o Redoc e iniciar a visualização local:
-
-```bash
-act workflow_dispatch -W .github/workflows/publish-docs.yml
-```
-
-Essa execução usa o `openapi.yaml` da raiz, copiado para o container. Se você editou `spec/`, atualize primeiro esse arquivo com `npm run bundle` ou `./scripts/docker-tools.sh bundle`. O `act` não encadeia automaticamente a conclusão da geração com outra execução; rode os workflows separadamente para conferir cada etapa. No GitHub, a publicação automática baixa o artefato da execução concluída.
-
-**Ao executar `publish-docs.yml` com `act`, o container `pix-api-docs` fica rodando mesmo depois que o comando termina.** Ele serve a documentação Redoc em [http://localhost:8080](http://localhost:8080). Ao executar o workflow de publicação novamente, a visualização é atualizada. A porta 8080 precisa estar disponível.
-
-Para encerrar a visualização:
-
-```bash
-docker rm -f pix-api-docs
-```
-
-#### Simular uma release — `release.yml`
-
-O evento abaixo simula o envio de uma tag, sem criar uma tag local ou remota:
-
-```bash
-printf '%s\n' '{"ref":"refs/tags/fork-v0.0.0-local"}' > /tmp/pix-api-release-event.json
-act push -W .github/workflows/release.yml -e /tmp/pix-api-release-event.json \
-  --artifact-server-path "$PWD/reports/act-release-artifacts"
-```
-
-O pacote gerado fica no artefato `release-fork-v0.0.0-local`, dentro de `reports/act-release-artifacts`. A simulação gera o contrato, o Redoc e uma cópia do changelog com a nova seção, além de verificar os checksums. Com `act`, a publicação da release e o commit do changelog ficam desativados; o `changelog.md` da sua pasta de trabalho não é alterado.
-
-#### Listar os workflows
-
-Para listar os workflows de execução manual:
-
-```bash
-act workflow_dispatch --list
-```
-
-O workflow de release usa o evento de push de tag. Para listar seu job:
-
-```bash
-act push -W .github/workflows/release.yml --list
-```
-
-A imagem de execução está configurada em `.actrc`. O `act` copia os arquivos locais para os containers, inclusive alterações ainda sem commit.
-
-Os comandos npm presentes nos workflows são executados dentro dos containers. `node_modules/`, `reports/` e `site/` são gerados nesse ambiente.
-
-Durante o `act`, a publicação no GitHub e o envio de artefatos remotos são ignorados. A aprovação do gestor e a proteção da branch são verificadas pelo próprio GitHub e precisam ser conferidas em um PR real.

@@ -55,20 +55,19 @@ jobs:
       - name: Preparar arquivos da release
         run: |
           mkdir -p reports/release
-          cp openapi.yaml reports/release/openapi.yaml
-          cp site/index.html reports/release/redoc.html
+          cp openapi.yaml reports/release/spec.yaml
+          npm exec -- redocly bundle pix --output reports/release/spec.json
+          cp site/index.html reports/release/spec.html
           cd reports/release
-          sha256sum openapi.yaml redoc.html changelog.md > SHA256SUMS
+          sha256sum spec.yaml spec.json spec.html changelog.md > SHA256SUMS
           sha256sum --check SHA256SUMS
       - name: Disponibilizar pacote da release
-        if: ${{ !env.ACT || env.ACTIONS_RUNTIME_URL != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ steps.version.outputs.tag }}
           path: reports/release/
           if-no-files-found: error
       - name: Publicar release no GitHub
-        if: ${{ !env.ACT }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
@@ -91,12 +90,11 @@ jobs:
               --notes-file reports/release-notes.md
           fi
           gh release upload "$RELEASE_TAG" \
-            reports/release/openapi.yaml reports/release/redoc.html \
+            reports/release/spec.yaml reports/release/spec.json reports/release/spec.html \
             reports/release/changelog.md reports/release/SHA256SUMS \
             --clobber
           gh release edit "$RELEASE_TAG" --draft=false --prerelease="$IS_PRERELEASE"
       - name: Registrar changelog na master
-        if: ${{ !env.ACT }}
         env:
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
         run: |
@@ -118,12 +116,3 @@ jobs:
           done
           echo 'Não foi possível atualizar o changelog na master. Execute o workflow novamente.' >&2
           exit 1
-      - name: Informar resultado local
-        if: ${{ env.ACT }}
-        env:
-          RELEASE_TAG: ${{ steps.version.outputs.tag }}
-          IS_PRERELEASE: ${{ steps.version.outputs.prerelease }}
-        run: |
-          echo "Simulação da release $RELEASE_TAG; pré-release: $IS_PRERELEASE."
-          echo 'Arquivos preparados: openapi.yaml, redoc.html, changelog.md e SHA256SUMS.'
-          echo 'Com act, nenhuma tag, release ou commit é criado no GitHub.'

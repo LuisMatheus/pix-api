@@ -49,12 +49,8 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           if [ -z "$BASE_SHA" ]; then
-            if [ "${ACT:-false}" != "true" ]; then
-              echo "O evento do PR não informou o commit da base." >&2
-              exit 1
-            fi
-            BASE_SHA=$(git rev-parse refs/remotes/origin/master)
-            echo "act: usando a referência local origin/master como base."
+            echo "O evento do PR não informou o commit da base." >&2
+            exit 1
           fi
           if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA"
@@ -73,7 +69,7 @@ jobs:
           cat reports/compatibility.md
           cat reports/compatibility.md >> "$GITHUB_STEP_SUMMARY"
       - name: Disponibilizar relatórios
-        if: ${{ always() && !env.ACT }}
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: contract-reports

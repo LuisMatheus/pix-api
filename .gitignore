@@ -2,5 +2,4 @@
 node_modules/
 site/
 reports/
-.act-cache/
 .secrets
