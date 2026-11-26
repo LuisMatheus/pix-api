@@ -29,3 +29,7 @@ Use também `npm run check:bundle` para conferir se o `openapi.yaml` corresponde
 Sobem um servidor simulado em uma porta temporária de `127.0.0.1`. O cliente consulta `GET /pix` com o intervalo do exemplo, consulta `GET /pix/{e2eid}` para os IDs dos exemplos individuais e exercita a resposta `404`. Cada caso confere o status, o `Content-Type` e o JSON recebido. O servidor é encerrado ao fim da suíte.
 
 Para validar as respostas de uma implementação real, execute testes de integração em homologação com os dados e as credenciais desse ambiente.
+
+## Testes de integração da PSP de referência
+
+Execute `sh tests/psp/rodar.sh estavel` na raiz para verificar as regras de negócio, os fluxos HTTP, os webhooks e a persistência após reiniciar a PSP. Execute `sh tests/psp/rodar-mtls.sh estavel` para verificar certificados, vínculo do token, JWS e webhooks com autenticação mútua. Use `candidata` para rodar a mesma suíte na pré-release. As suítes usam Docker Compose com projetos e volumes de teste próprios. [Guia da PSP](../api/README.md)

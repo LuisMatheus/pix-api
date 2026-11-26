@@ -1,0 +1,26 @@
+name: pix-psp
+services:
+  psp:
+    image: ${PIX_IMAGEM:-pix-psp-referencia:2.11.0-rc1}
+    restart: unless-stopped
+    build:
+      context: ..
+      dockerfile: api/Dockerfile
+    ports:
+      - "127.0.0.1:${PIX_PORT:-8787}:8080"
+    environment:
+      PIX_PUBLIC_URL: ${PIX_PUBLIC_URL:-http://localhost:${PIX_PORT:-8787}}
+      PIX_CLIENT_ID: ${PIX_CLIENT_ID:-psp-local}
+      PIX_CLIENT_SECRET: ${PIX_CLIENT_SECRET:-segredo-local}
+      PIX_WEBHOOK_ORIGINS: ${PIX_WEBHOOK_ORIGINS:-}
+      PIX_FERIADOS: ${PIX_FERIADOS:-}
+      PIX_RELOGIO_SIMULADO: ${PIX_RELOGIO_SIMULADO:-0}
+    volumes:
+      - dados:/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/saude').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  dados:

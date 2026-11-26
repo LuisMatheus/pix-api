@@ -1,0 +1,17 @@
+services:
+  psp:
+    environment:
+      PIX_PUBLIC_URL: https://psp:8080
+      PIX_WEBHOOK_ORIGINS: http://verificacao:8091,https://verificacao:8091
+  verificacao:
+    entrypoint: ["node", "/app/tests/mtls.mjs"]
+    volumes:
+      - ./certificados/ca.pem:/certificados/ca.pem:ro
+      - ./certificados/cliente.pem:/certificados/cliente.pem:ro
+      - ./certificados/cliente.key:/certificados/cliente.key:ro
+      - ./certificados/cliente-alternativo.pem:/certificados/cliente-alternativo.pem:ro
+      - ./certificados/cliente-alternativo.key:/certificados/cliente-alternativo.key:ro
+      - ./certificados/webhook.pem:/certificados/webhook.pem:ro
+      - ./certificados/webhook.key:/certificados/webhook.key:ro
+      - ./certificados/receptor.pem:/certificados/receptor.pem:ro
+      - ./certificados/receptor.key:/certificados/receptor.key:ro

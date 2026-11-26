@@ -1,0 +1,16 @@
+services:
+  psp:
+    environment:
+      PIX_TLS_DIR: /certificados
+      PIX_PUBLIC_URL: ${PIX_PUBLIC_URL:-https://localhost:${PIX_PORT:-8787}}
+    volumes:
+      - ./certificados/ca.pem:/certificados/ca.pem:ro
+      - ./certificados/servidor.pem:/certificados/servidor.pem:ro
+      - ./certificados/servidor.key:/certificados/servidor.key:ro
+      - ./certificados/clientes.pem:/certificados/clientes.pem:ro
+      - ./certificados/webhook.pem:/certificados/webhook.pem:ro
+      - ./certificados/webhook.key:/certificados/webhook.key:ro
+      - ./certificados/assinatura.pem:/certificados/assinatura.pem:ro
+      - ./certificados/assinatura.key:/certificados/assinatura.key:ro
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('node:https').get('https://localhost:8080/saude', { ca: require('node:fs').readFileSync('/certificados/ca.pem'), family: 4 }, res => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]

@@ -16,6 +16,16 @@ O branch `master` da API pode ser visualizado __[aqui](https://luismatheus.githu
 
 * A release atual da API Pix pode ser encontrada neste __[link](https://github.com/bacen/pix-api/releases/tag/2.11.0-rc1)__.
 
+## Executar uma PSP de referência
+
+Na raiz do repositório, suba a implementação local com Docker Compose.
+
+```bash
+docker compose -f api/compose.yaml up -d --build --wait
+```
+
+Consulte a saúde do serviço em `http://localhost:8787/saude`. A PSP usa o contrato deste projeto e armazena cobranças, Pix, devoluções e recorrências em um volume SQLite. O guia inclui exemplos de liquidação e devolução, perfil mTLS de laboratório e testes de regras do Banco Central. [Guia da PSP de referência](api/README.md)
+
 ## Desenvolvimento do contrato
 
 As fontes do contrato ficam em `spec/`. Edite os módulos e gere o `openapi.yaml` da raiz antes de abrir o pull request. O arquivo da raiz é versionado para manter o endereço público do contrato e permitir a revisão do conteúdo publicado.

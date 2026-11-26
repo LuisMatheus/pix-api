@@ -1,0 +1,20 @@
+name: pix-psp-teste
+services:
+  psp:
+    image: ${COMPOSE_PROJECT_NAME}-psp
+    ports: !reset []
+    environment:
+      PIX_CLIENT_ID: cliente-teste
+      PIX_CLIENT_SECRET: segredo-teste
+      PIX_PUBLIC_URL: http://psp:8080
+      PIX_WEBHOOK_ORIGINS: http://verificacao:8091
+      PIX_RELOGIO_SIMULADO: "1"
+  verificacao:
+    image: ${COMPOSE_PROJECT_NAME}-psp
+    pull_policy: never
+    entrypoint: ["node", "/app/tests/verificar.mjs"]
+    volumes:
+      - ../tests/psp:/app/tests:ro
+      - evidencia:/data
+volumes:
+  evidencia:

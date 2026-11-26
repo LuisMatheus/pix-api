@@ -1,0 +1,13 @@
+{
+  "name": "pix-psp-referencia",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13 <23" },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
+    "decimal.js": "10.6.0",
+    "yaml": "2.9.1"
+  }
+}

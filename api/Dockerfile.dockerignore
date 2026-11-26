@@ -1,0 +1,6 @@
+**
+!openapi.yaml
+!api/
+!api/package*.json
+!api/src/
+!api/src/**
