@@ -11,6 +11,8 @@ import { cancelRecurring, confirmSchedule, createRecurring, decideRec, updateLif
 import { refund, settle } from './payments.mjs';
 import { deliveries, startDelivery, webhook } from './webhooks.mjs';
 import { canList, search } from './search.mjs';
+import { mapearPacs008 } from './pacs.mjs';
+import { consultarSpi, iniciarSpi, reconciliarSpi } from './spi/liquidacao.mjs';
 import { clientCertificate, mutualTls, tlsOptions } from './tls.mjs';
 
 function dispatch(route, p, query, body) {
@@ -96,7 +98,19 @@ async function handleRequest(req, res) {
       }
       transaction(updateLifecycle);
       if (method === 'GET' && path === '/simulacao/notificacoes') return respond(res, 200, deliveries());
+      const mapping = /^\/simulacao\/pix\/([A-Za-z0-9]{32})\/mapeamento\/pacs\.008$/.exec(path);
+      if (method === 'GET' && mapping) return respond(res, 200, mapearPacs008(get('pix', mapping[1])));
       if (method === 'POST' && path === '/simulacao/liquidacoes') return respond(res, 201, transaction(() => settle(body)));
+      if (method === 'POST' && path === '/simulacao/spi/liquidacoes') {
+        const result = await iniciarSpi(body);
+        return respond(res, result.status, result.body);
+      }
+      const spi = /^\/simulacao\/spi\/liquidacoes\/(E[A-Za-z0-9]{31})(\/reconciliar)?$/.exec(path);
+      if (method === 'GET' && spi && !spi[2]) return respond(res, 200, consultarSpi(spi[1]));
+      if (method === 'POST' && spi?.[2]) {
+        const result = await reconciliarSpi(spi[1]);
+        return respond(res, result.status, result.body);
+      }
       const rec = /^\/simulacao\/rec\/([a-zA-Z0-9]{29})\/decisao$/.exec(path);
       if (method === 'POST' && rec) return respond(res, 200, transaction(() => decideRec(rec[1], body?.status)));
       const failure = /^\/simulacao\/cobr\/([a-zA-Z0-9]{26,35})\/falha$/.exec(path);

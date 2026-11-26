@@ -12,6 +12,7 @@ export function persistCharge(kind, charge) {
   return charge;
 }
 export function writeCharge(kind, txid, method, body, inBatch = false) {
+  demand(!find('spi-charge', txid), 'A cobrança aguarda o resultado do ciclo SPI.', 409);
   demand(!body.loc?.tipoCob || body.loc.tipoCob === kind, 'O tipo informado não corresponde à cobrança.');
   const lot = !inBatch && find('charge-batch', txid);
   if (lot) {

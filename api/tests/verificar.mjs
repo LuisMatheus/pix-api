@@ -134,6 +134,14 @@ async function scenario() {
     const payments = await Promise.all([post('/simulacao/liquidacoes',input),post('/simulacao/liquidacoes', input)]);
     assert.deepEqual(payments[0], payments[1]);
     assert.equal((await get('/api/pix/' + e2eid)).valor, '40.00');
+    const mapping = await get('/simulacao/pix/' + e2eid + '/mapeamento/pacs.008');
+    assert.equal(mapping.mensagem, 'pacs.008');
+    const mapped = Object.fromEntries(mapping.campos.map(field => [field.destino, field.valor]));
+    assert.equal(mapped['PmtId.TxId'], marker);
+    assert.equal(mapped['CdtrAcct.Prxy.Id'], merchant);
+    assert.equal(mapped.IntrBkSttlmAmt, '40.00');
+    assert.equal(mapped['Purp.Cd'], 'IPAY');
+    await call('GET', '/simulacao/pix/' + e2eid + '/mapeamento/pacs.008', 403, undefined, readonly);
     const refundPath = '/api/pix/' + e2eid + '/devolucao/';
     const back = await put(refundPath + 'D1', { valor: '15.10' });
     assert.deepEqual(await put(refundPath + 'D1', { valor: '15.10' }),back);

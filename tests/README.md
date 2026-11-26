@@ -1,4 +1,4 @@
-# Testes da API Pix
+# Testes do contrato OpenAPI
 
 As suítes leem os exemplos de `spec/` por meio de um bundle JSON temporário gerado pelo Redocly. Execute os comandos na raiz do projeto depois de instalar as dependências com `npm ci --ignore-scripts`.
 
@@ -8,7 +8,7 @@ npm run test:unit
 npm run test:request
 ```
 
-`npm test` executa ambas as suítes. Para incluir outro exemplo de Pix no cenário existente, declare-o em `examples` da resposta correspondente no OpenAPI. As suítes leem esses exemplos diretamente e criam os casos de teste em tempo de execução.
+`npm test` executa ambas as suítes. Para incluir um exemplo, declare-o em `example` ou `examples` no OpenAPI ou referencie-o a partir de `components.examples`. Os casos são descobertos a cada execução, incluindo exemplos de cobrança, Pix Automático, webhooks e respostas de erro.
 
 Para rodar as mesmas suítes pelo Docker, execute os comandos abaixo na raiz. O script instala as dependências no container temporário.
 
@@ -20,16 +20,21 @@ Para rodar as mesmas suítes pelo Docker, execute os comandos abaixo na raiz. O 
 
 ## Testes unitários
 
-Conferem se o CPF de um exemplo de cobrança atende ao padrão do contrato e se variações com tamanho ou caracteres inválidos são rejeitadas. Para os exemplos de Pix, verificam os campos obrigatórios do schema `Pix`, o formato do identificador e do valor e a coerência da paginação da lista.
+O Redocly valida cada exemplo associado a um schema. A saída informa o caminho do exemplo e marca como `TODO` os que divergem do schema. Exemplos nomeados sem uma associação a schema são conferidos como dados do contrato. A suíte também mantém as verificações de CPF, identificador Pix, valor e paginação.
+
+Para reprovar a execução quando um exemplo divergir do schema, ative o modo estrito.
+
+```bash
+PIX_EXEMPLOS_ESTRITOS=1 npm run test:unit
+PIX_EXEMPLOS_ESTRITOS=1 ./scripts/docker-tools.sh test:unit
+```
 
 Use também `npm run check:bundle` para conferir se o `openapi.yaml` corresponde às fontes e `npm run lint` para rodar as regras ativas do [Redocly](../redocly.yaml). Nos pull requests, o oasdiff compara o contrato com a base do PR no [quality gate](../.github/workflows/quality-gate.yml).
 
 ## Testes de requisição
 
-Sobem um servidor simulado em uma porta temporária de `127.0.0.1`. O cliente consulta `GET /pix` com o intervalo do exemplo, consulta `GET /pix/{e2eid}` para os IDs dos exemplos individuais e exercita a resposta `404`. Cada caso confere o status, o `Content-Type` e o JSON recebido. O servidor é encerrado ao fim da suíte.
+Usam um servidor simulado em `127.0.0.1` para testar o transporte dos exemplos associados a operações e callbacks. Conferem método, caminho, parâmetros, cabeçalhos e corpos declarados, incluindo respostas de erro. Nos exemplos de QR, o servidor assina o payload como JWS e o cliente verifica a assinatura e o conteúdo. Exemplos parciais de propriedades e exemplos sem operação são exercitados na suíte unitária.
 
 Para validar as respostas de uma implementação real, execute testes de integração em homologação com os dados e as credenciais desse ambiente.
 
-## Testes de integração da PSP de referência
-
-Execute `sh tests/psp/rodar.sh estavel` na raiz para verificar as regras de negócio, os fluxos HTTP, os webhooks e a persistência após reiniciar a PSP. Execute `sh tests/psp/rodar-mtls.sh estavel` para verificar certificados, vínculo do token, JWS e webhooks com autenticação mútua. Use `candidata` para rodar a mesma suíte na pré-release. As suítes usam Docker Compose com projetos e volumes de teste próprios. [Guia da PSP](../api/README.md)
+Os testes da implementação da PSP ficam em [`api/tests/`](../api/README.md#testar-a-implementação).

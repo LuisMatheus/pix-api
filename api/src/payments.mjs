@@ -38,7 +38,7 @@ function components(kind, charge, input) {
   demand(value.gt(0), 'O pagamento deve ser positivo.');
   return { valor: value.toFixed(2), componentesValor: parts };
 }
-export function settle(input) {
+export function prepareSettlement(input) {
   demand(input && typeof input === 'object' && !Array.isArray(input), 'Informe os dados da liquidação.');
   const fields = ['txid','endToEndId','chave','valor','valorRetirada','pagador','infoPagador','finalidadeMED','codMun'];
   demand(Object.keys(input).every(key => fields.includes(key)), 'Campo desconhecido na liquidação.');
@@ -47,7 +47,7 @@ export function settle(input) {
     const prior = find('settlement', input.endToEndId);
     if (prior) {
       demand(isDeepStrictEqual(prior, input), 'Este endToEndId já identifica outro pagamento.');
-      return get('pix', input.endToEndId);
+      return { payment: get('pix', input.endToEndId), completed: true };
     }
   }
   if (input.txid !== undefined) demand(typeof input.txid === 'string' && /^[A-Za-z0-9]{26,35}$/.test(input.txid), 'txid inválido.');
@@ -63,6 +63,7 @@ export function settle(input) {
   let kind, charge, payment;
   let id = input.endToEndId || identifier('E');
   if (input.txid) {
+    demand(!find('spi-charge', input.txid), 'A cobrança aguarda o resultado do ciclo SPI.', 409);
     kind = get('tx-kind', input.txid);
     charge = get(kind, input.txid);
     demand(charge.status === 'ATIVA', 'A cobrança precisa estar ativa.');
@@ -82,16 +83,24 @@ export function settle(input) {
     demand(input.chave && money(input.valor).gt(0) && input.valorRetirada === undefined, 'Para um Pix avulso, informe chave e valor positivo.');
     payment = { chave: input.chave, valor: input.valor };
   }
+  demand(!find('spi-payment', id), 'Este endToEndId está reservado ao ciclo SPI.', 409);
   demand(!find('pix', id), 'endToEndId em uso.');
   Object.assign(payment, { endToEndId: id, horario: instant(), ...pick(input, ['infoPagador']) });
   if (charge) settleTax(payment, charge);
   const payer = input.pagador || (kind === 'cobr' ? get('rec', charge.idRec).pagador : undefined);
+  return { id, input, payment, payer, kind, charge };
+}
+export function completeSettlement({ id, input, payment, payer, kind, charge }) {
   save('pix-filters', id, { pagador: payer, finalidadeMED: input.finalidadeMED || false });
   save('settlement', id, input);
   save('pix', id, payment);
   if (charge) syncCharge(kind, charge, payment);
   if (payment.txid && payment.chave) notify('pix', payment);
   return payment;
+}
+export function settle(input) {
+  const plan = prepareSettlement(input);
+  return plan.completed ? plan.payment : completeSettlement(plan);
 }
 export function refund(e2eid, id, input) {
   const payment = get('pix', e2eid);

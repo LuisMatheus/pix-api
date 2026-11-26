@@ -3,6 +3,7 @@ import { mock } from 'node:test';
 import { dueAmount } from '../src/amounts.mjs';
 import { chargePayload, writeCharge } from '../src/charges.mjs';
 import { refund, settle } from '../src/payments.mjs';
+import { mapearPacs008 } from '../src/pacs.mjs';
 import { confirmSchedule, createRecurring, decideRec, updateLifecycle, failAttempt, retry, writeRec } from '../src/recurrences.mjs';
 import { get, save, transaction } from '../src/store.mjs';
 
@@ -20,6 +21,27 @@ assert.equal(dueAmount(discount, '2026-11-24', '3550308').final, '900.00');
 const fine = charge('2026-11-21', { original, abatimento, multa: { modalidade: 2, valorPerc: '5.00' } });
 assert.equal(dueAmount(fine, '2026-11-24', '2304400').final, '900.00');
 assert.equal(dueAmount(fine, '2026-11-25', '2304400').final, '945.00');
+
+const pixTroco = { txid: '1'.repeat(32), chave: 'teste@example.test', valor: '120.00',
+  infoPagador: 'Compra de teste', componentesValor: {
+    original: { valor: '100.00' },
+    troco: { valor: '20.00', modalidadeAgente: 'AGTEC', prestadorDoServicoDeSaque: '12345678' },
+  } };
+const troco = mapearPacs008(pixTroco);
+assert.equal(troco.campos.find(field => field.destino === 'Purp.Cd').valor, 'GSCB');
+assert.deepEqual(troco.campos.filter(field => field.destino.endsWith('AdjstmntAmtAndRsn')).map(field => field.valor),
+  [{ Amt: '20.00', Rsn: 'VLDN' }, { Amt: '100.00', Rsn: 'VLCP' }]);
+assert.equal(troco.campos.find(field => field.destino === 'RmtInf').valor, 'Compra de teste');
+const pixSaque = { ...pixTroco, valor: '20.00', componentesValor: {
+  original: { valor: '0.00' }, saque: { ...pixTroco.componentesValor.troco, modalidadeAgente: 'AGPSS' },
+} };
+const saque = mapearPacs008(pixSaque);
+assert.equal(saque.campos.find(field => field.destino === 'Purp.Cd').valor, 'OTHR');
+assert.equal(saque.campos.find(field => field.destino.endsWith('Prtry')).valor, 'AGFSS');
+assert.throws(() => mapearPacs008({ valor: '5.00' }), { status: 400 });
+const vencimento = mapearPacs008({ txid: '2'.repeat(32), chave: 'vencimento@example.test',
+  valor: '107.00', componentesValor: { original: { valor: '100.00' }, juros: { valor: '7.00' } } });
+assert.equal(vencimento.campos.find(field => field.destino === 'IntrBkSttlmAmt').valor, '107.00');
 
 mock.timers.enable({ apis: ['Date'], now: new Date('2026-11-25T10:00:00Z') });
 try {

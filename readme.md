@@ -18,13 +18,13 @@ O branch `master` da API pode ser visualizado __[aqui](https://luismatheus.githu
 
 ## Executar uma PSP de referência
 
-Na raiz do repositório, suba a implementação local com Docker Compose.
+O laboratório em `api/` é um projeto independente. Para executar com o contrato da raiz, passe o caminho do arquivo ao Docker Compose.
 
 ```bash
-docker compose -f api/compose.yaml up -d --build --wait
+PIX_OPENAPI="$PWD/openapi.yaml" docker compose -f api/compose.yaml up -d --build --wait
 ```
 
-Consulte a saúde do serviço em `http://localhost:8787/saude`. A PSP usa o contrato deste projeto e armazena cobranças, Pix, devoluções e recorrências em um volume SQLite. O guia inclui exemplos de liquidação e devolução, perfil mTLS de laboratório e testes de regras do Banco Central. [Guia da PSP de referência](api/README.md)
+Consulte a saúde em `http://localhost:8787/saude`. Os comandos do laboratório, incluindo os testes em `api/tests/`, estão no [guia da PSP de referência](api/README.md).
 
 ## Desenvolvimento do contrato
 
@@ -127,6 +127,14 @@ Para retomar uma regra, altere sua severidade de `off` para `error` em `redocly.
 `quality-gate.yml` confere o arquivo gerado e executa o lint quando `run_lint` estiver habilitado. Nos PRs, o `oasdiff` gera um relatório de compatibilidade em português, disponível no resumo da execução e no artefato `contract-reports`. Esse relatório apoia a aprovação do gestor; mudanças de compatibilidade são revisadas conforme o versionamento e as regras da API Pix.
 
 A comparação usa o commit exato da base do PR. Se ele não estiver no checkout, o workflow busca apenas esse commit, com profundidade 1 e sem tags.
+
+#### Migração das correções de CPF e webhook
+
+A branch corrige o padrão de CPF para `^\d{11}$`, aceitando uma string composta por exatamente 11 dígitos. O padrão anterior, `/^\d{11}$/`, continha barras delimitadoras no valor do schema. Atualize clientes, validadores e testes que tenham copiado o padrão anterior. O oasdiff sinaliza a mudança como aviso em cada parâmetro ou propriedade que usa o schema.
+
+Em `PUT /webhookcobv`, solicite o escopo OAuth2 `webhookcobv.write`. A grafia anterior no endpoint era `webhookcobV.write`, mas o esquema OAuth2 declarava apenas a grafia em minúsculas. Atualize o cliente e as permissões no servidor de autorização antes de usar o contrato corrigido. O oasdiff classifica essa correção como quebra de compatibilidade para clientes que dependiam do nome anterior.
+
+Essas alterações permanecem no relatório enquanto a base comparada contiver os valores anteriores. O workflow publica o relatório para revisão e não bloqueia o PR por alterações de compatibilidade.
 
 A cada push na `master`, `generate-openapi.yml` gera o `openapi.yaml`, disponibiliza o artefato `openapi-contract` e grava um commit com o arquivo atualizado, quando houver diferenças. O lint é executado somente quando `run_lint` estiver habilitado na execução manual. O push do contrato usa o `GITHUB_TOKEN` com permissão de escrita, sem aprovação do gestor, e é recusado se a branch remota avançar durante a execução.
 

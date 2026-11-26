@@ -1,11 +1,18 @@
 name: pix-psp
 services:
   psp:
-    image: ${PIX_IMAGEM:-pix-psp-referencia:2.11.0-rc1}
+    image: ${PIX_IMAGEM:-pix-psp-referencia:local}
     restart: unless-stopped
+    depends_on:
+      spi:
+        condition: service_healthy
+    networks: [default, liquidacao]
     build:
-      context: ..
-      dockerfile: api/Dockerfile
+      context: .
+      target: psp
+    configs:
+      - source: contrato_pix
+        target: /app/openapi.yaml
     ports:
       - "127.0.0.1:${PIX_PORT:-8787}:8080"
     environment:
@@ -15,6 +22,8 @@ services:
       PIX_WEBHOOK_ORIGINS: ${PIX_WEBHOOK_ORIGINS:-}
       PIX_FERIADOS: ${PIX_FERIADOS:-}
       PIX_RELOGIO_SIMULADO: ${PIX_RELOGIO_SIMULADO:-0}
+      PIX_SPI_URL: http://spi:8080
+      PIX_SPI_TOKEN: ${PIX_SPI_TOKEN:-spi-local}
     volumes:
       - dados:/data
     healthcheck:
@@ -22,5 +31,28 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  spi:
+    image: pix-spi-simulado:5.13.2
+    restart: unless-stopped
+    build:
+      context: .
+      target: spi
+    environment:
+      PIX_SPI_TOKEN: ${PIX_SPI_TOKEN:-spi-local}
+    networks: [liquidacao]
+    volumes:
+      - dados-spi:/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/saude').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+networks:
+  liquidacao:
+    internal: true
+configs:
+  contrato_pix:
+    file: ${PIX_OPENAPI:?defina PIX_OPENAPI com o caminho do openapi.yaml consolidado}
 volumes:
   dados:
+  dados-spi:

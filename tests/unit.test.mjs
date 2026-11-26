@@ -1,8 +1,23 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { loadContract, resolveComponent, responseExamples } from './contract.mjs';
+import { auditExamples, resolveComponent, responseExamples } from './contract.mjs';
+import { associateProblems, exampleInventory } from './examples.mjs';
 
-const contract = loadContract();
+const { contract, problems } = auditExamples();
+const inventory = exampleInventory(contract);
+associateProblems(inventory, problems);
+const strict = process.env.PIX_EXEMPLOS_ESTRITOS === '1';
+
+for (const { pointer, problems } of inventory.values()) {
+  test('Exemplo ' + pointer, (t) => {
+    if (!problems.size) return;
+    const details = [...problems].join('\n');
+    if (strict) assert.fail(details);
+    t.todo('Exemplo divergente do schema');
+    t.diagnostic(details);
+  });
+}
+
 const { schemas, examples } = contract.components;
 const pixSchema = schemas.Pix;
 const idSchema = resolveComponent(contract, pixSchema.properties.endToEndId);

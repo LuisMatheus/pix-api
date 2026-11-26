@@ -72,6 +72,7 @@ export function unlink(kind, id) {
   if (location[key]) {
     const group = location.tipoCob || 'rec';
     const owner = get(group, location[key]);
+    demand(!find('spi-charge', owner.txid), 'A cobrança aguarda o resultado do ciclo SPI.', 409);
     delete owner.loc;
     delete owner.location;
     delete owner.pixCopiaECola;

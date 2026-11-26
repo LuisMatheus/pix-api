@@ -9,7 +9,7 @@
   "scripts": {
     "bundle": "redocly bundle spec/openapi.yaml --output openapi.yaml",
     "check:bundle": "node scripts/check-bundle.mjs",
-    "test": "node --test",
+    "test": "node --test tests/*.test.mjs",
     "test:unit": "node --test tests/unit.test.mjs",
     "test:request": "node --test tests/request.test.mjs",
     "lint": "mkdir -p reports && redocly lint openapi.yaml --format json --max-problems 10000 > reports/lint.json",

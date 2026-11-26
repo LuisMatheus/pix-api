@@ -1,4 +1,3 @@
-name: pix-psp-teste
 services:
   psp:
     image: ${COMPOSE_PROJECT_NAME}-psp
@@ -13,8 +12,15 @@ services:
     image: ${COMPOSE_PROJECT_NAME}-psp
     pull_policy: never
     entrypoint: ["node", "/app/tests/verificar.mjs"]
+    networks: [default, liquidacao]
+    environment:
+      PIX_TEST_SPI_URL: http://spi:8080
+      PIX_SPI_TOKEN: ${PIX_SPI_TOKEN:-spi-local}
+    configs:
+      - source: contrato_pix
+        target: /app/openapi.yaml
     volumes:
-      - ../tests/psp:/app/tests:ro
+      - ./tests:/app/tests:ro
       - evidencia:/data
 volumes:
   evidencia:

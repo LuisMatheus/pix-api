@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
-import { parse } from 'yaml';
+import { readOpenApi } from '../src/openapi.mjs';
 
-const document = parse(readFileSync(new URL('../openapi.yaml', import.meta.url), 'utf8'));
+const document = readOpenApi();
 const schemas = document.components.schemas;
 // Os contratos oficiais contêm nomes inconsistentes em "required" e padrões com barras delimitadoras.
 function stripPatternDelimiters(node) {

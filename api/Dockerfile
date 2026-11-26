@@ -1,21 +1,28 @@
 # syntax=docker/dockerfile:1
+FROM node:22.22.2-bookworm-slim AS catalogo-spi
+ADD --checksum=sha256:8ac114c30ee6d15535387047aff68bf6fdf8f3f7f8bfd2a6ab0e3d33aa93ecbe https://www.bcb.gov.br/content/estabilidadefinanceira/cedsfn/Catalogos/spi.5.13.2.zip /spi.zip
+RUN apt-get update && apt-get install -y --no-install-recommends unzip \
+    && unzip -j /spi.zip '*/xsd/pacs.008.spi.1.16.xsd' '*/xsd/pacs.002.spi.1.18.xsd' -d /spi-xsd \
+    && sed -i 's|<xs:any namespace="http://www.w3.org/2000/09/xmldsig#"/>|<xs:any minOccurs="0" namespace="http://www.w3.org/2000/09/xmldsig#"/>|' /spi-xsd/*.xsd
+
 FROM node:22.22.2-bookworm-slim AS base
 LABEL org.opencontainers.image.title="PSP de referência da API Pix" \
       org.opencontainers.image.description="Laboratório da API Pix com persistência e liquidação simulada"
 WORKDIR /app
-COPY api/package.json api/package-lock.json ./
-RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund \
+COPY package.json package-lock.json ./
+RUN apt-get update && apt-get install -y --no-install-recommends libxml2-utils \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm ci --omit=dev --ignore-scripts --no-audit --no-fund \
     && mkdir /data && chown node:node /data
-COPY api/src ./src
+COPY --from=catalogo-spi /spi-xsd ./spi-xsd
+COPY src ./src
 USER node
 ENV PORT=8080 PIX_DB=/data/pix.sqlite
 EXPOSE 8080
+
+FROM base AS spi
+CMD ["node", "src/spi/simulador.mjs"]
+
+FROM base AS psp
+ENV PIX_OPENAPI=/app/openapi.yaml
 CMD ["node", "src/server.mjs"]
-
-FROM base AS estavel
-LABEL org.opencontainers.image.version="2.10.0"
-ADD --chmod=0444 --checksum=sha256:5c39d711674551c2ce2ced9263724d58237ea84cf9594950a5c479a96e354310 https://raw.githubusercontent.com/bacen/pix-api/2.10.0/openapi.yaml /app/openapi.yaml
-
-FROM base AS candidata
-LABEL org.opencontainers.image.version="2.11.0-rc1"
-COPY openapi.yaml ./

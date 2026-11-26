@@ -3,4 +3,3 @@ node_modules/
 site/
 reports/
 .secrets
-/api/certificados/

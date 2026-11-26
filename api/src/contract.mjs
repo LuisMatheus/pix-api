@@ -1,12 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { parse } from 'yaml';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { Problem, demand } from './common.mjs';
+import { readOpenApi } from './openapi.mjs';
 
-const bundled = new URL('../openapi.yaml', import.meta.url);
-const contractFile = existsSync(bundled) ? bundled : new URL('../../openapi.yaml', import.meta.url);
-const document = parse(readFileSync(contractFile, 'utf8'));
+const document = readOpenApi();
 const schemas = document.components.schemas;
 const uri = 'urn:pix:contrato';
 export const scopes = Object.keys(document.components.securitySchemes.OAuth2.flows.clientCredentials.scopes);

@@ -25,4 +25,4 @@ issue webhook 4 'extendedKeyUsage=clientAuth'
 issue receptor 5 'extendedKeyUsage=serverAuth' 'subjectAltName=DNS:verificacao'
 issue assinatura 6
 cat cliente.pem cliente-alternativo.pem > clientes.pem
-printf '%s\n' 'Certificados de laboratório gerados em api/certificados/.'
+printf '%s\n' 'Certificados de laboratório gerados em certificados/.'
